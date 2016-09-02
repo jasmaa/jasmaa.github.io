@@ -1,1 +1,9 @@
-selector { cursor: none; }
+selector {
+  cursor: none;
+
+}
+
+body {
+    margin: 60px auto;
+    width: 70%;
+}
