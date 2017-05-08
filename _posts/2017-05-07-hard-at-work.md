@@ -17,7 +17,7 @@ However, the last seven days have been a tear-filled stress fest which makes me 
 
 And sometimes, you do put work in, but something or another screws you over.
 I happened to be assigned a group for a presentation this week that's getting shown tomorrow.
-For 2 days, I have forgone leisure time and self-studying to push this project off the ground and guess what happened tonight (cmon):
+For 2 days, I have forgone leisure time and self-studying to push this project off the ground and guess what happened tonight (cmon, give it a go):
 
 ~60% of my slides: Deleted. Gone. Poof.
 
