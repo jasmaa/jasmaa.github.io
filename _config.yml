@@ -1,17 +1,15 @@
 # Site settings
 title: JBlog
 email: jasonmaa3955@gmail.com
-description: My personal blog about me.
+description: Personal Blog
 baseurl: ""
 url: ""
 
 author:
   name     : 'Jason Maa'
-  
+
 
 github: https://github.com/jasmaa
-disqus_shortname: "fernandomoreira"
-google_analytics: UA-52446115-1
 
 paginate: 2
 comments: true

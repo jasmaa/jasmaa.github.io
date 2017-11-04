@@ -9,14 +9,14 @@ Some projects I have.
 
 ---
 
-#### [Unity Games](https://treechicken.itch.io/)
-Experimental games in Unity.
+#### [Chattering With Me](https://chatteringwith.me)
+Dynamic chatroom made with sockets in Django
 
-#### [It shall remain unamed!](https://github.com/IsolationStudios/CAC-2017)
-Point and click adventure.
+#### [itch.io](https://treechicken.itch.io/)
+My experimental games library
 
-#### Edline/Grade Halper
-A grade checking app.
+#### [There is No Eden](https://github.com/IsolationStudios/CAC-2017)
+Point and click adventure in the works (on hiatus for now)
 
-#### Poor Man Bowl
-A Protobowl clone in Django.
+#### [Blindshot](https://github.com/jasmaa/gameoff2017)
+Github Game Off 2017 entry in the works
