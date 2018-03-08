@@ -47,7 +47,7 @@ for me, it's rare to be able to speak with a Japanese person let alone one close
 thinks I am or what he took away from this, but I really appreciate having him follow me around for 3 days and putting up with my patchwork Japanese. It was a great time and something
 that has made me open my eyes and get a glimpse of the world, not just my country, as well as something that has driven me to try to improve upon my language skills.
 
-![Paper crane](/images/paper_tsuru.jpg)
+![Paper crane](/images/paper_tsuru.JPG)
 
 
 Thank you all so much for visiting our school!
