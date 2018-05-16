@@ -1,10 +1,14 @@
 <aside>
 	<div class="container-fluid">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-       <a class="navbar-brand" href="/">JBlog</a>
+			<a class="navbar-brand" href="/">JBlog</a>
+			<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" style="">
+				<span class="navbar-toggler-icon"></span>
+			</button>
 
-       <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+       <div class="collapse navbar-collapse" id="navbarColor01">
          <ul class="navbar-nav mr-auto">
   				  {% for page in site.pages %}
               {% if page.title %}
@@ -15,6 +19,7 @@
             {% endfor %}
   			</ul>
       </div>
+
 		</nav>
 	</div>
 </aside>

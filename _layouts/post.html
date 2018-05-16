@@ -2,9 +2,12 @@
 layout: default
 ---
 
-<h2>{{ page.title }}</h2>
-<time>
-  {{ page.date | date: "%b %-d, %Y" }}
-</time>
+<div class="container-fluid">
+  <div class="jumbotron">
+    <h1 class="page-header">{{ page.title }}</h1>
+    <h5>{{ page.date | date: "%b %-d, %Y" }}</h5>
+    <hr>
 
-{{ content }}
+    {{ content }}
+  </div>
+</div>
