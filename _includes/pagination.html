@@ -1,0 +1,18 @@
+<br>
+<ul class="pagination">
+  {% for page in (1..paginator.total_pages) %}
+    {% if page == paginator.page %}
+     <li class="page-item active">
+      <em class="page-link">{{ page }}</em>
+      </li>
+    {% elsif page == 1 %}
+    <li class="page-item">
+      <a href="/" class="page-link">{{ page }}</a>
+    </li>
+    {% else %}
+      <li class="page-item">
+      <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}" class="page-link">{{ page }}</a>
+    </li>
+    {% endif %}
+  {% endfor %}
+</ul>
