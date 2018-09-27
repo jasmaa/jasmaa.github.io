@@ -26,7 +26,7 @@
 }
 
 .jumbotron {
-  margin: 2% 10% 2% 10%;
+  margin: 2% 5% 2% 5%;
 }
 
 img {
@@ -42,4 +42,9 @@ aside {
 
 html {
   margin: 0% 10% 0% 10%;
+}
+@media screen and (max-width: 768px) {
+  html {
+     margin: 0% 0% 0% 0%;
+  }
 }
