@@ -36,7 +36,7 @@ an excuse to start messing around with it.
 <br>
 <br>
 
-# Process
+## Process
 One of the first things I did was figure out how to get around with Selenium.
 Once I could successfully navigate through the calendars via button click and
 pull the source, the project became mostly a parsing game. I threw all the
@@ -57,7 +57,7 @@ code to change the time offset based on whether DST was in place or not.
 <br>
 <br>
 
-# After Thoughts
+## After Thoughts
 This project was not that complicated, and I'm sure there were better ways to do
 what I had set out to accomplish. For all I know, I may have just entirely missed
 an "Add to Google Calendar" button on the undergrad site which would have saved
