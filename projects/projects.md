@@ -9,11 +9,11 @@ A few of my projects.
 
 ---
 
+#### [Kuiperbowl](https://github.com/jasmaa/kuiperbowl)
+Proof-of-concept real-time multiplayer trivia bowl
+
 #### [NES Pong](https://github.com/jasmaa/nes-pong)
 A naive implementation of Pong in 6502 assembly.
-
-#### [Chattering With Me](https://github.com/jasmaa/chatroom)
-Dynamic chatroom made with sockets in Django (not running)
 
 #### [Mana Filter](https://github.com/jasmaa/ManaFilter)
 OpenCV facial recognition program that puts croissants on your head.
