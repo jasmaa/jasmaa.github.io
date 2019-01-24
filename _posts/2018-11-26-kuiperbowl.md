@@ -1,6 +1,7 @@
 ---
 layout: post
-title:  "Kuiperbowl: Like Protobowl but significantly worse"
+title:  "Kuiperbowl"
+subtitle: "Like Protobowl but significantly worse"
 date:   2018-11-26
 categories: trivia quizbowl kuiperbowl
 ---
@@ -47,7 +48,7 @@ answered the question. However, this did not account for the fact that time woul
 the problem remained of how to coordinate buzzing among all the clients. I ended up drawing a little diagram and came up with
 what I affectionately call the "King Crimson" approach, drawing inspiration from JoJo's Bizzare Adventure:
 
-![Time flow diagram](/images/kuiperbowl_helpme.png)
+![Time flow diagram](/images/kuiperbowl/kuiperbowl_helpme.png)
 
 Essentially, upon a buzz, a buzzing start time is recorded. The contesting player spends some amount of time
 on the buzz and when the buzz is done, the duration of the buzz is calculated and both the start and end times
@@ -55,7 +56,7 @@ are moved by forward by that duration. This effectively erases any time the buzz
 time, hence the name, King Crimson approach (Additionally, this also serves as a nice explanation as to how King
 Crimson works I feel...).
 
-![Dojyaaan](/images/kuiperbowl_kingcrimson.jpg)
+![Dojyaaan](/images/kuiperbowl/kuiperbowl_kingcrimson.jpg)
 
 Afterwards, it was a matter of sprucing the client up so that the local and client game states stayed in sync. One
 issue in particular was that while buzzing near the end of a question, the question would prematurely end, interrupting
@@ -100,7 +101,7 @@ even suggested some sort of card game-trivia bowl hybrid.
 I believe Protobowl also operates in a similar manner to my design so perhaps this might also be setup for writing a mobile app to finally interface with Protobowl
 once again...
 
-![Kuiperbowl comet](/images/comet_big.png)
+![Kuiperbowl comet](/images/kuiperbowl/comet_big.png)
 
 ...but that's for another time!
 

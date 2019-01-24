@@ -1,6 +1,7 @@
 ---
 layout: post
-title:  "Calendar from Undergrad"
+title:	"CMSC Undergrad Calendar"
+subtitle:  "Calendar from Undergrad"
 date:   2018-09-27
 categories: umd cmsc undergrad calendar
 ---
@@ -33,8 +34,6 @@ webscraping.
 
 The solution I turned to was Selenium, mostly because this project gave me
 an excuse to start messing around with it.
-<br>
-<br>
 
 ## Process
 One of the first things I did was figure out how to get around with Selenium.
@@ -54,8 +53,6 @@ November. How curious! I thought I had messed up some timezone issue, but then
 I remembered: Daylight saving time. Ugh. Google Calendar was automatically accounting
 for DST for some reason. To be honest, I just monkey-patched the
 code to change the time offset based on whether DST was in place or not.
-<br>
-<br>
 
 ## After Thoughts
 This project was not that complicated, and I'm sure there were better ways to do
@@ -74,4 +71,4 @@ the calendar still has some use for reminding me of smaller events and if anythi
 I learned how to prototype webscrapers faster with it through the Selenium experience.
 
 The calendar itself can be accessed [here](https://calendar.google.com/calendar/embed?src=a08cd3h5pl26olnsts54pn8kvs%40group.calendar.google.com&ctz=America%2FNew_York)
- although it is likely not up-to-date.
+although it is likely not up-to-date.
