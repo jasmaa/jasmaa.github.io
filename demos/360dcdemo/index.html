@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<title>Fun in DC - 2019</title>
+	
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/103/three.js"></script>
+		<script src="js/panolens.min.js"></script>
+	</head>
+	
+	<body>
+	</body>
+	
+	<script>
+		var panorama, viewer;
+		var count = 0;
+		var panoramaList = [
+			new PANOLENS.ImagePanorama('images/R0010421.JPG'),
+			new PANOLENS.ImagePanorama('images/R0010423.JPG'),
+			new PANOLENS.ImagePanorama('images/R0010436.JPG'),
+			new PANOLENS.ImagePanorama('images/R0010438.JPG'),
+			new PANOLENS.ImagePanorama('images/R0010440.JPG'),
+		];
+
+		viewer = new PANOLENS.Viewer();
+		for(let i = 0; i < panoramaList.length; i++){
+			viewer.add(panoramaList[i]);
+		}
+		
+		
+		window.setInterval(function(){
+			count++;
+			count %= panoramaList.length;
+			viewer.setPanorama( panoramaList[count] );
+		}, 10000);
+		
+	</script>
+</html>
