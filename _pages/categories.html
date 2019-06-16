@@ -1,0 +1,72 @@
+---
+layout: page
+title: Categories
+permalink: /categories/
+slug: categories
+---
+
+{% comment %}
+	Get all categories from posts
+{% endcomment %}
+{% assign raw_categories = "" | split:'|' %}
+{% for post in site.posts %}
+	{% assign raw_categories = raw_categories | concat:post.categories %}
+{% endfor %}
+
+{% comment %}
+	Get rid of repeat categories
+{% endcomment %}
+{% assign categories = "" | split:'|' %}
+{% for category in raw_categories %}
+	{% if category != "" %}
+		{% unless categories contains category %}
+			{%assign curr_category = category | split:'|' %}
+			{% assign categories = categories | concat:curr_category %}
+		{% endunless %}
+	{% endif %}
+{% endfor %}
+
+<!-- Display categories -->
+{% for category in categories %}
+	<div class="btn btn-outline-secondary" style="margin: 0.2em 0.2em 0.2em 0.2em;" onClick="showPosts('{{ category }}')">
+		<i class="fas fa-tag"></i>
+		{{ category }}
+	</div>
+{% endfor %}
+
+<br><br>
+
+{% for category in categories %}
+	<div id="{{ category }}-posts">
+	{% for post in site.posts %}
+		{% if post.categories contains category %}
+			<div class="card">
+			  <div class="card-body">
+				<h5 class="card-title">{{ post.title }}</h5>
+				<h6 class="card-subtitle mb-2 text-muted"><i>{{ post.subtitle }}</i></h6>
+				<p class="card-text">{{ post.excerpt | truncatewords:30 | strip_html}}</p>
+				<a href="{{ post.url }}" class="btn btn-primary">Read more</a>
+			  </div>
+			</div>
+			<br>
+		{% endif %}
+	{% endfor %}
+	</div>
+{% endfor %}
+
+<script>
+	function hideAll(){
+		{% for category in categories %}
+		$("#{{ category }}-posts").hide();
+		{% endfor %}
+	}
+	
+	function showPosts(id){
+		hideAll();
+		$(`#${id}-posts`).fadeIn();
+	}
+	
+	hideAll();
+</script>
+
+

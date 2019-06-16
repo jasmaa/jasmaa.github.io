@@ -5,10 +5,6 @@ permalink: /projects/
 slug: projects
 ---
 
-A few of my projects.
-
----
-
 #### [Kuiperbowl](https://github.com/jasmaa/kuiperbowl)
 Proof-of-concept real-time multiplayer trivia bowl
 
@@ -26,4 +22,4 @@ Code grabs daily password and runs it through Jisho API.
 Experimental games library
 
 #### [This site](https://github.com/jasmaa/jasmaa.github.io)
-Schizophrenic Github page. Currently running this Jekyll project blog.
+Capricious Github page. Currently running this Jekyll project blog.

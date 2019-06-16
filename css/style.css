@@ -1,5 +1,5 @@
 .page-header{
-  margin: 00px 0px 10px 0px;
+  margin: 0px 0px 10px 0px;
 }
 
 .cover-img{
@@ -57,15 +57,12 @@ img {
   margin-right: auto;
 }
 
-aside {
-  margin: 2% 0% 0% 0%;
-}
 
-html {
-  margin: 0% 10% 0% 10%;
+aside {
+  margin: 2% 2% 0% 2%;
 }
 @media screen and (max-width: 768px) {
-  html {
+  aside {
      margin: 0% 0% 0% 0%;
   }
 }

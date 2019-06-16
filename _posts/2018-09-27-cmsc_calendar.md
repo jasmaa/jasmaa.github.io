@@ -3,7 +3,7 @@ layout: post
 title:	"CMSC Undergrad Calendar"
 subtitle:  "Calendar from Undergrad"
 date:   2018-09-27
-categories: umd cmsc undergrad calendar
+categories: python calendar
 ---
 
 Going into college, one of my primary goals was to get

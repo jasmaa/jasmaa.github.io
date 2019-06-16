@@ -3,7 +3,7 @@ layout: post
 title:  "Protobowl VR"
 subtitle: "You buzz in the game, you buzz in real life"
 date:   2019-01-24
-categories: protobowl oculus
+categories: quizbowl oculus websocket unity3d
 ---
 
 Late last year, after a session of my school's XR club, I had, on a whim, proposed to a friend my grand idea of putting quizbowl in VR. As per usual, my absurd scheme was

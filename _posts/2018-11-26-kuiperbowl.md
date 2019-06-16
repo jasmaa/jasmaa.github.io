@@ -3,7 +3,7 @@ layout: post
 title:  "Kuiperbowl"
 subtitle: "Like Protobowl but significantly worse"
 date:   2018-11-26
-categories: trivia quizbowl kuiperbowl
+categories: quizbowl python django js websocket
 ---
 
 As of the time of writing, Kuiperbowl is live [here](https://www.kuiperbowl.com)!
