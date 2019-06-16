@@ -1,3 +1,3 @@
-Personal github pages site powered by Jekyll and Bootstrap.
+# jasma.github.io
 
-Mostly a projects blog.
+Personal site
