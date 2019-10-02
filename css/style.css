@@ -6,29 +6,73 @@
 
 .vert-box {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  padding: 2em;
 }
 
 .box-profile {
-  display: flex;
   flex: 1;
-  background-color: gainsboro;
   padding: 2em;
+
+  align-self: flex-start;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
 }
 
 .box-content {
   display: flex;
-  flex: 2;
-  background-color: white;
+  flex: 3;
+  flex-direction: column;
+  background-color: gainsboro;
   padding: 2em;
+
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-img {
   border-radius: 50%;
-  width: 50%;
+  width: 40%;
 }
 
-body {
-  background-image: url("/images/bg.jpg");
+.blog-card {
+  padding: 1em;
+}
+
+img {
+  width: 40vmax;
+}
+
+p {
+  color: gray;
+  font-size: 1.2em;
+  line-height: 2;
+  padding-bottom: 1em;
+}
+ul {
+  margin-left: 2em;
+  margin-right: 2em;
+}
+ul li {
+  color: gray;
+  font-size: 1.2em;
+  list-style-type: circle !important
+}
+ol li {
+  color: gray;
+  font-size: 1.2em;
+  line-height: 2;
+}
+
+a {
+  color: orange;
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }

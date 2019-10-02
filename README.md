@@ -1,3 +1,7 @@
-# jasma.github.io
+# JBlog
 
-Personal site
+Personal website and project blog
+
+## Setup
+    bundle install
+    bundle exec jekyll serve

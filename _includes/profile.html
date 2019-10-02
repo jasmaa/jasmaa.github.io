@@ -1,53 +1,38 @@
-<div class="vert-box card">
-
+<div class="vert-box">
     <div style="display: flex; flex-direction: column; align-items: center;" class="section">
         <img src="/personal/me.jpg" class="profile-img">
         <h3>{{ site.author }}</h3>
-        <p>{{ site.blurb }}</p>
+        {{ site.blurb }}
     </div>
 
-    <div class="section">
+    <div>
         <h5>About</h5>
-        <p>{{ site.description }}</p>
+        {{ site.description }}
     </div>
 
-    <div class="section">
+    <div>
         <h5>Resume</h5>
         <a href="/personal/Jason Maa - Resume.pdf"><i class="fas fa-file"></i> Resume</a>
     </div>
 
-    <div class="section">
-        <h5>Projects</h5>
-        <ul>
-            <li>
-                <a href="#">
-                    Project 01
-                </a>
-            </li>
-        </ul>
-    </div>
-
-    <div class="section">
+    <div>
         <h5>Contact and Links</h5>
-        <ul>
-            <li>
-                <a href="mailto://{{ site.email }}">
-                    <i class="fas fa-envelope-square"></i> {{ site.email }}
-                </a>
-            </li>
-            <li>
-                <a href="https://linkedin.com/in/{{ site.linkedin_username }}">
-                    <i class="fab fa-linkedin"></i>
-                    {{ site.linkedin_username }}
-                </a>
-            </li>
-            <li>
-                <a href="https://github.com/{{ site.github_username }}">
-                    <i class="fab fa-github-square"></i>
-                    {{ site.github_username }}
-                </a>
-            </li>
-        </ul>
-    </div>
 
+        <div style="display: flex; flex-direction: column">
+            <a href="mailto://{{ site.email }}">
+                <i class="fas fa-envelope-square"></i> {{ site.email }}
+            </a>
+
+            <a href="https://linkedin.com/in/{{ site.linkedin_username }}">
+                <i class="fab fa-linkedin"></i>
+                {{ site.linkedin_username }}
+            </a>
+
+            <a href="https://github.com/{{ site.github_username }}">
+                <i class="fab fa-github-square"></i>
+                {{ site.github_username }}
+            </a>
+        </div>
+
+    </div>
 </div>

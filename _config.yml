@@ -16,9 +16,8 @@
 title: JBlog
 author: Jason Maa
 email: jasonmaa3955@gmail.com
-blurb: Sophomore Computer Science at University of Maryland
+blurb: Computer Science at University of Maryland
 description: > # this means to ignore newlines until "baseurl:"
-  Hello! My name is Jason Maa.
   I am an undergraduate student at the University of Maryland
   studying computer science. I primarily work on web and machine
   learning projects. In my free time, I enjoy reading, taking hikes,
@@ -41,7 +40,7 @@ plugins:
   - jekyll-paginate
 
 # Pagination Settings
-paginate: 3
+paginate: 4
 pagination_path: "/page:num/"
 
 # Permalink
