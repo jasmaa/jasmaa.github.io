@@ -24,7 +24,7 @@ I was about to give up and just manually add all 50+ some events when
 the words of an old friend came back to me:
 
 
-#### *"Webscraping? Pfft that's easy."*
+*"Webscraping? Pfft that's easy."*
 
 
 In a sense, he was right because while trying to hack together a script and figuring
@@ -35,7 +35,8 @@ webscraping.
 The solution I turned to was Selenium, mostly because this project gave me
 an excuse to start messing around with it.
 
-## Process
+#### Process
+
 One of the first things I did was figure out how to get around with Selenium.
 Once I could successfully navigate through the calendars via button click and
 pull the source, the project became mostly a parsing game. I threw all the
@@ -54,7 +55,8 @@ I remembered: Daylight saving time. Ugh. Google Calendar was automatically accou
 for DST for some reason. To be honest, I just monkey-patched the
 code to change the time offset based on whether DST was in place or not.
 
-## After Thoughts
+#### After Thoughts
+
 This project was not that complicated, and I'm sure there were better ways to do
 what I had set out to accomplish. For all I know, I may have just entirely missed
 an "Add to Google Calendar" button on the undergrad site which would have saved

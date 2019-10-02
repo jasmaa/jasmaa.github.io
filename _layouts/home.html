@@ -1,23 +1,14 @@
 ---
 layout: default
 pagination:
-  enabled: true
+enabled: true
 ---
 
-<div class="container-fluid">
-
-  {% for post in paginator.posts %}
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ post.title }}</h5>
-		<h6 class="card-subtitle mb-2 text-muted"><i>{{ post.subtitle }}</i></h6>
-        <p class="card-text">{{ post.excerpt | truncatewords:30 | strip_html}}</p>
-        <a href="{{ post.url }}" class="btn btn-primary">Read more</a>
-      </div>
-    </div>
-    <br>
-  {% endfor %}
-
-  {% include pagination.html %}
-
+<div class="hori-box">
+  <div class="box-profile">
+    {% include profile.html %}
+  </div>
+  <div class="box-content">
+    {% include blogPosts.html %}
+  </div>
 </div>
