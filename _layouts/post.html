@@ -3,20 +3,17 @@ layout: default
 ---
 
 <div class="hori-box">
-    <div class="box-profile">
-        {% include profile.html %}
-    </div>
     <div class="box-content">
 
         <div style="display: flex; flex-direction: row; align-items: center;">
             {% include postNav.html %}
         </div>
 
-        <div class="card">
-            <div class="card-content post-page">
+        <div class="card post-page">
+            <div class="card-content">
                 <h3>{{ page.title }}</h3>
                 <h5><i>{{ page.subtitle }}</i></h5>
-                <h5><i>{{ page.date | date: "%b %-d, %Y" }}</i></h5>    
+                <h5><i>{{ page.date | date: "%b %-d, %Y" }}</i></h5>
                 <hr style="margin-top: 2em; margin-bottom: 2em;">
                 {{ content }}
             </div>
