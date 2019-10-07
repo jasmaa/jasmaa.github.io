@@ -3,6 +3,11 @@
   flex: 1;
   flex-direction: row;
 }
+@media only screen and (max-width: 1000px) {
+  .hori-box {
+    flex-direction: column;
+  }
+}
 
 .vert-box {
   display: flex;
@@ -18,6 +23,11 @@
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
+}
+@media only screen and (max-width: 1000px) {
+  .box-profile {
+    position: relative;
+  }
 }
 
 .box-content {
@@ -40,6 +50,19 @@
   padding: 1em;
 }
 
+.post-page {
+  margin-left: 15em;
+  margin-right: 15em;
+  padding: 4em;
+}
+@media only screen and (max-width: 1000px) {
+  .post-page {
+    margin-left: 0em;
+    margin-right: 0em;
+    padding: 2em;
+  }
+}
+
 img {
   width: 40vmax;
 }
@@ -57,6 +80,7 @@ ul {
 ul li {
   color: gray;
   font-size: 1.2em;
+  margin-bottom: 1em;
   list-style-type: circle !important
 }
 ol li {
