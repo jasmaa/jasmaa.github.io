@@ -100,3 +100,8 @@ img {
   margin-top: 1em;
   margin-bottom: 1em;
 }
+
+strong {
+	color: dark-gray;
+	font-weight: bold;
+}
