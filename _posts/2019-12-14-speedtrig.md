@@ -9,6 +9,8 @@ categories: trig react-native js mobile
 **At the time of writing, the app is available for Android on Google Play
 [here](https://play.google.com/store/apps/details?id=com.speedtrig)!**
 
+**UPDATE (12/29/2019): Now available on iOS as well [here](https://apps.apple.com/us/app/speed-trig/id1493062069)**
+
 ***
 
 One of my fondest memories from high school were a set of re-takeable quizzes
