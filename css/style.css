@@ -34,7 +34,6 @@
   flex: 3;
   flex-direction: column;
   background-color: gainsboro;
-  padding: 2em;
 
   justify-content: center;
   align-items: center;
@@ -58,9 +57,10 @@
   .post-page {
     margin-left: 0em;
     margin-right: 0em;
-    padding: 0em;
+    padding: 1em;
   }
 }
+
 
 img {
   width: 60vmin;
