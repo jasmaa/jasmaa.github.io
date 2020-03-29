@@ -61,11 +61,6 @@
   }
 }
 
-
-img {
-  width: 60vmin;
-}
-
 p {
   color: gray;
   font-size: 1.2em;
@@ -98,6 +93,12 @@ img {
   margin-right: auto;
   margin-top: 1em;
   margin-bottom: 1em;
+  width: 40em;
+}
+@media only screen and (max-width: 1000px) {
+  img {
+    width: 20em;
+  }
 }
 
 strong {
