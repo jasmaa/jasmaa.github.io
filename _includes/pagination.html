@@ -1,4 +1,4 @@
-<ul class="pagination">
+<ul class="pagination" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
   <li class="disabled"><a href="{{ paginator.previous_page_path }}"><i class="fas fa-chevron-left"></i></a></li>
   {% for page in (1..paginator.total_pages) %}
   {% if page == paginator.page %}

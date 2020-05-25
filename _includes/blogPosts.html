@@ -1,7 +1,7 @@
-<div class="vert-box" style="min-height: 100vh;">
+<div class="vert-box" style="min-height: 100vh; margin-top: 2em;">
 
     {% for post in paginator.posts %}
-    <div class="card" style="margin: 2em;">
+    <div class="card" style="margin-left: 2em; margin-right: 2em;">
         <div class="card-content">
             <span class="card-title">{{ post.title }}</span>
             <h6 class="card-subtitle mb-2 text-muted"><i>{{ post.subtitle }}</i></h6>
@@ -17,9 +17,8 @@
     <div style="flex: 1; flex-direction: column;">
     </div>
 
-    <div class="box-content">
-        <div style="display: flex; flex-direction: row; align-items: center;">
-            {% include pagination.html %}
-        </div>
+    <div style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+        {% include pagination.html %}
     </div>
+
 </div>
