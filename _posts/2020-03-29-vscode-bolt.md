@@ -55,9 +55,8 @@ especially useful for constructs that enclose things such as strings.
 
 As an example, this regex was used to match the beginning of function declarations:
 
-```
-(function\\s)?\\s*([a-zA-Z_$]\\w*)\\s*(\\()((?:[a-zA-Z_$]\\w*)(?:,\\s*(?:[a-zA-Z_$]\\w*))*)?(\\))\\s*{
-```
+<code data-gist-id="e495f887aef1e4b8d667d000fd4a5bb3" data-gist-file="2020-03-29-vscode-bolt-1">
+</code>
 
 ...which looks like a complete mess at first until it gets broken down:
 
@@ -68,28 +67,8 @@ parts of a construct which determines how text gets highlighted. In addition, ca
 can also be used to nest patterns for more constructs as seen in capture group 4 below
 which tries to find and match argument names in the function header.
 
-```
-"beginCaptures": {
-    "1": {
-		"name": "storage.type.function.bolt"
-	},
-	"2": {
-		"name": "entity.name.function.bolt"
-	},
-	"3": {
-		"name": "punctuation.definition.parameters.begin.bolt"
-	},
-	"4": {
-		"patterns": [{
-			"name": "variable.parameter.function.bolt",
-			"match": "\\b(?:[a-zA-Z_$]\\w*)"
-		}]
-	},
-	"5": {
-		"name": "punctuation.definition.parameters.end.bolt"
-	}
-},
-```
+<code data-gist-id="e495f887aef1e4b8d667d000fd4a5bb3" data-gist-file="2020-03-29-vscode-bolt-2">
+</code>
 
 References to defined constructs can also be included inside other
 constructs which makes it really easy to design a grammar top-down.
@@ -97,16 +76,8 @@ The patterns shown below match the in-between text of a function
 declaration block, saying that the inside of a block can either include
 another `function-declaration` or an expression (`expr`).
 
-```
-"patterns": [
-	{
-		"include": "#function-declaration"
-	},
-	{
-		"include": "#expr"
-	}
-]
-```
+<code data-gist-id="e495f887aef1e4b8d667d000fd4a5bb3" data-gist-file="2020-03-29-vscode-bolt-3">
+</code>
 
 The rest of the project boiled down to writing regex rules to match key constructs
 and placing them properly into my hierarchy.
@@ -159,7 +130,7 @@ I didn't expect to ever use any of the parsing stuff I learned when I took progr
 languages, having written it off as too low-level and faraway from the world of
 app development, but here I am today, a wiser man. I also find it ironic that in an effort
 to not have to write large, unreadable JSON files, I ended up making this project
-which is, at it's core, a large, complicated, and very unreadable JSON file.
+which is, at its core, a large, complicated, and very unreadable JSON file.
 
 Life is full of many mysteries and contradictions.
 
@@ -178,7 +149,7 @@ This long chain of forking was the primary reason why I had hesitated to make
 a pull request to begin with. The grammars appeared to have been machine converted from
 the original XML into JSON which made them somewhat of a nightmare to read
 and modify. I was also not sure what both creators treated as the ground truth
-for their grammars and decided it was just easier to make my own grammar scratch.
+for their grammars and decided it was just easier to make my own grammar from scratch.
 
 On the other hand, it's amazing to see code(?) work its way up to the present. Some rules from the
 original JS language package date as far back to 2012 and have haphazardly made their way
@@ -186,3 +157,5 @@ across different projects for different editors, residing in different forms, to
 being used by thousands today and scrutinized by a flakey college student 8 years later. I think it's
 one thing when talking about old code in a long-running project but it's another to see code move across
 different projects and contexts over time.
+
+**UPDATE 05/25/20**: Grammar examples moved to Gist, minor changes to text
