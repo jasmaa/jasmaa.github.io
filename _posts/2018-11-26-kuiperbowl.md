@@ -6,7 +6,7 @@ date:   2018-11-26
 categories: quizbowl python django js websocket
 ---
 
-As of the time of writing, Kuiperbowl is live [here](https://www.kuiperbowl.com)!
+As of the time of writing, Kuiperbowl is live [here](https://kuiperbowl.com)!
 
 ---
 

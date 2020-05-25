@@ -6,10 +6,22 @@
             <span class="card-title">{{ post.title }}</span>
             <h6 class="card-subtitle mb-2 text-muted"><i>{{ post.subtitle }}</i></h6>
             <p class="card-text">{{ post.excerpt | truncatewords:30 | strip_html}}</p>
-        </div>
 
-        <div class="card-action">
-            <a href="{{ post.url }}">Read more</a>
+            <hr />
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+
+                <a href="{{ post.url }}" style="white-space: nowrap; margin-right: 1em;">READ MORE</a>
+
+                <div style="text-align: right;">
+                    {% assign categories = post.categories | sort %}
+                    {% for category in categories %}
+                    <div class="chip">
+                        <a href="/categories#{{category}}">{{category}}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
     {% endfor %}

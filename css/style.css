@@ -3,7 +3,7 @@
   flex: 1;
   flex-direction: row;
 }
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1500px) {
   .hori-box {
     flex-direction: column;
   }
@@ -25,8 +25,7 @@
   width: 25%;
   background-color: white;
 }
-
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1500px) {
   .box-profile {
     width: 100%;
     padding: 2em;
@@ -44,7 +43,7 @@
   justify-content: center;
   align-items: center;
 }
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1500px) {
   .box-content {
     margin: 0;
     width: 100%;
@@ -54,7 +53,7 @@
 
 .profile-img {
   border-radius: 50%;
-  width: 40%;
+  width: 10em;
 }
 
 .blog-card {
@@ -66,7 +65,7 @@
   margin-right: 15em;
   padding: 4em;
 }
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1500px) {
   .post-page {
     margin-left: 0em;
     margin-right: 0em;
@@ -107,16 +106,25 @@ a:hover {
   color: orangered;
 }
 
-img {
+p > img {
   display: block;
   margin-left: auto;
   margin-right: auto;
   margin-top: 1em;
   margin-bottom: 1em;
+  min-width: 40vw;
   max-width: 80%;
 }
 
 strong {
 	color: dark-gray;
 	font-weight: bold;
+}
+
+hr {
+  background-color: gainsboro;
+  height: 1px;
+  border: none;
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
