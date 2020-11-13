@@ -2,7 +2,7 @@
 layout: post
 title:  "Protobowl VR"
 subtitle: "You buzz in the game, you buzz in real life"
-date:   2019-01-24
+date: "2019-01-24"
 categories: quizbowl oculus websocket unity3d
 ---
 
@@ -126,7 +126,7 @@ the buzzer launching was particularly amusing as it would mess with the characte
   
 #### TL;DR Demo Video
 
-<div class="video-container"><iframe src="https://www.youtube.com/embed/7s_zPBXLv94"></iframe></div>
+<iframe src="https://www.youtube.com/embed/7s_zPBXLv94" width="1080rem" height="720rem"></iframe>
 
 #### After Thoughts
 

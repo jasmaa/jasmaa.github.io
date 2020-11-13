@@ -2,7 +2,7 @@
 layout: post
 title:  "VS Code Bolt"
 subtitle: "That One Coding Project That Isn't Actually a Coding Project"
-date:   2020-03-29
+date: "2020-03-29"
 categories: vscode bolt firebase
 ---
 

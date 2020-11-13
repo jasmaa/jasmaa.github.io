@@ -2,7 +2,7 @@
 layout: post
 title:  "Speed Trig"
 subtitle: "TRIG-ger Happy Havoc"
-date:   2019-12-14
+date: "2019-12-14"
 categories: trig react-native js mobile
 ---
 

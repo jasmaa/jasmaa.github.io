@@ -2,7 +2,7 @@
 layout: post
 title:  "DQNsort"
 subtitle: "Sorting with neural nets"
-date:   2019-08-23
+date: "2019-08-23"
 categories: python pytorch ml
 ---
 

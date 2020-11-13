@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Kuiperbowl"
+title: "Kuiperbowl"
 subtitle: "Like Protobowl but significantly worse"
-date:   2018-11-26
+date: "2018-11-26"
 categories: quizbowl python django js websocket
 ---
 

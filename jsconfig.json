@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@includes/*": [
+        "_includes/*"
+      ],
+      "@layouts/*": [
+        "_layouts/*"
+      ],
+      "@styles/*": [
+        "styles/*"
+      ],
+      "@posts/*": [
+        "_posts/*"
+      ],
+      "@lib/*": [
+        "lib/*"
+      ],
+    }
+  }
+}
