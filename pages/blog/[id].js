@@ -1,6 +1,8 @@
 import Head from 'next/head';
-import { Container } from 'reactstrap';
+import Link from 'next/link';
+import { Card, CardBody, Container } from 'reactstrap';
 
+import Categories from '@components/Categories';
 import config from '@lib/config';
 import { getAllPostIDs, getPostData } from '@lib/posts';
 
@@ -11,12 +13,24 @@ export default function Post({ postData }) {
         <title>{postData.title} - {config.siteName}</title>
       </Head>
 
-      <Container>
-        <pre>
-          {JSON.stringify(postData, null, 2)}
-        </pre>
-        <h1>{postData.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+      <Container className="py-5">
+        <Link href="/"><a>← Back to Home</a></Link>
+
+        <div className="my-5">
+          <h1>{postData.title}</h1>
+          <h4>
+            <em>{postData.subtitle}</em>
+          </h4>
+          <h4>
+            <em>{postData.date}</em>
+          </h4>
+          <Categories categories={postData.categories} />
+          <hr className="my-3" />
+          <div className="post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+        </div>
+
+        <Link href="/"><a>← Back to Home</a></Link>
+
       </Container>
     </>
   );
@@ -26,16 +40,16 @@ export default function Post({ postData }) {
 export async function getStaticPaths() {
   const paths = getAllPostIDs();
   return {
-          paths,
-          fallback: false
+    paths,
+    fallback: false
   }
 }
 
-export async function getStaticProps({params}) {
+export async function getStaticProps({ params }) {
   const postData = await getPostData(params.id);
   return {
-          props: {
-          postData
-        }
+    props: {
+      postData
+    }
   }
 }

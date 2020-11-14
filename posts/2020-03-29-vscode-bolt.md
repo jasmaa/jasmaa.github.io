@@ -10,7 +10,7 @@ Recently, I had started experimenting with Firebase's Realtime Database.
 Then one thing led to another, and I eventually found myself working on a
 language extension for a rules language, but I'm getting ahead of myself.
 
-#### Background
+## Background
 
 Taking a step back and providing some much-needed background:
 the Firebase Realtime Database is a JSON-based,
@@ -33,7 +33,7 @@ extension for syntax highlighting, but, unfortunately, none of the available one
 the marketplace met my expectations. I made like any sane and normal person and dived
 into making my own!
 
-#### Making Language Extensions
+## Making Language Extensions
 
 While I develop a lot IN VS Code, I had no actual experience developing
 FOR VS Code. Surprisingly, getting started was quite simple: I was able to bootstrap a new project
@@ -96,7 +96,7 @@ that more work for parsing fell on the regexes, leading to very long and complic
 Trudging through, I eventually got the extension to a place where most of the
 language constructs were written into the TextMate grammar.
 
-#### Opening Up Shop
+## Opening Up Shop
 
 At this point I was ready to release it to the marketplace. Packaging up the extension for
 release was simple with `vsce` but my experience with other markplaces told
@@ -111,7 +111,7 @@ some badges and my Bolt language extension was ready for anyone to use!
 
 ![Marketplace page](/images/vscode_bolt/marketplace.png)
 
-#### Improvements and Conclusion
+## Improvements and Conclusion
 
 While the syntax highlighter works quite nicely overall, more could still be done with
 it. One issue is that I did not name scopes for all language structures so
@@ -134,7 +134,7 @@ which is, at its core, a large, complicated, and very unreadable JSON file.
 
 Life is full of many mysteries and contradictions.
 
-#### Appendix A: Fun with FOSS
+## Appendix A: Fun with FOSS
 
 At the start, I had originally just intended to make a pull request to one of the other Bolt extensions,
 but when I peeked at their repositories, I found that

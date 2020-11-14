@@ -1,10 +1,11 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Card, CardBody, Container } from 'reactstrap';
+import { Container, Row, Col, Card, CardBody } from 'reactstrap';
 
 import config from '@lib/config';
 import { getSortedPostsData } from '@lib/posts';
 import style from '@styles/Home.module.css';
+import PostPagination from '@components/PostPagination';
 
 export default function Home({ posts }) {
   return (
@@ -14,22 +15,27 @@ export default function Home({ posts }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container>
-        <div className="d-flex flex-column align-items-center my-5">
-          <img className={style['profile-img']} src="/images/me.jpg" />
-          <h1> Jason Maa</h1>
-        </div>
+      <Container className="py-5">
+
+        <Row>
+          <Col sm="12" md={{ size: 8, offset: 2 }}>
+            <div className="d-flex flex-column align-items-center my-3">
+              <img className={style['profile-img']} src="/images/me.jpg" />
+              <h1 className={style['headline']}>Jason Maa</h1>
+              <h4>Student at the University of Maryland</h4>
+            </div>
+            <p style={{ textAlign: 'center' }}>
+              I am an undergraduate student at the University of Maryland studying computer science.
+              I primarily work on web and machine learning projects.
+              In my free time, I enjoy reading, taking hikes,
+              and doing language studies.
+            </p>
+          </Col>
+        </Row>
 
         <div>
-          {posts.map(post => (
-            <Card className="m-3">
-              <CardBody>
-                <Link href={`/blog/${post.id}`}><a><h2>{post.title}</h2></a></Link>
-                <h3>{post.date}</h3>
-                <h3>{post.subtitle}</h3>
-              </CardBody>
-            </Card>
-          ))}
+          <h2>Blog Posts</h2>
+          <PostPagination posts={posts} />
         </div>
       </Container>
     </>
