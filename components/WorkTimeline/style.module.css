@@ -1,0 +1,21 @@
+.timeline-element {
+  width: 100%;
+  display: inline-block;
+  border-left: 0.3rem solid black;
+  padding-left: 5rem;
+  padding-bottom: 3rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.dot {
+  position: relative;
+  left: -5.9rem;
+  top: 7rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  background-color: white;
+  border: 0.2rem solid black;
+  border-radius: 50%;
+  display: inline-block;
+}
