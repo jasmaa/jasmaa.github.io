@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Card, CardBody, Container } from 'reactstrap';
+import { Container } from 'reactstrap';
 
 import Categories from '@components/CategoriesList';
 import config from '@lib/config';
