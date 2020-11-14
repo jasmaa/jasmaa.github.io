@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { Card, CardBody, Pagination, PaginationItem, PaginationLink } from "reactstrap";
+import { Card, CardBody } from "reactstrap";
 
+import Controller from './Controller';
 import CategoriesList from '@components/CategoriesList';
 
 const postsPerPage = 2;
+const numDisplayPages = 4;
 
 /**
  * Paginated container for blog posts
@@ -20,12 +22,12 @@ export default function PostPagination({ posts }) {
     <>
       {posts.slice(postsPerPage * page, postsPerPage * (page + 1))
         .map(post => (
-          <Card key={posts.id} className="m-3">
+          <Card key={post.id} className="m-3">
             <CardBody>
+              <small><em>{new Date(post.date).toDateString()}</em></small>
               <h2><Link href={`/blog/${post.id}`}><a>{post.title}</a></Link></h2>
-              <div className="d-flex flex-column mt-2 mb-4">
-                <em>{post.subtitle}</em>
-                <em>{new Date(post.date).toDateString()}</em>
+              <div className="mt-2 mb-4">
+                <h5><em>{post.subtitle}</em></h5>
               </div>
               <CategoriesList categories={post.categories} />
             </CardBody>
@@ -33,21 +35,7 @@ export default function PostPagination({ posts }) {
         ))
       }
       <div className="d-flex justify-content-center">
-        <Pagination>
-          <PaginationItem>
-            <PaginationLink first onClick={() => setPage(0)} />
-          </PaginationItem>
-          {new Array(numPages)
-            .fill(undefined)
-            .map((_, i) => (
-              <PaginationItem key={`pagination-item-${i}`} active={i === page}>
-                <PaginationLink onClick={() => setPage(i)}>{i + 1}</PaginationLink>
-              </PaginationItem>
-            ))}
-          <PaginationItem>
-            <PaginationLink last onClick={() => setPage(numPages - 1)} />
-          </PaginationItem>
-        </Pagination>
+        <Controller page={page} setPage={setPage} numPages={numPages} numDisplayPages={numDisplayPages} />
       </div>
     </>
   );

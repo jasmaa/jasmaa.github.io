@@ -21,14 +21,12 @@ export default function Post({ postData }) {
       <Container className="py-5">
         <Link href="/"><a>← Back to Home</a></Link>
 
-        <div className="my-5">
-          <h1>{postData.title}</h1>
-          <h4>
-            <em>{postData.subtitle}</em>
-          </h4>
-          <h4>
-            <em>{new Date(postData.date).toDateString()}</em>
-          </h4>
+        <div className="mt-3 mb-5">
+          <h5><em>{new Date(postData.date).toDateString()}</em></h5>
+          <div className="my-3">
+            <h1>{postData.title}</h1>
+            <h4><em>{postData.subtitle}</em></h4>
+          </div>
           <Categories categories={postData.categories} />
           <hr className="my-3" />
           <div className="post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
