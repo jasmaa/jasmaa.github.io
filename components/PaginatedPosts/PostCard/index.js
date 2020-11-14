@@ -8,7 +8,7 @@ import CategoriesList from '@components/CategoriesList';
  */
 export default function PostCard({ post }) {
   return (
-    <Card className="my-5 animate__animated animate__fadeIn">
+    <Card className="mt-3 mb-5 animate__animated animate__fadeIn">
       <CardBody>
         <small><em>{new Date(post.date).toDateString()}</em></small>
         <h2><Link href={`/blog/${post.id}`}><a>{post.title}</a></Link></h2>
