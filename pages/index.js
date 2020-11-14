@@ -21,15 +21,14 @@ import LinksDisplay from '@components/LinksDisplay';
  * 
  * @param {*} param0 
  */
-export default function Home({ posts, rss }) {
+export default function Home({ posts }) {
   return (
     <>
       <Head>
         <title>Home - {config.siteName}</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content={config.siteDescription} />
       </Head>
-
-      <pre>{rss}</pre>
 
       <Container className="py-5">
         <Row>

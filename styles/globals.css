@@ -20,6 +20,8 @@ a:hover {
 }
 
 li {
+  font-size: 1.2rem;
+  color: gray;
   margin-bottom: 1.2rem;
 }
 

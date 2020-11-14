@@ -10,20 +10,20 @@ export default function PostNavigation({ prevPost, nextPost }) {
       {nextPost
         ? (
           <PaginationItem>
-            <Link href={`/blog/${nextPost.id}`}><PaginationLink previous /></Link>
+            <Link href={`/blog/${nextPost.id}`}><a className="page-link">←</a></Link>
           </PaginationItem>
         )
-        : <PaginationItem disabled><PaginationLink previous /></PaginationItem>}
+        : <PaginationItem disabled><a className="page-link">←</a></PaginationItem>}
       <PaginationItem>
-        <Link href="/"><PaginationLink>Back to Home</PaginationLink></Link>
+        <Link href="/"><a className="page-link">Back to Home</a></Link>
       </PaginationItem>
       {prevPost
         ? (
           <PaginationItem>
-            <Link href={`/blog/${prevPost.id}`}><PaginationLink next /></Link>
+            <Link href={`/blog/${prevPost.id}`}><a className="page-link">→</a></Link>
           </PaginationItem>
         )
-        : <PaginationItem disabled><PaginationLink next /></PaginationItem>}
+        : <PaginationItem disabled><a className="page-link">→</a></PaginationItem>}
     </Pagination >
   );
 }

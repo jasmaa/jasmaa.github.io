@@ -13,7 +13,7 @@ export default function ProjectsDisplay({ items }) {
   return (
     <div className="my-5">
       {items.map(item => (
-        <Card className={style['project-item']}>
+        <Card key={item.name} className={style['project-item']}>
           <CardBody>
             <div className={style['project-content']}>
               <h3>{item.name}</h3>
