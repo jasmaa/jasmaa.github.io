@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import Link from 'next/link';
-import { Card, CardBody } from "reactstrap";
 
 import Controller from './Controller';
-import CategoriesList from '@components/CategoriesList';
+import PostCard from './PostCard';
 
 const postsPerPage = 2;
 const numDisplayPages = 4;
@@ -21,18 +19,7 @@ export default function PostPagination({ posts }) {
   return (
     <>
       {posts.slice(postsPerPage * page, postsPerPage * (page + 1))
-        .map(post => (
-          <Card key={post.id} className="m-3">
-            <CardBody>
-              <small><em>{new Date(post.date).toDateString()}</em></small>
-              <h2><Link href={`/blog/${post.id}`}><a>{post.title}</a></Link></h2>
-              <div className="mt-2 mb-4">
-                <h5><em>{post.subtitle}</em></h5>
-              </div>
-              <CategoriesList categories={post.categories} />
-            </CardBody>
-          </Card>
-        ))
+        .map(post => <PostCard key={post.id} post={post} />)
       }
       <div className="d-flex justify-content-center">
         <Controller page={page} setPage={setPage} numPages={numPages} numDisplayPages={numDisplayPages} />

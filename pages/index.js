@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcase, faEnvelope, faLaptop, faNetworkWired, faPencilAlt, faRss } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import ScrollAnimation from 'react-animate-on-scroll';
 
 import config from '@lib/config';
 import { getSortedPostsData } from '@lib/posts';
@@ -28,40 +29,56 @@ export default function Home({ posts }) {
           <Col md={{ size: 8, offset: 2 }}>
             <div className="mb-5">
               <div className="d-flex flex-column align-items-center my-3">
-                <img className={style['profile-img']} src="/images/me.jpg" />
-                <h1 className={style['headline']}>Jason Maa</h1>
-                <h4>Student at the University of Maryland</h4>
+                <ScrollAnimation animateIn="animate__flipInY" animateOnce>
+                  <img className={style['profile-img']} src="/images/me.jpg" />
+                </ScrollAnimation>
+                <ScrollAnimation animateIn="animate__fadeIn" delay={500} animateOnce>
+                  <h1 className={style['headline']}>Jason Maa</h1>
+                  <h4 style={{ textAlign: 'center' }}>Student at the University of Maryland</h4>
+                </ScrollAnimation>
               </div>
-              <p style={{ textAlign: 'center' }}>
-                I am an undergraduate student at the University of Maryland studying computer science.
-                I primarily work on web and machine learning projects.
-                In my free time, I enjoy reading, taking hikes,
-                and doing language studies.
-            </p>
+              <ScrollAnimation animateIn="animate__fadeIn" delay={600} animateOnce>
+                <p style={{ textAlign: 'center' }}>
+                  I am an undergraduate student at the University of Maryland studying computer science.
+                  I primarily work on web and machine learning projects.
+                  In my free time, I enjoy reading, taking hikes,
+                  and doing language studies.
+                 </p>
+              </ScrollAnimation>
             </div>
 
-            <div className="mb-5">
-              <h2 className="mb-3"><FontAwesomeIcon className="mr-2" icon={faNetworkWired} /> Links and Contact</h2>
-              <ul>
-                <li><a href="mailto:jasonmaa3955@gmail.com"><FontAwesomeIcon icon={faEnvelope} /> Email</a></li>
-                <li><a href="https://linkedin.com/in/jasmaa"><FontAwesomeIcon icon={faLinkedin} /> LinkedIn</a></li>
-                <li><a href="https://github.com/jasmaa"><FontAwesomeIcon icon={faGithub} /> GitHub</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faRss} /> RSS</a></li>
-              </ul>
-            </div>
+            <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
+              <div className="mb-5">
+                <h2 className="mb-3"><FontAwesomeIcon className="mr-2" icon={faNetworkWired} /> Links and Contact</h2>
+                <ul>
+                  <li><a href="mailto:jasonmaa3955@gmail.com"><FontAwesomeIcon icon={faEnvelope} /> Email</a></li>
+                  <li><a href="https://linkedin.com/in/jasmaa"><FontAwesomeIcon icon={faLinkedin} /> LinkedIn</a></li>
+                  <li><a href="https://github.com/jasmaa"><FontAwesomeIcon icon={faGithub} /> GitHub</a></li>
+                  <li><a href="#"><FontAwesomeIcon icon={faRss} /> RSS</a></li>
+                </ul>
+              </div>
+            </ScrollAnimation>
 
-            <div className="mb-5">
-              <h2 className="mb-3"><FontAwesomeIcon className="mr-2" icon={faBriefcase} />Work</h2>
-            </div>
+            <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
+              <div className="mb-5">
+                <h2 className="mb-3"><FontAwesomeIcon className="mr-2" icon={faBriefcase} />Work</h2>
+                {/* TODO: put experiences here*/}
+              </div>
+            </ScrollAnimation>
 
-            <div className="mb-5">
-              <h2 className="mb-3"><FontAwesomeIcon className="mr-2" icon={faLaptop} />Projects</h2>
-            </div>
+            <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
+              <div className="mb-5">
+                <h2 className="mb-3"><FontAwesomeIcon className="mr-2" icon={faLaptop} />Projects</h2>
+                {/* TODO: put projects here*/}
+              </div>
+            </ScrollAnimation>
 
-            <div className="mb-5">
-              <h2 className="mb-3"><FontAwesomeIcon className="mr-2" icon={faPencilAlt} />Blog Posts</h2>
-              <PostPagination posts={posts} />
-            </div>
+            <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
+              <div className="mb-5">
+                <h2 className="mb-3"><FontAwesomeIcon className="mr-2" icon={faPencilAlt} />Blog Posts</h2>
+                <PostPagination posts={posts} />
+              </div>
+            </ScrollAnimation>
           </Col>
         </Row>
       </Container>

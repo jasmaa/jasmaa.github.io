@@ -1,8 +1,10 @@
 .profile-img {
   border-radius: 50%;
   width: 20rem;
+  box-shadow: 0 0 1rem lightgray;
 }
 
 .headline {
   font-size: 4em;
+  text-align: center;
 }
