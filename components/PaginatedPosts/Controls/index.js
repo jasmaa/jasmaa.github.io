@@ -1,7 +1,7 @@
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 
 /**
- * Post pagination controller
+ * Pagination controls
  * 
  * @param {*} param0 
  */

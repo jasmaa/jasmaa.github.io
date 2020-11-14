@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import Controller from './Controller';
+import Controls from './Controls';
 import PostCard from './PostCard';
 
 const postsPerPage = 2;
@@ -18,12 +18,12 @@ export default function PostPagination({ posts }) {
 
   return (
     <>
+      <div className="d-flex justify-content-center">
+        <Controls page={page} setPage={setPage} numPages={numPages} numDisplayPages={numDisplayPages} />
+      </div>
       {posts.slice(postsPerPage * page, postsPerPage * (page + 1))
         .map(post => <PostCard key={post.id} post={post} />)
       }
-      <div className="d-flex justify-content-center">
-        <Controller page={page} setPage={setPage} numPages={numPages} numDisplayPages={numDisplayPages} />
-      </div>
     </>
   );
 }

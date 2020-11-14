@@ -7,11 +7,11 @@ import { faBriefcase, faEnvelope, faLaptop, faNetworkWired, faPencilAlt, faRss }
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import ScrollAnimation from 'react-animate-on-scroll';
 
+import PaginatedPosts from '@components/PaginatedPosts';
 import config from '@lib/config';
 import { getSortedPostsData } from '@lib/posts';
 import { generateRSSFeed } from '@lib/rss';
 import style from '@styles/Home.module.css';
-import PostPagination from '@components/PostPagination';
 
 /**
  * Home page
@@ -79,8 +79,8 @@ export default function Home({ posts, rss }) {
 
             <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
               <div className="mb-5">
-                <h2 className="mb-3"><FontAwesomeIcon className="mr-2" icon={faPencilAlt} />Blog Posts</h2>
-                <PostPagination posts={posts} />
+                <h2 className="mb-5"><FontAwesomeIcon className="mr-2" icon={faPencilAlt} />Blog Posts</h2>
+                <PaginatedPosts posts={posts} />
               </div>
             </ScrollAnimation>
           </Col>
