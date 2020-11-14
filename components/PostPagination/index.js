@@ -2,10 +2,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Card, CardBody, Pagination, PaginationItem, PaginationLink } from "reactstrap";
 
-import Categories from '@components/Categories';
+import CategoriesList from '@components/CategoriesList';
 
 const postsPerPage = 2;
 
+/**
+ * Paginated container for blog posts
+ * 
+ * @param {*} param0 
+ */
 export default function PostPagination({ posts }) {
 
   const [page, setPage] = useState(0);
@@ -20,9 +25,9 @@ export default function PostPagination({ posts }) {
               <h2><Link href={`/blog/${post.id}`}><a>{post.title}</a></Link></h2>
               <div className="d-flex flex-column mt-2 mb-4">
                 <em>{post.subtitle}</em>
-                <em>{(new Date(post.date)).toDateString()}</em>
+                <em>{new Date(post.date).toDateString()}</em>
               </div>
-              <Categories categories={post.categories} />
+              <CategoriesList categories={post.categories} />
             </CardBody>
           </Card>
         ))

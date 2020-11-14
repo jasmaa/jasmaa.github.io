@@ -14,7 +14,7 @@ Another old idea that had been swimming in my head for a few years was creating 
 impressive parts of my largely unimpressive trivia knowledge base to rote practice on Protobowl, it has always been
 a small dream of mine to make something similar in functionality (and bot the site lol).
 
-#### Design
+## Design
 
 Roughly, Kuiperbowl is made up of a Javascript client with a websocket that pings a main game server to stay in sync as well
 as requesting information and commands. The information stored is comprised of four models:
@@ -28,7 +28,7 @@ The bulk of the project server-side is actually just a giant if-else that respon
 Surprisingly, I feel the client's design took more thought as aside from coordinating UI elements, the client
 also had to be kept in sync with the server.
  
-#### Process
+## Process
 
 I knew I wanted to make the site in Django using Channels to handle websockets since I had built a real-time chatroom
 following tutorials doing the same thing. The first problem I ran into was when I tried to re-serve the old chatroom
@@ -83,7 +83,7 @@ as usual but used a reverse proxy to Daphne for HTTP requests. The last stretch 
 The domain name linking went smoothly as I had used Route 53 before, but the SSL certificate was a hassle. Eventually I figured out I could
 generate certificates for multiple domain names and then just had Nginx redirect HTTP to HTTPS.
 
-#### After Thoughts
+## After Thoughts
 
 Once again, like most of my projects. The implementation is not the cleanest it could have been. The most glaring monstrosities in
 this project are the huge if-else that comprises the server and the spaghetti code that coordinates game states for the client. Nevertheless,

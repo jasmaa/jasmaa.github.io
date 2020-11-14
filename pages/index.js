@@ -1,12 +1,17 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Container, Row, Col, Card, CardBody } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 import config from '@lib/config';
 import { getSortedPostsData } from '@lib/posts';
 import style from '@styles/Home.module.css';
 import PostPagination from '@components/PostPagination';
 
+/**
+ * Home page
+ * 
+ * @param {*} param0 
+ */
 export default function Home({ posts }) {
   return (
     <>

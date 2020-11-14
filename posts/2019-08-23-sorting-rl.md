@@ -13,7 +13,7 @@ The show-offs like to call out radix sort and the jokers always point out bogoso
 Today, however, I present to you something new, pulled entirely out of my limited
 machine learning knowledge. Yes, ladies and gentlemen, it's DQNsort!
 
-#### Background
+## Background
 
 Reddit's r/programminghumor was holding a hackathon with the theme "Overengineering".
 I had long dreamed of getting into reinforcement learning after watching many of
@@ -24,7 +24,7 @@ that sorting using reinforcement learning is not a new idea. A
 describing RPsort which appears to use a more advanced version of RL that generates
 algorithms in a process called reinforcement programming, but that's beside the point.
 
-#### RL in a Jiffy
+## RL in a Jiffy
 
 Reinforcement learning, in general, trains an AI agent to make optimal decisions in an environment.
 An environment has a **state** and the agent is allowed to make **actions** to change this state.
@@ -51,7 +51,7 @@ learning, we can do just that. Deep reinforcement learning is like traditional R
 we've swapped the Q table for a neural net called a **deep Q network** or **DQN** that allows us to
 input a state and estimates the Q-values for each action.
 
-#### Sorting with a Net
+## Sorting with a Net
 
 The DQNsort agent works by using a DQN to decide which two elements in an array to switch to
 get it closer to being sorted. The DQN is a multilayer-perceptron that takes an n-length array
@@ -93,7 +93,7 @@ to some hyperparameters and the reward function to try to make it more reliable.
 
 ![Q table example](/images/dqnsort/dqnsort.png)
 
-#### Problems and Improvements
+## Problems and Improvements
 
 The most tedious part of this project was figuring out what parameters DQNsort needed and the
 limits it could work within. Even after tuning it for several days, DQNsort is still not that

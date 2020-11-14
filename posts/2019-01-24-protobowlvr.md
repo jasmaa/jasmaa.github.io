@@ -9,13 +9,13 @@ categories: quizbowl oculus websocket unity3d
 Late last year, after a session of my school's XR club, I had, on a whim, proposed to a friend my grand idea of putting quizbowl in VR. As per usual, my absurd scheme was
 quickly shot down, and we moved to other points of discussion. Later at the outset of winter break with nothing better to do, I told myself: Why not? and got to work.
 
-#### Design
+## Design
 
 The goal of this project was to emulate quizbowl to the best of my ability in VR which evolved into building a VR client for Protobowl (PB). At its base, the program was
 going to be have the user with a realistic buzzer and several other avatars representing the other players in an immaculate room. The program would properly translate
 the events that took place in the web client PB room into actions in the 3D scene. As for the platform, I chose to target Oculus Rift and write the project in Unity.
 
-#### Rewriting and Porting the Protobowl Client
+## Rewriting and Porting the Protobowl Client
 
 To start off, I had to implement a Protobowl client in C#. I had already written an incomplete Python client a few years ago, so I ended up porting that code and subsituting
 dependencies with C# libraries and scripts from online. One major problem was working with the JSON responses which were dictionaries in the Python version. While Python's dynamic typing makes
@@ -25,7 +25,7 @@ but eventually I got it to at least have the question text scrolling in sync wit
 
 ![PB client in Unity](/images/protobowlvr/quizbowlvr_01.gif)
 
-#### Moving to Oculus
+## Moving to Oculus
 
 On the VR side, I started by getting Unity's Oculus Integration and putting together a simple scene with an avatar that could pick up objects through Frankenstein-ing prefabs
 from the provided demo scenes. Then I populated the scene with a table and a buzzer prefab I had modeled earlier to get a sense of how the environment felt. This buzzer in particular
@@ -36,7 +36,7 @@ VR would suddenly break it but it worked better than expected.
 
 ![PB client in Unity](/images/protobowlvr/quizbowlvr_02.gif)
 
-#### The Long Haul of Making UI
+## The Long Haul of Making UI
 
 Now came the Herculean task of writing UI in VR. The first thing to came to mind was making something similar to the menus in Sword Art Online. In SAO, the menu has
 a main body of options that can expand outwards. The player can bring up this menu by pointing and swiping down which materializes the menu from top to bottom.
@@ -59,7 +59,7 @@ I had also naively hoped that the Unity UI elements would all transfer flawlessl
 prefabs has one, the scroll bar was too hard to work with in VR. I ended up having to write my own scroll wheel script which simply implemented several drag handler interfaces that allowed a panel
 of options to be dragged vertically. The whole panel would then snap to a selected option upon the end of a drag.
 
-#### Adding Voice Recognition
+## Adding Voice Recognition
 
 I had considered adding a voice recognition input option early on, but it readily became apparent that this was going to be the primary method of input as typing in an answer through the VR
 keyboard was too slow for the allocated answer time that Protobowl gives you. I had planned on using an online service such as voice recognition from Google Cloud or IBM's Watson Speech to Text
@@ -70,7 +70,7 @@ One major problem is that voice recognition would often stop becoming responsive
 suspected this was a problem with starting and stopping the dictation recognizer from the warnings to the console, and while fixing that did resolve most of the hiccups, the voice recognizer
 is still one of the more finicky parts of the app.
 
-#### Fixing What's Broke
+## Fixing What's Broke
 
 While connecting the PB client to the actual VR game, I also had to expand upon the client itself as the Python client was incomplete. Among the many things added were:
   - Detection of who claimed a buzz
@@ -98,7 +98,7 @@ a response. I had hardcoded the timing for this which had worked in normal rooms
 the client was awaiting a response for who had the buzz fixed the problem. To my surprise, after the fix, my VR client actually ran smoother than Protobowl's web client in the overburdened
 room (humble brag lol..).
   
-#### Avatars, Polish, and Shenanigans
+## Avatars, Polish, and Shenanigans
 
 While it would have been possible to play quizbowl with just an event log, the point of doing it in VR would be to have quasi-realistic quizbowl experience. Because of this, I wanted to
 have the other players in the room represented as avatars. As I'm not very good at art, especially in 3D, simple was going to be better. The avatars are made up of disconnected geometry,
@@ -124,11 +124,11 @@ At this point, it also seemed like playing quizbowl was the least appealing thin
 an object at the end of the board and send it launching with a flick of the wrist at no cost the user as the torque exhibited by the object in-game is obviously not felt in real life. Sending
 the buzzer launching was particularly amusing as it would mess with the character joints, causing the cord to spaz out.
   
-#### TL;DR Demo Video
+## TL;DR Demo Video
 
-<iframe src="https://www.youtube.com/embed/7s_zPBXLv94" width="1080rem" height="720rem"></iframe>
+<iframe src="https://www.youtube.com/embed/7s_zPBXLv94" width="100%" height="720rem"></iframe>
 
-#### After Thoughts
+## After Thoughts
 
 All in all, this was a very satisfying project and also my first large project with VR. It is still not a perfect product, but I feel it is one of the more polished
 things I've managed to push out in Unity. Practically speaking, Protobowl VR is sort of useless as it's easier to get a bunch of mates together, pull up a packet, and play quizbowl

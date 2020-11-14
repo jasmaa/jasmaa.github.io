@@ -27,7 +27,7 @@ back, I would have appreciated an app for practicing problems. Come years later,
 while brainstorming project ideas to explore mobile development, I ended up
 digging up my past and making a simple Speed Trig app.
 
-#### Background
+## Background
 
 Foremost, this idea is not original: our high school had a Smartphone Programming Club (SPC)
 which developed [a Speed Trig app](https://github.com/MBHS-SPC/speed-trig-android) years earlier
@@ -39,7 +39,7 @@ to make it a multiple choice, timed quiz which would be more appealing to the pl
 answers directly. I also went in with a heavier focus on trying to get the aesthetics and feel of
 the game down.
 
-#### Mobile and Trying to Render Math
+## Mobile and Trying to Render Math
 
 Starting development, the first roadblock hit with was rendering the math formulas needed for displaying
 questions and answer choices. Working in React Native, there
@@ -51,7 +51,7 @@ entire thing and just pulling math symbols from Unicode. Although this was a set
 to display was not too complicated, so the app did not suffer much. That being said, a fast formula renderer
 for React Native might be an interesting project for someone to tackle in the future.
 
-#### Designing for Looks
+## Designing for Looks
 
 Coding up the app, the logic ended up being quite simple. All the app does is repeatedly select a trig problem and display it with
 4 possible answer choices. A point is rewarded for a correct answer and a heart is lost for a
@@ -76,7 +76,7 @@ a major eyesore, but playing around with the app, I found that they only ended u
 library also provides access to other Firebase features like analytics and Firestore which are worth looking into in the
 future.
 
-#### Problems and Improvements
+## Problems and Improvements
 
 Speed Trig was meant to be a fast and simple project, so it does leave a lot to be desired.
 One of the biggest problems with Speed Trig is the way it stores its questions. The entire question
@@ -90,7 +90,7 @@ competitive play, rankings, adjustable settings, and perhaps even alternative ga
 but these are all considerations for another day. Adding some of these features also has the additional
 overhead of jumping through a lot of app store bureaucratic hoops and red tape which I'm not keen on going through.
 
-#### Conclusion
+## Conclusion
 
 Ultimately, I am quite happy with this project. Granted, while it was mostly all design work with minimal coding,
 I am still proud of the end product. Making a Speed Trig app was always my joke suggestion when brainstorming

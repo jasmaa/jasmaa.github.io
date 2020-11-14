@@ -2,10 +2,15 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Card, CardBody, Container } from 'reactstrap';
 
-import Categories from '@components/Categories';
+import Categories from '@components/CategoriesList';
 import config from '@lib/config';
 import { getAllPostIDs, getPostData } from '@lib/posts';
 
+/**
+ * Blog post
+ * 
+ * @param {*} param0 
+ */
 export default function Post({ postData }) {
   return (
     <>
@@ -22,7 +27,7 @@ export default function Post({ postData }) {
             <em>{postData.subtitle}</em>
           </h4>
           <h4>
-            <em>{postData.date}</em>
+            <em>{new Date(postData.date).toDateString()}</em>
           </h4>
           <Categories categories={postData.categories} />
           <hr className="my-3" />

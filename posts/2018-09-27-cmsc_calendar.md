@@ -35,7 +35,7 @@ webscraping.
 The solution I turned to was Selenium, mostly because this project gave me
 an excuse to start messing around with it.
 
-#### Process
+## Process
 
 One of the first things I did was figure out how to get around with Selenium.
 Once I could successfully navigate through the calendars via button click and
@@ -55,7 +55,7 @@ I remembered: Daylight saving time. Ugh. Google Calendar was automatically accou
 for DST for some reason. To be honest, I just monkey-patched the
 code to change the time offset based on whether DST was in place or not.
 
-#### After Thoughts
+## After Thoughts
 
 This project was not that complicated, and I'm sure there were better ways to do
 what I had set out to accomplish. For all I know, I may have just entirely missed
