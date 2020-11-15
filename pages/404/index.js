@@ -18,7 +18,7 @@ export default function NotFound() {
       <Container className="py-5">
         <div className="d-flex flex-column align-items-center justify-content-center">
           <h1 className={style['headline']}>404</h1>
-          <img className={style['not-found-img']} src="images/404.gif" />
+          <img className={style['not-found-img']} src="/images/404.gif" />
           <p>{`Page could not be found :<`}</p>
           <Link href="/"><a>Go Back Home</a></Link>
         </div>
