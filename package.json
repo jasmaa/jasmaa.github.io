@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && next export",
-    "deploy": "gh-pages -d out --no-history",
+    "deploy": "gh-pages -d out --no-history --dotfiles=true",
     "start": "next start"
   },
   "dependencies": {
