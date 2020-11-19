@@ -6,9 +6,16 @@
       <link>https://jasmaa.github.io/blog</link>
       <description>My blog</description>
       <language>en</language>
-      <lastBuildDate>Sun, 29 Mar 2020 00:00:00 GMT</lastBuildDate>
+      <lastBuildDate>Mon, 16 Nov 2020 00:00:00 GMT</lastBuildDate>
       <atom:link href="https://jasmaa.github.io/rss.xml" rel="self" type="application/rss+xml"/>
       
+  <item>
+    <guid>https://jasmaa.github.io/blog/2020-11-16-misaka-net</guid>
+    <title>Misaka Net</title>
+    <link>https://jasmaa.github.io/blog/2020-11-16-misaka-net</link>
+    <description>...said Misaka with a posed look.</description>
+    <pubDate>Mon, 16 Nov 2020 00:00:00 GMT</pubDate>
+  </item>
   <item>
     <guid>https://jasmaa.github.io/blog/2020-03-29-vscode-bolt</guid>
     <title>VS Code Bolt</title>
