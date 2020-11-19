@@ -33,7 +33,7 @@ export default function Categories({ categorizedPosts }) {
                 <a href="#top">Back to Top</a>
                 <ul>
                   {categorizedPosts[category].map(post => (
-                    <li><Link href={`blog/${post.id}`}><a>{post.title}</a></Link></li>
+                    <li key={post.id}><Link href={`blog/${post.id}`}><a>{post.title}</a></Link></li>
                   ))}
                 </ul>
               </div>
