@@ -38,12 +38,12 @@ export default function Home({ posts }) {
                 <div className="animate__animated animate__flipInY" >
                   <img className={style['profile-img']} src="/images/me.jpg" />
                 </div>
-                <ScrollAnimation animateIn="animate__fadeIn" delay={500} animateOnce>
+                <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
                   <h1 className={style['headline']}>Jason Maa</h1>
                   <h4 style={{ textAlign: 'center' }}>Student at the University of Maryland</h4>
                 </ScrollAnimation>
               </div>
-              <ScrollAnimation animateIn="animate__fadeIn" delay={600} animateOnce>
+              <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
                 <p style={{ textAlign: 'center' }}>
                   I am an undergraduate student at the University of Maryland studying computer science.
                   I primarily work on web and machine learning projects.

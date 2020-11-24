@@ -14,7 +14,7 @@ const numDisplayPages = 4;
 export default function PostPagination({ posts }) {
 
   const [page, setPage] = useState(0);
-  const numPages = posts.length / postsPerPage;
+  const numPages = Math.ceil(posts.length / postsPerPage);
 
   return (
     <>
