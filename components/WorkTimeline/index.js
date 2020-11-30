@@ -1,4 +1,3 @@
-import { Card, CardBody } from 'reactstrap';
 import style from './style.module.css';
 
 /**
@@ -12,22 +11,18 @@ export default function WorkTimeline({ items }) {
       {items.map(item => (
         <div key={`${item.company}-${item.dates}`} className={style['timeline-element']}>
           <span className={style['dot']}></span>
-          <Card>
-            <CardBody>
-              <p>{item.dates}</p>
-              <h2>{item.company}</h2>
-              <h4><em>{item.position}</em></h4>
-              <div className="mt-3">
-                <ul>
-                  {item.descriptionItems.map((descriptionItem, i) => (
-                    <li key={`${item.company}-${item.dates}${i}`}>
-                      {descriptionItem}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </CardBody>
-          </Card>
+          <p>{item.dates}</p>
+          <h2>{item.company}</h2>
+          <h4><em>{item.position}</em></h4>
+          <div className="mt-3">
+            <ul>
+              {item.descriptionItems.map((descriptionItem, i) => (
+                <li key={`${item.company}-${item.dates}${i}`}>
+                  {descriptionItem}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       ))}
     </div>
