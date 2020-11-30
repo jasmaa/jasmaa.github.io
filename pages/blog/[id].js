@@ -1,11 +1,11 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { Container } from 'reactstrap';
 
 import Categories from '@components/CategoriesList';
 import PostNavigation from '@components/PostNavigation';
 import config from '@lib/config';
 import { getAllPostIDs, getPostData, getSortedPostsData } from '@lib/posts';
+import DrawerContainer from '@components/DrawerContainer';
 
 /**
  * Blog post
@@ -19,28 +19,28 @@ export default function Post({ postData, prevPost, nextPost }) {
         <title>{postData.title} - {config.siteName}</title>
       </Head>
 
-      <Container className="py-5">
-
-        <div className="d-flex justify-content-center">
-          <PostNavigation nextPost={nextPost} prevPost={prevPost} />
-        </div>
-
-        <div className="mt-3 mb-5">
-          <h5><em>{new Date(postData.date).toDateString()}</em></h5>
-          <div className="my-3">
-            <h1>{postData.title}</h1>
-            <h4><em>{postData.subtitle}</em></h4>
+      <DrawerContainer>
+        <Container className="py-5">
+          <div className="d-flex justify-content-center">
+            <PostNavigation nextPost={nextPost} prevPost={prevPost} />
           </div>
-          <Categories categories={postData.categories} />
-          <hr className="my-3" />
-          <div className="post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
-        </div>
 
-        <div className="d-flex justify-content-center">
-          <PostNavigation nextPost={nextPost} prevPost={prevPost} />
-        </div>
+          <div className="mt-3 mb-5">
+            <h5><em>{new Date(postData.date).toDateString()}</em></h5>
+            <div className="my-3">
+              <h1>{postData.title}</h1>
+              <h4><em>{postData.subtitle}</em></h4>
+            </div>
+            <Categories categories={postData.categories} />
+            <hr className="my-3" />
+            <div className="post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+          </div>
 
-      </Container>
+          <div className="d-flex justify-content-center">
+            <PostNavigation nextPost={nextPost} prevPost={prevPost} />
+          </div>
+        </Container>
+      </DrawerContainer>
     </>
   );
 }

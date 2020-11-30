@@ -17,13 +17,15 @@ export default function PostPagination({ posts }) {
   const numPages = Math.ceil(posts.length / postsPerPage);
 
   return (
-    <div style={{ height: '35rem' }}>
+    <>
+      <div style={{ height: '30rem' }}>
+        {posts.slice(postsPerPage * page, postsPerPage * (page + 1))
+          .map(post => <PostCard key={post.id} post={post} />)
+        }
+      </div>
       <div className="d-flex justify-content-center">
         <Controls page={page} setPage={setPage} numPages={numPages} numDisplayPages={numDisplayPages} />
       </div>
-      {posts.slice(postsPerPage * page, postsPerPage * (page + 1))
-        .map(post => <PostCard key={post.id} post={post} />)
-      }
-    </div>
+    </>
   );
 }

@@ -1,0 +1,38 @@
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color:white;
+  width: 20rem;
+  height: 100%;
+  z-index: 9999;
+  animation-duration: 0.5s;
+}
+
+.hidden-drawer {
+  position: fixed;
+  visibility: hidden;
+  width: 0;
+}
+
+.drawer-item {
+  font-size: 1.2em;
+  margin-bottom: 2rem;
+}
+
+.page-hamburger {
+  top: 0;
+  margin: 0.1rem;
+  background-color: white;
+  padding: 0.8rem;
+}
+
+.faded-bg {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9998;
+  animation-duration: 0.5s;
+}
