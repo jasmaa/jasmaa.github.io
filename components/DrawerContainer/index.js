@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Hamburger from 'hamburger-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import style from './style.module.css';
 
@@ -57,7 +59,8 @@ export default function DrawerContainer({ children }) {
           : `${style['hidden-drawer']}`
       }>
         <div className="d-flex justify-content-end align-items-center m-3">
-          <Hamburger toggled={isOpen} toggle={toggle} />
+          {/* Using fontawesome for now since mobile has trouble hiding hamburger */}
+          <FontAwesomeIcon icon={faTimes} style={{ cursor: 'pointer' }} onClick={() => toggle(false)} size="2x" />
         </div>
         <div className="d-flex flex-column align-items-center m-5">
           <div className={style['drawer-item']}>

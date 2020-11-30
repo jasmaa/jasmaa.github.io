@@ -33,7 +33,7 @@ export default function Home() {
             <Col md={{ size: 8, offset: 2 }}>
               <div className="mb-5">
                 <div className="d-flex flex-column align-items-center my-3">
-                  <div className="animate__animated animate__flipInY" >
+                  <div className="animate__animated animate__fadeIn" >
                     <img className={style['profile-img']} src="/images/me.jpg" />
                   </div>
                   <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
