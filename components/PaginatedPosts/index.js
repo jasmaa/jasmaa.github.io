@@ -24,8 +24,8 @@ export default function PostPagination({ posts }) {
       <div>
         {posts.slice(postsPerPage * page, postsPerPage * (page + 1))
           .map(post => (
-            <div className="mb-10">
-              <PostCard key={post.id} post={post} />
+            <div key={post.id} className="mb-10">
+              <PostCard post={post} />
             </div>
           ))
         }

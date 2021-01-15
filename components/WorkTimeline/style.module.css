@@ -1,10 +1,8 @@
 .timeline-element {
-  width: 100%;
   display: inline-block;
+  width: 100%;
   border-left: 0.3rem solid darkgray;
   padding-left: 2rem;
-  padding-bottom: 3rem;
-  padding-right: 1rem;
 }
 
 .dot {

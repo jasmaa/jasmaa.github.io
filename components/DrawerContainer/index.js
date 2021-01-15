@@ -19,8 +19,7 @@ export default function DrawerContainer({ children }) {
   // Ensure page is still scrollable after unloaded
   useEffect(() => {
     return () => {
-      document.body.style.overflow = 'unset';
-      document.body.style.paddingRight = '0px';
+      window.onscroll = function () { };
     }
   }, []);
 
@@ -31,12 +30,21 @@ export default function DrawerContainer({ children }) {
    */
   const toggle = v => {
     if (v) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = '18px';
+      // https://www.geeksforgeeks.org/how-to-disable-scrolling-temporarily-using-javascript/
+      // Get the current page scroll position
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+      // Freeze scroll
+      window.onscroll = function () {
+        window.scrollTo(scrollLeft, scrollTop);
+      };
+
       setIsOpen(v);
     } else {
-      document.body.style.overflow = 'unset';
-      document.body.style.paddingRight = '0px';
+      // Enable scroll
+      window.onscroll = function () { };
+
       setIsClosing(true);
       setTimeout(() => {
         setIsOpen(false);
