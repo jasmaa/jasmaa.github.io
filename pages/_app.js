@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import hljs from 'highlight.js/lib/core';
 import go from 'highlight.js/lib/languages/go';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css/animate.min.css';
 import 'highlight.js/styles/github.css';
+import "tailwindcss/tailwind.css";
 import '@styles/globals.css';
 
 // Register more languages as needed

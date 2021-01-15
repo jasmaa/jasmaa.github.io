@@ -8,15 +8,13 @@ import CategoriesList from '@components/CategoriesList';
  */
 export default function PostCard({ post }) {
   return (
-    <Card className="mt-3 mb-5 animate__animated animate__fadeIn">
-      <CardBody>
-        <small><em>{new Date(post.date).toDateString()}</em></small>
-        <h2><Link href={`/blog/${post.id}`}><a>{post.title}</a></Link></h2>
-        <div className="mt-2 mb-4">
-          <h5><em>{post.subtitle}</em></h5>
-        </div>
-        <CategoriesList categories={post.categories} />
-      </CardBody>
-    </Card>
+    <div className="rounded shadow-xl p-4 mt-3 mb-5 animate__animated animate__fadeIn">
+      <small><em>{new Date(post.date).toDateString()}</em></small>
+      <h2><Link href={`/blog/${post.id}`}><a>{post.title}</a></Link></h2>
+      <div className="text-2xl mt-2 mb-4">
+        <h5><em>{post.subtitle}</em></h5>
+      </div>
+      <CategoriesList categories={post.categories} />
+    </div>
   );
 }

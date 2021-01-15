@@ -18,12 +18,12 @@ export default function PostPagination({ posts }) {
 
   return (
     <>
-      <div style={{ height: '30rem' }}>
+      <div className="h-full">
         {posts.slice(postsPerPage * page, postsPerPage * (page + 1))
           .map(post => <PostCard key={post.id} post={post} />)
         }
       </div>
-      <div className="d-flex justify-content-center">
+      <div className="flex justify-center">
         <Controls page={page} setPage={setPage} numPages={numPages} numDisplayPages={numDisplayPages} />
       </div>
     </>

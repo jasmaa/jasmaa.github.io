@@ -2,6 +2,7 @@ import fs from 'fs';
 import Head from 'next/head';
 import { Container } from 'reactstrap';
 
+import Layout from '@components/Layout';
 import PaginatedPosts from '@components/PaginatedPosts';
 import DrawerContainer from '@components/DrawerContainer';
 import config from '@lib/config';
@@ -21,13 +22,13 @@ export default function Blog({ posts }) {
       </Head>
 
       <DrawerContainer>
-        <Container className="pb-5">
-          <h1 className="mb-3">Blog</h1>
-          <p>Writing about projects among other things</p>
+        <Layout>
+          <h1 className="mb-5">Blog</h1>
+          <h2 className="text-gray-500 mb-5">Writing about projects among other things</h2>
           <div className="py-1">
             <PaginatedPosts posts={posts} />
           </div>
-        </Container>
+        </Layout>
       </DrawerContainer>
     </>
   );
