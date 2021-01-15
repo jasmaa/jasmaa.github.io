@@ -19,8 +19,7 @@ export default function DrawerContainer({ children }) {
   // Ensure page is still scrollable after unloaded
   useEffect(() => {
     return () => {
-      document.body.style.overflow = 'unset';
-      document.body.style.paddingRight = '0px';
+      window.onscroll = function () { };
     }
   }, []);
 
@@ -31,12 +30,21 @@ export default function DrawerContainer({ children }) {
    */
   const toggle = v => {
     if (v) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = '18px';
+      // https://www.geeksforgeeks.org/how-to-disable-scrolling-temporarily-using-javascript/
+      // Get the current page scroll position
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+      // Freeze scroll
+      window.onscroll = function () {
+        window.scrollTo(scrollLeft, scrollTop);
+      };
+
       setIsOpen(v);
     } else {
-      document.body.style.overflow = 'unset';
-      document.body.style.paddingRight = '0px';
+      // Enable scroll
+      window.onscroll = function () { };
+
       setIsClosing(true);
       setTimeout(() => {
         setIsOpen(false);
@@ -58,11 +66,11 @@ export default function DrawerContainer({ children }) {
             : `${style['drawer']} animate__animated animate__slideInLeft`
           : `${style['hidden-drawer']}`
       }>
-        <div className="d-flex justify-content-end align-items-center m-3">
+        <div className="flex justify-end items-center m-3">
           {/* Using fontawesome for now since mobile has trouble hiding hamburger */}
           <FontAwesomeIcon icon={faTimes} style={{ cursor: 'pointer' }} onClick={() => toggle(false)} size="2x" />
         </div>
-        <div className="d-flex flex-column align-items-center m-5">
+        <div className="flex flex-col items-center m-5">
           <div className={style['drawer-item']}>
             <Link href="/"><a>Home</a></Link>
           </div>

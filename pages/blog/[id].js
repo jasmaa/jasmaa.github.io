@@ -1,11 +1,11 @@
 import Head from 'next/head';
-import { Container } from 'reactstrap';
 
+import Layout from '@components/Layout';
 import Categories from '@components/CategoriesList';
 import PostNavigation from '@components/PostNavigation';
+import DrawerContainer from '@components/DrawerContainer';
 import config from '@lib/config';
 import { getAllPostIDs, getPostData, getSortedPostsData } from '@lib/posts';
-import DrawerContainer from '@components/DrawerContainer';
 
 /**
  * Blog post
@@ -20,26 +20,29 @@ export default function Post({ postData, prevPost, nextPost }) {
       </Head>
 
       <DrawerContainer>
-        <Container className="py-5">
-          <div className="d-flex justify-content-center">
+        <Layout>
+          <div className="flex justify-center">
             <PostNavigation nextPost={nextPost} prevPost={prevPost} />
           </div>
 
-          <div className="mt-3 mb-5">
-            <h5><em>{new Date(postData.date).toDateString()}</em></h5>
-            <div className="my-3">
+          <div className="mt-8 mb-5">
+            <h3 className="text-xl"><em>{new Date(postData.date).toDateString()}</em></h3>
+            <div className="mt-5 mb-8">
               <h1>{postData.title}</h1>
-              <h4><em>{postData.subtitle}</em></h4>
+              <h3 className="text-3xl mt-3"><em>{postData.subtitle}</em></h3>
             </div>
             <Categories categories={postData.categories} />
-            <hr className="my-3" />
-            <div className="post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+            <div className="border-t-2 mt-5 mb-10" />
+            <div className="flex justify-center">
+              <div className="prose md:prose-xl post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+            </div>
+            <div className="border-t-2 mt-5 mb-10" />
           </div>
 
-          <div className="d-flex justify-content-center">
+          <div className="flex justify-center">
             <PostNavigation nextPost={nextPost} prevPost={prevPost} />
           </div>
-        </Container>
+        </Layout>
       </DrawerContainer>
     </>
   );

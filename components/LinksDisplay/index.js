@@ -1,4 +1,3 @@
-import { Row, Col, Badge } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 /**
@@ -8,16 +7,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
  */
 export default function LinksDisplay({ items }) {
   return (
-    <Row>
+    <div className="flex md:justify-center flex-col md:flex-row">
       {items.map(item => (
-        <Col key={item.name} className="d-flex justify-content-center">
-          <h4>
-            <Badge color="warning" href={item.url}>
-              <FontAwesomeIcon icon={item.icon} /> {item.name}
-            </Badge>
-          </h4>
-        </Col>
+        <a
+          key={item.name}
+          className="flex justify-center items-center text-xl m-4 px-3 bg-yellow-400 hover:bg-yellow-500 rounded text-black hover:no-underline hover:text-black"
+          href={item.url}
+        >
+          <FontAwesomeIcon className="mr-1" icon={item.icon} /> {item.name}
+        </a>
       ))}
-    </Row>
+    </div>
   );
 }

@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Container } from 'reactstrap';
 
 import config from '@lib/config';
+import Layout from '@components/Layout';
 import { getAllPostCategories, getSortedPostsData } from '@lib/posts';
 
 /**
@@ -17,21 +17,21 @@ export default function Categories({ categorizedPosts }) {
         <title>Categories - {config.siteName}</title>
       </Head>
 
-      <Container className="py-5">
+      <Layout>
         <div id="top"></div>
         <Link href="/"><a>← Back to Home</a></Link>
 
         <div className="my-5">
           <div className="mb-5">
-            <h1 className="mb-3">Categories</h1>
-            <p>Assorted blog post categories</p>
+            <h1 className="text-5xl mb-5">Categories</h1>
+            <h2 className="text-gray-500 text-3xl mb-10">Assorted blog post categories</h2>
           </div>
-          <div className="d-flex flex-column">
+          <div className="flex flex-col">
             {Object.keys(categorizedPosts).map(category => (
-              <div key={category} id={category}>
-                <h2>{category}</h2>
+              <div className="mb-5" key={category} id={category}>
+                <h2 className="text-4xl">{category}</h2>
                 <a href="#top">Back to Top</a>
-                <ul>
+                <ul className="ml-5 list-disc list-inside">
                   {categorizedPosts[category].map(post => (
                     <li key={post.id}><Link href={`blog/${post.id}`}><a>{post.title}</a></Link></li>
                   ))}
@@ -40,7 +40,7 @@ export default function Categories({ categorizedPosts }) {
             ))}
           </div>
         </div>
-      </Container>
+      </Layout>
     </>
   );
 }

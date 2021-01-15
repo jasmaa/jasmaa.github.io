@@ -1,4 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+
+@layer base {
+  h1 {
+    @apply text-6xl font-semibold;
+  }
+  h2 {
+    @apply text-4xl;
+  }
+
+  p {
+    @apply text-gray-500;
+  }
+
+  a {
+    @apply text-yellow-500 hover:text-yellow-600 hover:underline
+  }
+}
 
 html, body {
   padding: 0;
@@ -6,40 +27,6 @@ html, body {
   font-family: 'Ubuntu', sans-serif;
 }
 
-p {
-  font-size: 1.2rem;
-  color: gray;
-  padding-bottom: 0.2rem;
-}
-
-a {
-  color: orange;
-}
-a:hover {
-  color: darkorange;
-}
-
-li {
-  font-size: 1.2rem;
-  color: gray;
-  margin-bottom: 1.2rem;
-}
-
-.page-link {
-  color: orange;
-}
-.page-link:hover {
-  color: darkorange;
-}
-.page-item.active .page-link {
-  background-color: orange;
-  border-color: orange;
-}
-
-.post-content h2 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
 .post-content img {
   display: block;
   margin-left: auto;
@@ -48,12 +35,4 @@ li {
   max-width: 80%;
   margin-top: 3rem;
   margin-bottom: 3rem;
-}
-.post-content li {
-  color: gray;
-  font-size: 1.2rem;
-}
-
-.card {
-  box-shadow: 0 0 1rem lightgray;
 }

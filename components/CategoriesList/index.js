@@ -1,5 +1,3 @@
-import { Badge } from "reactstrap";
-
 /**
  * Category link listing
  * 
@@ -7,11 +5,11 @@ import { Badge } from "reactstrap";
  */
 export default function Categories({ categories }) {
   return (
-    <div>
+    <div className="flex">
       {categories.map(category => (
-        <Badge key={category} className="mr-1" href={`/categories#${category}`} color="light">
-          <span style={{ fontSize: '1rem' }}>{category}</span>
-        </Badge>
+        <a key={category} className="mr-4 bg-gray-200 rounded px-1 hover:bg-gray-300 hover:no-underline" href={`/categories#${category}`}>
+          <span className="text-black font-semibold">{category}</span>
+        </a>
       ))}
     </div>
   );
