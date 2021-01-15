@@ -32,9 +32,9 @@ export default function Home() {
             <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
               <div className="flex flex-col items-center my-3">
                 <img className="w-96 rounded-full shadow-xl" src="/images/me.jpg" />
-                <h1 className="text-7xl mt-5">Jason Maa</h1>
+                <h1 className="text-6xl text-center mt-5">Jason Maa</h1>
                 <h4 className="text-3xl text-center mt-5">Student at the University of Maryland</h4>
-                <p className="text-xl text-center py-5 md:w-2/3">
+                <p className="text-xl py-5 md:w-2/3">
                   I am an undergraduate student at the University of Maryland studying computer science.
                   I primarily work on web and machine learning projects.
                   In my free time, I enjoy reading, taking hikes,
