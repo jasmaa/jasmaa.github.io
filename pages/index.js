@@ -31,17 +31,15 @@ export default function Home() {
         <Container className="py-5">
           <Row>
             <Col md={{ size: 8, offset: 2 }}>
+
               <div className="mb-5">
-                <div className="d-flex flex-column align-items-center my-3">
-                  <div className="animate__animated animate__fadeIn" >
+                <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
+                  <div className="d-flex flex-column align-items-center my-3">
                     <img className={style['profile-img']} src="/images/me.jpg" />
-                  </div>
-                  <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
                     <h1 className={style['headline']}>Jason Maa</h1>
                     <h4 style={{ textAlign: 'center' }}>Student at the University of Maryland</h4>
-                  </ScrollAnimation>
-                </div>
-                <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
+                  </div>
+
                   <p style={{ textAlign: 'center' }}>
                     I am an undergraduate student at the University of Maryland studying computer science.
                     I primarily work on web and machine learning projects.
