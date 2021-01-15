@@ -27,10 +27,6 @@ html, body {
   font-family: 'Ubuntu', sans-serif;
 }
 
-.post-content h2 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
 .post-content img {
   display: block;
   margin-left: auto;
@@ -39,8 +35,4 @@ html, body {
   max-width: 80%;
   margin-top: 3rem;
   margin-bottom: 3rem;
-}
-.post-content li {
-  color: gray;
-  font-size: 1.2rem;
 }
