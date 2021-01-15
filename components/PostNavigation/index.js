@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 
 /**
  * Controls navigation through blog posts
