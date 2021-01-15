@@ -23,15 +23,15 @@ export default function Categories({ categorizedPosts }) {
 
         <div className="my-5">
           <div className="mb-5">
-            <h1 className="text-6xl font-semibold mb-3">Categories</h1>
-            <p className="text-3xl text-gray-500">Assorted blog post categories</p>
+            <h1 className="text-5xl mb-5">Categories</h1>
+            <h2 className="text-gray-500 text-3xl mb-10">Assorted blog post categories</h2>
           </div>
           <div className="flex flex-col">
             {Object.keys(categorizedPosts).map(category => (
-              <div key={category} id={category}>
+              <div className="mb-5" key={category} id={category}>
                 <h2 className="text-4xl">{category}</h2>
                 <a href="#top">Back to Top</a>
-                <ul className="list-disc list-inside">
+                <ul className="ml-5 list-disc list-inside">
                   {categorizedPosts[category].map(post => (
                     <li key={post.id}><Link href={`blog/${post.id}`}><a>{post.title}</a></Link></li>
                   ))}

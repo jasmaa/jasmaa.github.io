@@ -1,12 +1,11 @@
 import Head from 'next/head';
-import { Container } from 'reactstrap';
 
 import Layout from '@components/Layout';
 import Categories from '@components/CategoriesList';
 import PostNavigation from '@components/PostNavigation';
+import DrawerContainer from '@components/DrawerContainer';
 import config from '@lib/config';
 import { getAllPostIDs, getPostData, getSortedPostsData } from '@lib/posts';
-import DrawerContainer from '@components/DrawerContainer';
 
 /**
  * Blog post
@@ -34,7 +33,10 @@ export default function Post({ postData, prevPost, nextPost }) {
             </div>
             <Categories categories={postData.categories} />
             <div className="border-t-2 mt-5 mb-10" />
-            <div className="prose-xl post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+            <div className="flex justify-center">
+              <div className="prose md:prose-xl post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+            </div>
+            <div className="border-t-2 mt-5 mb-10" />
           </div>
 
           <div className="flex justify-center">

@@ -58,11 +58,11 @@ export default function DrawerContainer({ children }) {
             : `${style['drawer']} animate__animated animate__slideInLeft`
           : `${style['hidden-drawer']}`
       }>
-        <div className="d-flex justify-content-end align-items-center m-3">
+        <div className="flex justify-end items-center m-3">
           {/* Using fontawesome for now since mobile has trouble hiding hamburger */}
           <FontAwesomeIcon icon={faTimes} style={{ cursor: 'pointer' }} onClick={() => toggle(false)} size="2x" />
         </div>
-        <div className="d-flex flex-column align-items-center m-5">
+        <div className="flex flex-col items-center m-5">
           <div className={style['drawer-item']}>
             <Link href="/"><a>Home</a></Link>
           </div>

@@ -1,8 +1,5 @@
-import { Card, CardBody } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCode, faLink } from '@fortawesome/free-solid-svg-icons';
-
-import style from './style.module.css';
 
 /**
  * Display project items
@@ -11,24 +8,22 @@ import style from './style.module.css';
  */
 export default function ProjectsDisplay({ items }) {
   return (
-    <div className="my-5">
+    <div className="grid md:grid-cols-2 gap-10 grid-cols-flow my-5">
       {items.map(item => (
-        <Card key={item.name} className={style['project-item']}>
-          <CardBody>
-            <div className={style['project-content']}>
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
-            </div>
-            <div className="d-flex justify-content-end">
-              {item.sourceURL
-                ? <a className="ml-3" href={item.sourceURL}><FontAwesomeIcon icon={faCode} size="lg" /></a>
-                : null}
-              {item.siteURL
-                ? <a className="ml-3" href={item.siteURL}><FontAwesomeIcon icon={faLink} size="lg" /></a>
-                : null}
-            </div>
-          </CardBody>
-        </Card>
+        <div key={item.name} className="rounded shadow-xl bg-white p-5 transform transition hover:scale-110 my-5">
+          <div>
+            <h3 className="text-3xl">{item.name}</h3>
+            <p className="py-4">{item.description}</p>
+          </div>
+          <div className="flex justify-end">
+            {item.sourceURL
+              ? <a className="ml-3" href={item.sourceURL}><FontAwesomeIcon icon={faCode} size="lg" /></a>
+              : null}
+            {item.siteURL
+              ? <a className="ml-3" href={item.siteURL}><FontAwesomeIcon icon={faLink} size="lg" /></a>
+              : null}
+          </div>
+        </div>
       ))}
     </div>
   );

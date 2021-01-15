@@ -47,14 +47,14 @@ export default function Home() {
 
           <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
             <div className="border-t-2 mt-8 pt-5">
-              <h2 className="my-5"><FontAwesomeIcon className="mr-3" icon={faBriefcase} />Work Experience</h2>
+              <h2 className="font-extrabold my-5"><FontAwesomeIcon className="mr-3" icon={faBriefcase} />Work Experience</h2>
               <WorkTimeline items={workItems} />
             </div>
           </ScrollAnimation>
 
           <ScrollAnimation animateIn="animate__fadeIn" animateOnce>
             <div className="border-t-2 mt-8 pt-5">
-              <h2 className="my-5"><FontAwesomeIcon className="mr-2" icon={faLaptop} />Projects</h2>
+              <h2 className="font-extrabold my-5"><FontAwesomeIcon className="mr-2" icon={faLaptop} />Projects</h2>
               <ProjectsDisplay items={projectItems} />
             </div>
           </ScrollAnimation>

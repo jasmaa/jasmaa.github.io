@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
+import Layout from '@components/Layout';
 import config from '@lib/config';
 
 /**
@@ -13,14 +14,14 @@ export default function NotFound() {
         <title>Page Not Found - {config.siteName}</title>
       </Head>
 
-      <div className="md:container md:mx-auto py-5">
-        <div className="flex flex-col items-center justify-center">
+      <Layout>
+        <div className="flex flex-col items-center justify-center text-xl">
           <h1 className="text-9xl font-bold">404</h1>
           <img className="w-96" src="/images/404.gif" />
-          <p>{`Page could not be found :<`}</p>
+          <p className="my-5">{`Page could not be found :<`}</p>
           <Link href="/"><a>Go Back Home</a></Link>
         </div>
-      </div>
+      </Layout>
     </>
   );
 }
