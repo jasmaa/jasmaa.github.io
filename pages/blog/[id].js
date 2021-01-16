@@ -34,7 +34,7 @@ export default function Post({ postData, prevPost, nextPost }) {
             <Categories categories={postData.categories} />
             <div className="border-t-2 mt-5 mb-10" />
             <div className="flex justify-center">
-              <div className="prose md:prose-xl post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+              <div className="prose prose-sm sm:prose-xl post-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
             </div>
             <div className="border-t-2 mt-5 mb-10" />
           </div>
