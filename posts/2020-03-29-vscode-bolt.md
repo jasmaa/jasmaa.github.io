@@ -55,8 +55,9 @@ especially useful for constructs that enclose things such as strings.
 
 As an example, this regex was used to match the beginning of function declarations:
 
-<code data-gist-id="e495f887aef1e4b8d667d000fd4a5bb3" data-gist-file="2020-03-29-vscode-bolt-1">
-</code>
+```
+(function\\s)?\\s*([a-zA-Z_$]\\w*)\\s*(\\()((?:[a-zA-Z_$]\\w*)(?:,\\s*(?:[a-zA-Z_$]\\w*))*)?(\\))\\s*{
+```
 
 ...which looks like a complete mess at first until it gets broken down:
 
@@ -67,8 +68,28 @@ parts of a construct which determines how text gets highlighted. In addition, ca
 can also be used to nest patterns for more constructs as seen in capture group 4 below
 which tries to find and match argument names in the function header.
 
-<code data-gist-id="e495f887aef1e4b8d667d000fd4a5bb3" data-gist-file="2020-03-29-vscode-bolt-2">
-</code>
+```
+"beginCaptures": {
+	"1": {
+		"name": "storage.type.function.bolt"
+	},
+	"2": {
+		"name": "entity.name.function.bolt"
+	},
+	"3": {
+		"name": "punctuation.definition.parameters.begin.bolt"
+	},
+	"4": {
+		"patterns": [{
+			"name": "variable.parameter.function.bolt",
+			"match": "\\b(?:[a-zA-Z_$]\\w*)"
+		}]
+	},
+	"5": {
+		"name": "punctuation.definition.parameters.end.bolt"
+	}
+},
+```
 
 References to defined constructs can also be included inside other
 constructs which makes it really easy to design a grammar top-down.
@@ -76,8 +97,16 @@ The patterns shown below match the in-between text of a function
 declaration block, saying that the inside of a block can either include
 another `function-declaration` or an expression (`expr`).
 
-<code data-gist-id="e495f887aef1e4b8d667d000fd4a5bb3" data-gist-file="2020-03-29-vscode-bolt-3">
-</code>
+```
+"patterns": [
+	{
+		"include": "#function-declaration"
+	},
+	{
+		"include": "#expr"
+	}
+]
+```
 
 The rest of the project boiled down to writing regex rules to match key constructs
 and placing them properly into my hierarchy.
@@ -159,3 +188,5 @@ one thing when talking about old code in a long-running project but it's another
 different projects and contexts over time.
 
 **UPDATE 05/25/20**: Grammar examples moved to Gist, minor changes to text
+
+**UPDATE 01/17/21**: Grammar examples moved back as code
