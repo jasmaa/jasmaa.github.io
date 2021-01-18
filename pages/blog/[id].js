@@ -3,7 +3,6 @@ import Head from 'next/head';
 import Layout from '@components/Layout';
 import Categories from '@components/CategoriesList';
 import PostNavigation from '@components/PostNavigation';
-import DrawerContainer from '@components/DrawerContainer';
 import config from '@lib/config';
 import { getAllPostIDs, getPostData, getSortedPostsData } from '@lib/posts';
 
@@ -19,31 +18,29 @@ export default function Post({ postData, prevPost, nextPost }) {
         <title>{postData.title} - {config.siteName}</title>
       </Head>
 
-      <DrawerContainer>
-        <Layout>
-          <div className="flex justify-center">
-            <PostNavigation nextPost={nextPost} prevPost={prevPost} />
-          </div>
+      <Layout>
+        <div className="flex justify-center">
+          <PostNavigation nextPost={nextPost} prevPost={prevPost} />
+        </div>
 
-          <div className="mt-8 mb-5">
-            <div className="mb-8">
-              <h3 className="text-xl mt-3"><em>{new Date(postData.date).toDateString()}</em></h3>
-              <h1 className="text-5xl mt-3">{postData.title}</h1>
-              <h3 className="text-2xl mt-3"><em>{postData.subtitle}</em></h3>
-            </div>
-            <Categories categories={postData.categories} />
-            <div className="border-t-2 mt-5 mb-10" />
-            <div className="md:flex md:justify-center">
-              <div className="prose prose-sm sm:prose-xl" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
-            </div>
-            <div className="border-t-2 mt-5 mb-10" />
+        <div className="mt-8 mb-5">
+          <div className="mb-8">
+            <h3 className="text-xl mt-3"><em>{new Date(postData.date).toDateString()}</em></h3>
+            <h1 className="text-5xl mt-3">{postData.title}</h1>
+            <h3 className="text-2xl mt-3"><em>{postData.subtitle}</em></h3>
           </div>
+          <Categories categories={postData.categories} />
+          <div className="border-t-2 mt-5 mb-10" />
+          <div className="md:flex md:justify-center">
+            <div className="prose prose-sm sm:prose-xl" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+          </div>
+          <div className="border-t-2 mt-5 mb-10" />
+        </div>
 
-          <div className="flex justify-center">
-            <PostNavigation nextPost={nextPost} prevPost={prevPost} />
-          </div>
-        </Layout>
-      </DrawerContainer>
+        <div className="flex justify-center">
+          <PostNavigation nextPost={nextPost} prevPost={prevPost} />
+        </div>
+      </Layout>
     </>
   );
 }

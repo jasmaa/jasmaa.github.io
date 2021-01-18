@@ -98,7 +98,9 @@ export default function DrawerContainer({ children }) {
       }}
       ></div>
 
-      { children}
+      <div className="pt-20">
+        {children}
+      </div>
     </div >
   );
 }
