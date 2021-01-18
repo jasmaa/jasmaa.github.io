@@ -55,8 +55,10 @@ export default function DrawerContainer({ children }) {
 
   return (
     <div>
-      <div className={style['page-hamburger']}>
-        <Hamburger toggled={isOpen} toggle={toggle} />
+      <div className="fixed rounded-br-full pl-2 pt-2 pr-5 pb-5 bg-yellow-300 shadow-xl z-50">
+        <div className={style['page-hamburger']}>
+          <Hamburger toggled={isOpen} toggle={toggle} />
+        </div>
       </div>
 
       <div className={
