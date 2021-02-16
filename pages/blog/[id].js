@@ -31,9 +31,12 @@ export default function Post({ postData, prevPost, nextPost }) {
           </div>
           <Categories categories={postData.categories} />
           <div className="border-t-2 mt-5 mb-10" />
-          <div className="md:flex md:justify-center">
-            <div className="prose prose-sm sm:prose-xl" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
-          </div>
+
+          <div
+            className="post-content prose prose-xl max-w-none w-full"
+            dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
+          />
+
           <div className="border-t-2 mt-5 mb-10" />
         </div>
 
