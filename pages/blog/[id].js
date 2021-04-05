@@ -2,6 +2,7 @@ import Head from 'next/head';
 
 import Layout from '@components/Layout';
 import Categories from '@components/CategoriesList';
+import Divider from '@components/Divider';
 import PostNavigation from '@components/PostNavigation';
 import config from '@lib/config';
 import { getAllPostIDs, getPostData, getSortedPostsData } from '@lib/posts';
@@ -19,28 +20,26 @@ export default function Post({ postData, prevPost, nextPost }) {
       </Head>
 
       <Layout>
-        <div className="flex justify-center">
+        <div className="flex justify-center my-14">
           <PostNavigation nextPost={nextPost} prevPost={prevPost} />
         </div>
 
-        <div className="mt-8 mb-5">
+        <div className="mb-5">
           <div className="mb-8">
             <h3 className="text-xl mt-3"><em>{new Date(postData.date).toDateString()}</em></h3>
             <h1 className="text-5xl mt-3">{postData.title}</h1>
             <h3 className="text-2xl mt-3"><em>{postData.subtitle}</em></h3>
           </div>
           <Categories categories={postData.categories} />
-          <div className="border-t-2 mt-5 mb-10" />
+          <Divider />
 
           <div
             className="post-content prose prose-xl max-w-none w-full"
             dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
           />
-
-          <div className="border-t-2 mt-5 mb-10" />
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center my-14">
           <PostNavigation nextPost={nextPost} prevPost={prevPost} />
         </div>
       </Layout>
