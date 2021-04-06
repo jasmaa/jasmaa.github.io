@@ -16,6 +16,10 @@
     @apply text-gray-500;
   }
 
+  li {
+    @apply text-gray-500;
+  }
+
   a {
     @apply text-yellow-500 hover:text-yellow-600 hover:underline
   }

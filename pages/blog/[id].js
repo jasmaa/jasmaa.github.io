@@ -33,10 +33,12 @@ export default function Post({ postData, prevPost, nextPost }) {
           <Categories categories={postData.categories} />
           <Divider />
 
+          <div className="flex justify-center">
           <div
-            className="post-content prose prose-xl max-w-none w-full"
+            className="post-content prose prose-xl w-full"
             dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
           />
+          </div>
         </div>
 
         <div className="flex justify-center my-14">
