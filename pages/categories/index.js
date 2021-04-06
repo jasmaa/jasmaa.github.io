@@ -3,6 +3,8 @@ import Link from 'next/link';
 
 import config from '@lib/config';
 import Layout from '@components/Layout';
+import Navbar from '@components/Navbar';
+import Divider from '@components/Divider';
 import { getAllPostCategories, getSortedPostsData } from '@lib/posts';
 
 /**
@@ -18,8 +20,11 @@ export default function Categories({ categorizedPosts }) {
       </Head>
 
       <Layout>
-        <div id="top"></div>
-        <Link href="/"><a>← Back to Home</a></Link>
+
+        <Navbar />
+        <Divider />
+
+        <div id="top" />
 
         <div className="my-5">
           <div className="mb-5">
