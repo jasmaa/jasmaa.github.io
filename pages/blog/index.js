@@ -1,4 +1,3 @@
-import fs from 'fs';
 import Head from 'next/head';
 
 import Layout from '@components/Layout';
@@ -7,7 +6,6 @@ import Navbar from '@components/Navbar';
 import Divider from '@components/Divider';
 import config from '@lib/config';
 import { getSortedPostsData } from '@lib/posts';
-import { generateRSSFeed } from '@lib/rss';
 
 /**
  * Blog page
@@ -35,10 +33,6 @@ export default function Blog({ posts }) {
 
 export async function getStaticProps({ params }) {
   const posts = getSortedPostsData();
-
-  // Write rss feed
-  const rss = generateRSSFeed();
-  fs.writeFileSync('./public/rss.xml', rss);
 
   return {
     props: {

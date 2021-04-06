@@ -28,7 +28,7 @@ export default function Post({ postData, prevPost, nextPost }) {
           <div className="mb-8">
             <h3 className="text-xl mt-3"><em>{new Date(postData.date).toDateString()}</em></h3>
             <h1 className="text-5xl mt-3">{postData.title}</h1>
-            <h3 className="text-2xl mt-3"><em>{postData.subtitle}</em></h3>
+            <h3 className="text-2xl mt-3">{postData.subtitle}</h3>
           </div>
           <Categories categories={postData.categories} />
           <Divider />
