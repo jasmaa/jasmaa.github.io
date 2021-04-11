@@ -4,7 +4,7 @@ import go from 'highlight.js/lib/languages/go';
 import r from 'highlight.js/lib/languages/r';
 
 import 'animate.css/animate.min.css';
-import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/atom-one-dark.css';
 import "tailwindcss/tailwind.css";
 import '@styles/globals.css';
 
