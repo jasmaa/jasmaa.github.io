@@ -5,6 +5,7 @@ import Categories from '@components/CategoriesList';
 import Divider from '@components/Divider';
 import PostNavigation from '@components/PostNavigation';
 import config from '@lib/config';
+import { displayDate } from '@lib/utils';
 import { getAllPostIDs, getPostData, getSortedPostsData } from '@lib/posts';
 
 /**
@@ -26,7 +27,7 @@ export default function Post({ postData, prevPost, nextPost }) {
 
         <div className="mb-5">
           <div className="mb-8">
-            <h3 className="text-xl mt-3"><em>{new Date(postData.date).toDateString()}</em></h3>
+            <h3 className="text-xl mt-3"><em>{displayDate(new Date(postData.date))}</em></h3>
             <h1 className="text-5xl mt-3">{postData.title}</h1>
             <h3 className="text-2xl mt-3">{postData.subtitle}</h3>
           </div>
@@ -34,10 +35,10 @@ export default function Post({ postData, prevPost, nextPost }) {
           <Divider />
 
           <div className="flex justify-center">
-          <div
-            className="post-content prose prose-xl w-full"
-            dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
-          />
+            <div
+              className="post-content prose prose-xl w-full"
+              dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
+            />
           </div>
         </div>
 

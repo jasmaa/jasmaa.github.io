@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import CategoriesList from '@components/CategoriesList';
+import { displayDate } from '@lib/utils';
 
 /**
  * Shorthand card for blog post entry
@@ -8,7 +9,7 @@ import CategoriesList from '@components/CategoriesList';
 export default function PostCard({ post }) {
   return (
     <div className="shadow-xl bg-white p-10 rounded-lg">
-      <small><em>{new Date(post.date).toDateString()}</em></small>
+      <small><em>{displayDate(new Date(post.date))}</em></small>
       <h2><Link href={`/blog/${post.id}`}><a className="hover:no-underline">{post.title}</a></Link></h2>
       <div className="text-xl my-2">
         {post.subtitle}
