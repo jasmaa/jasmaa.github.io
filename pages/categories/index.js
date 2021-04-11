@@ -12,7 +12,7 @@ import { getAllPostCategories, getSortedPostsData } from '@lib/posts';
  * 
  * @param {*} param0 
  */
-export default function Categories({ categorizedPosts }) {
+export default function Categories({ categorizedPosts, categories }) {
   return (
     <>
       <Head>
@@ -32,7 +32,7 @@ export default function Categories({ categorizedPosts }) {
             <h2 className="text-gray-500 text-3xl mb-10">Assorted blog post categories</h2>
           </div>
           <div className="flex flex-col">
-            {Object.keys(categorizedPosts).map(category => (
+            {categories.map(category => (
               <div className="mb-5" key={category} id={category}>
                 <h2 className="text-4xl my-3">{category}</h2>
                 <a href="#top">Back to Top</a>
@@ -71,6 +71,7 @@ export function getStaticProps() {
   return {
     props: {
       categorizedPosts,
+      categories: Object.keys(categorizedPosts).sort(),
     }
   }
 }
