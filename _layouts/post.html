@@ -1,0 +1,32 @@
+---
+layout: default
+---
+
+<div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">{{ page.title }}</h1>
+    <h3 class="text-center">{{ page.date | date: '%b %d, %Y' }}</h3>
+    <div class="divider my-5 w-25"></div>
+  </div>
+
+  {{ content }}
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider my-5 w-25"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      {% if page.next %}
+      <a class="text-center" href="{{ page.next.url }}">←{{ page.next.title }}</a>
+      {% endif %}
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      {% if page.previous %}
+      <a class="text-center" href="{{ page.previous.url }}">{{ page.previous.title }}→</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
