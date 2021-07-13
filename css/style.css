@@ -5,6 +5,17 @@ a:hover {
   color: darkorange;
 }
 
+p {
+  color: gray;
+}
+p strong {
+  color: black;
+}
+
+li {
+  color: gray;
+}
+
 .highlight {
   padding: 0.5em;
   border-radius: 5px;
@@ -23,6 +34,15 @@ a:hover {
     margin: 0;
     border: 0;
     padding: 0;
+  }
+}
+.navbar .nav-links {
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 992px) {
+  .navbar .nav-links {
+    flex-direction: row;
   }
 }
 .navbar a.nav-item {
@@ -52,14 +72,14 @@ a:hover {
 }
 
 .post-content p {
-  color: gray;
   font-size: 1.2em;
   margin-top: 2em;
   margin-bottom: 2em;
   line-height: 1.7em;
 }
-.post-content p strong {
-  color: black;
+.post-content li {
+  font-size: 1.2em;
+  line-height: 1.7em;
 }
 .post-content img {
   display: block;
