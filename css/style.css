@@ -71,10 +71,14 @@ li {
   background-color: lightgray;
 }
 
+.post-content h2 {
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+
 .post-content p {
   font-size: 1.2em;
-  margin-top: 2em;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
   line-height: 1.7em;
 }
 .post-content li {
@@ -86,7 +90,13 @@ li {
   margin: 0 auto;
   max-height: 80%;
   max-width: 100%;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 .post-content table {
   width: 100%;
+}
+
+.post-content .footnotes {
+	font-size: 0.7em;
 }
