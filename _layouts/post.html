@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<div class="post-content">
+<div class="post-content mx-3">
   <div class="d-flex flex-column align-items-center">
     <h1 class="display-4 text-center mb-3">{{ page.title }}</h1>
     <h3 class="text-center">{{ page.date | date: '%b %d, %Y' }}</h3>
@@ -10,9 +10,9 @@ layout: default
   </div>
 
   {{ content }}
-  
+
   <div class="mt-5">
-	{% include tagsList.html %}
+    {% include tagsList.html %}
   </div>
 
   <div class="row">
