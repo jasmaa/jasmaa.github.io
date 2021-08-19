@@ -26,16 +26,15 @@ which are not too convenient for running statistics on. I ended up writing
 a small Python script to transform all the data into a CSV, ending up
 with the following table:
 
-```r
-##       name rank maze1 maze2  maze3 maze4 maze5 maze6 maze7 score
-## 1        *    1 1.100 0.108  1.468 2.469 0.330 0.380 1.159   139
-## 2        *    2 0.987 0.210  1.600 2.431 0.288 0.339 1.057   152
-## 3        *    3 3.742 0.098 10.209 6.144 0.375 1.697 5.770   168
-## 4        *    4 2.202 0.268  2.587 5.421 0.363 0.494 1.859   176
-## 5        *    5 3.785 0.096 10.326 6.110 0.374 1.685 5.912   202
-## 6        *    6 3.761 0.097 10.242 6.120 0.380 1.682 5.981   210
-...
-```
+| \#      | name | rank  | maze1  | maze2 | maze3  | maze4 | maze5 | maze6 | maze7 | score |
+| ---     | ---  | ---   | ---    | ---   | ---    | ---   | ---   | ---   | ---   | ---   |
+| **1**   | *    | 1     | 1.100  | 0.108 |  1.468 | 2.469 | 0.330 | 0.380 | 1.159 | 139   |
+| **2**   | *    | 2     | 0.987  | 0.210 |  1.600 | 2.431 | 0.288 | 0.339 | 1.057 | 152   |
+| **3**   | *    | 3     | 3.742  | 0.098 | 10.209 | 6.144 | 0.375 | 1.697 | 5.770 | 168   |
+| **4**   | *    | 4     | 2.202  | 0.268 |  2.587 | 5.421 | 0.363 | 0.494 | 1.859 | 176   |
+| **5**   | *    | 5     | 3.785  | 0.096 | 10.326 | 6.110 | 0.374 | 1.685 | 5.912 | 202   |
+| **6**   | *    | 6     | 3.761  | 0.097 | 10.242 | 6.120 | 0.380 | 1.682 | 5.981 | 210   |
+| ...     | ...  | ...   | ...    | ...   | ...    | ...   | ...   | ...   | ...   | ...   |
 
 At this point, the data still needed to be cleaned. Not all programs
 on the scoreboard ran correctly for all mazes, so these entries needed
@@ -71,52 +70,15 @@ all 7 mazes.
 
 ![Runtime histograms](/images/maze_contest/runtime_hists.png)
 
-<table>
-  <thead>
-    <tr>
-      <th>Maze #</th>
-      <th>Mean (s)</th>
-      <th>SD (s)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>3.857</td>
-      <td>0.757</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>0.105</td>
-      <td>0.0234</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>10.262</td>
-      <td>1.860</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>6.367</td>
-      <td>1.623</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>0.385</td>
-      <td>0.037</td>
-    </tr>
-    <tr>
-      <td>6</td>
-      <td>1.697</td>
-      <td>0.291</td>
-    </tr>
-    <tr>
-      <td>7</td>
-      <td>5.947</td>
-      <td>1.147</td>
-    </tr>
-  </tbody>
-</table>
+| Maze #     | Mean (s) | SD (s) |
+| ---        | ---      | ---    |
+| **1**      |  3.857   | 0.757  |
+| **2**      |  0.105 	| 0.0234 |
+| **3**      | 10.262   | 1.860  |
+| **4**      |  6.367 	| 1.623  |
+| **5**      |  0.385 	| 0.037  |
+| **6**      |  1.697 	| 0.291  |
+| **7**      |  5.947 	| 1.147  |
 
 In general, it seems that mazes with greater average runtimes
 displayed greater standard deviations. This is probably because mazes
@@ -148,12 +110,13 @@ kmeans_res <- kmeans(runtime_data, centers=3)
 kmeans_res$centers
 ```
 
-```r
-##      maze1     maze2    maze3    maze4     maze5    maze6    maze7
-## 1 1.453400 0.1904000  1.96160  3.55420 0.3530000 0.472400 1.377400
-## 2 3.909024 0.1013333 10.59048  6.35104 0.3845714 1.745048 6.128159
-## 3 9.255000 0.1880000 10.32500 22.46000 0.6390000 1.706000 6.007000
-```
+Cluster centers:
+
+| \#      | maze1    | maze2     | maze3    | maze4    | maze5     | maze6    | maze7    |
+| ---     | ---      | ---       | ---      | ---      | ---       | ---      | ---      |
+| **1**   | 1.453400 | 0.1904000 |  1.96160 |  3.55420 | 0.3530000 | 0.472400 | 1.377400 |
+| **2**   | 3.909024 | 0.1013333 | 10.59048 |  6.35104 | 0.3845714 | 1.745048 | 6.128159 |
+| **3**   | 9.255000 | 0.1880000 | 10.32500 | 22.46000 | 0.6390000 | 1.706000 | 6.007000 |
 
 Each data point was also transformed into 2D space for visualization
 by applying PCA and graphing the first two principal components of each
@@ -161,17 +124,17 @@ transformed point.
 
 ```r
 # PCA
-pca <- prcomp(runtime_data, center=TRUE, scale. = TRUE)
+pca <- prcomp(runtime_data, center=TRUE, scale.=TRUE)
 summary(pca)
 ```
 
-```r
-## Importance of components:
-##                           PC1    PC2     PC3     PC4     PC5     PC6     PC7
-## Standard deviation     1.9748 1.4750 0.65062 0.47248 0.43497 0.24521 0.17016
-## Proportion of Variance 0.5571 0.3108 0.06047 0.03189 0.02703 0.00859 0.00414
-## Cumulative Proportion  0.5571 0.8679 0.92835 0.96025 0.98727 0.99586 1.00000
-```
+Importance of components:
+
+| metric                     | PC1    | PC2    |PC3      | PC4     | PC5     | PC6     | PC7     |
+| ---                        | ---    | ---    | ---     | ---     | ---     | ---     | ---     |
+| **Standard deviation**     | 1.9748 | 1.4750 | 0.65062 | 0.47248 | 0.43497 | 0.24521 | 0.17016 |
+| **Proportion of Variance** | 0.5571 | 0.3108 | 0.06047 | 0.03189 | 0.02703 | 0.00859 | 0.00414 |
+| **Cumulative Proportion**  | 0.5571 | 0.8679 | 0.92835 | 0.96025 | 0.98727 | 0.99586 | 1.00000 |
 
 ![Graph of competitors by cluster](/images/maze_contest/clusters.png)
 
@@ -240,3 +203,5 @@ writing. The contest runs until the end of the semester, and we are free to impr
 we like. It is very possible for the clusters and rankings to change as competitors find smarter and leaner ways to
 solve mazes. Perhaps the everyone blob will scatter; perhaps we will all end up in cluster 1. Only time
 will tell, but until then, let the maze solver tournament arc continue!
+
+**UPDATE 08/19/21**: Convert HTML tables and code output to Markdown tables.

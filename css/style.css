@@ -16,6 +16,10 @@ li {
   color: gray;
 }
 
+table {
+  @extend .table;
+}
+
 .highlight {
   padding: 0.5em;
   border-radius: 5px;
@@ -99,4 +103,8 @@ li {
 
 .post-content .footnotes {
 	font-size: 0.7em;
+}
+
+.post-content table {
+  margin-bottom: 2em;
 }
