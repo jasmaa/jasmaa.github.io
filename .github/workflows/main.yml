@@ -14,11 +14,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.0.2
-      
+          bundler-cache: true
+
       - name: Install and Build
-        run: |
-          bundle install
-          bundle exec jekyll build
+        run: bundle exec jekyll build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
