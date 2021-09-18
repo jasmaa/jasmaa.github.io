@@ -28,6 +28,10 @@ table {
   margin-bottom: 2em;
 }
 
+.navbar-container {
+  height: 10em;
+}
+
 .navbar {
   margin-right: 2em;
   padding-right: 2em;
@@ -43,10 +47,12 @@ table {
 .navbar .nav-links {
   display: flex;
   flex-direction: column;
+  width: 5em;
 }
 @media (max-width: 992px) {
   .navbar .nav-links {
     flex-direction: row;
+    width: auto;
   }
 }
 .navbar a.nav-item {
