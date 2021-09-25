@@ -2,22 +2,20 @@
 layout: default
 ---
 
-<div class="container">
-  {% include paginator.html %}
+{% include paginator.html %}
 
-  {% for post in paginator.posts %}
-  <div class="card my-3">
-    <div class="card-body">
-      <small>{{ post.date | date: '%b %d, %Y' }}</small>
-      <a href="{{ post.url }}">
-        <h3 class="my-2">{{ post.title }}</h3>
-      </a>
-      {% include tagsList.html %}
-      <div class="divider my-3" style="width: 2em;"></div>
-      <p>{{ post.excerpt | strip_html | truncatewords:50 }}</p>
-    </div>
+{% for post in paginator.posts %}
+<div class="card my-3">
+  <div class="card-body">
+    <small>{{ post.date | date: '%b %d, %Y' }}</small>
+    <a href="{{ post.url }}">
+      <h3 class="my-3">{{ post.title }}</h3>
+    </a>
+    {% include tagsList.html %}
+    <div class="divider my-3" style="width: 2em;"></div>
+    <p>{{ post.excerpt | strip_html | truncatewords:50 }}</p>
   </div>
-  {% endfor %}
-
-  {% include paginator.html %}
 </div>
+{% endfor %}
+
+{% include paginator.html %}
