@@ -126,7 +126,9 @@ the buzzer launching was particularly amusing as it would mess with the characte
   
 ## TL;DR Demo Video
 
-<iframe src="https://www.youtube.com/embed/7s_zPBXLv94" width="100%" height="720rem"></iframe>
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/7s_zPBXLv94"></iframe>
+</div>
 
 ## After Thoughts
 
