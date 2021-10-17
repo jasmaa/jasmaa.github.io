@@ -15,7 +15,7 @@ everything from chip design to virtual machines to compilers, even to a very bar
 system!
 
 
-## **Chips Chips Galore!**
+## Chips Chips Galore!
 
 The first half of the course consisted of defining the machine hardware. The general idea of these
 sections was to incrementally take previously-fabricated chips and build new, more advanced ones,
@@ -61,7 +61,7 @@ obtain a shiny, new virtual computer. With the hardware and assembler built, I c
 software section of the course.
 
 
-## **Machine-to-Machine**
+## Machine-to-Machine
 
 The first thing we needed to address was the fact that our machine's assembly language was still
 much too primitive. Our software suite was in dire need of a few more features, which leads us to
@@ -90,7 +90,7 @@ the next step was creating the final tool in the compilation toolchain: a high l
 compiler.
 
 
-## **The Compiler**
+## The Compiler
 
 In order to write programs for our computer in a language that was a little more user-friendly, we
 needed a **compiler** to translate the course's high level language, **Jack**, into VM code. The Jack
@@ -117,7 +117,7 @@ which was easily fixed by comparing the lengths of potential tokenizations and p
 one that consumed the most text.
 
 
-## **Remembering to Forget**
+## Remembering to Forget
 
 With a compiler for a high level language added to our tool belt, the final part of Nand2Tetris was
 to write an **operating system** (OS). Yes, my friends. A fully-fledged operating system just like
@@ -155,7 +155,7 @@ were non-trivial as well. Eventually, I managed to write out and test every modu
 system, finally bringing my Nand2Tetris journey to an end.
 
 
-## **Thoughts on the Course**
+## Thoughts on the Course
 
 Overall, I found Nand2Tetris to be fun and enlightening. It was interesting to see a lot of the
 lower level computing I generally don't get to encounter, and the course gave me a much greater
@@ -180,7 +180,7 @@ software and hardware.
 
 ---
 
-## **Appendix A: Big Bugs**
+## Appendix A: Big Bugs
 
 One thing that became readily apparent the deeper I got into the course was the difficulty of
 testing projects at higher levels in a holistic manner. The course, thankfully, only expects you to
