@@ -3,6 +3,7 @@ layout: post
 title:  "The Nand2Tetris Experience"
 subtitle: "Turtles all the way down"
 date: "2021-08-18"
+categories: Programming
 tags: assembly compilers computer-architecture
 ---
 

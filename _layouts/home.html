@@ -11,6 +11,7 @@ layout: default
     <a href="{{ post.url }}">
       <h3 class="my-3">{{ post.title }}</h3>
     </a>
+    {% include categoriesList.html %}
     {% include tagsList.html %}
     <div class="divider my-3" style="width: 2em;"></div>
     <p>{{ post.excerpt | strip_html | truncatewords:50 }}</p>

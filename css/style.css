@@ -133,3 +133,11 @@ table {
   width: 100%;
   height: 100%;
 }
+
+/* Category badges */
+.programming-badge {
+  background-color: teal;
+}
+.music-badge {
+  background-color: salmon;
+}

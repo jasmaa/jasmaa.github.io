@@ -1,0 +1,11 @@
+{% if page.categories %}
+{% assign sorted_categories = page.categories | sort %}
+{% elsif post.categories %}
+{% assign sorted_categories = post.categories | sort %}
+{% endif %}
+
+{% for category in sorted_categories %}
+<a href="/categories#{{ category }}" class="badge rounded-pill m-1 {{ category | downcase }}-badge">
+  {{ category }}
+</a>
+{% endfor %}

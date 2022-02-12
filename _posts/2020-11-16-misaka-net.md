@@ -3,6 +3,7 @@ layout: post
 title:  "Misaka Net"
 subtitle: "...said Misaka with a posed look."
 date: "2020-11-16"
+categories: Programming
 tags: go grpc assembly
 ---
 

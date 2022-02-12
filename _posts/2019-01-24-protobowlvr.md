@@ -3,6 +3,7 @@ layout: post
 title:  "Protobowl VR"
 subtitle: "You buzz in the game, you buzz in real life"
 date: "2019-01-24"
+categories: Programming
 tags: quizbowl oculus websocket unity3d
 ---
 

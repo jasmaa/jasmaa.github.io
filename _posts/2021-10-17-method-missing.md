@@ -3,6 +3,7 @@ layout: post
 title:  "Method Missing"
 subtitle: "Your method is in another class."
 date: "2021-10-17"
+categories: Programming
 tags: ruby metaprogramming
 ---
 

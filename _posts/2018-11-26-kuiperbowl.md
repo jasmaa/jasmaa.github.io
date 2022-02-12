@@ -3,6 +3,7 @@ layout: post
 title: "Kuiperbowl"
 subtitle: "Like Protobowl but significantly worse"
 date: "2018-11-26"
+categories: Programming
 tags: quizbowl python django js websocket
 ---
 
