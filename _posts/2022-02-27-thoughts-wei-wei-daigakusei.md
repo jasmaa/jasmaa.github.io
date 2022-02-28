@@ -48,7 +48,7 @@ Kankandouritsu are a group of 4 elite universities. All 8 are considered quite
 prestigious and tough to get into though, hence their notability. Of course,
 these rankings are just for Kansai private universities. Kantou has their own
 pyramid of prestigious private schools, although I was not able to find
-definitive information about exactly which ones they were. Beyond these these
+definitive information about exactly which ones they were. Beyond these
 pyramids, there are even more elite schools since Japanese public universities
 are viewed as more prestigious than private ones. The schools making up what
 were the [imperial
