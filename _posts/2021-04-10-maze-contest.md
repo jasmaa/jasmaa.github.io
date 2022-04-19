@@ -3,7 +3,7 @@ layout: post
 title:  "Maze Contest: A Quick Analysis"
 subtitle: "Time for a tournament arc!"
 date: "2021-04-10"
-categories: Programming
+categories: Data
 tags: r data-science
 ---
 
