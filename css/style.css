@@ -79,6 +79,11 @@ table {
 .divider {
   height: 1px;
   background-color: lightgray;
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4em;
+  margin-bottom: 4em;
 }
 
 .post-content h2 {
@@ -113,6 +118,14 @@ table {
 
 .post-content table {
   margin-bottom: 2em;
+}
+
+.post-content hr {
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4em;
+  margin-bottom: 4em;
 }
 
 /* Adopted from: https://techstacker.com/how-to-responsive-youtube-videos/ */
