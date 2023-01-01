@@ -10,6 +10,9 @@ Shamiko or Momo
 
 [Hellify ML](/hellify-ml): CycleGAN model that sets images on fire
 
+[Blackbird Viewing Gallery](/blackbird-viewing-gallery): 13 ways of viewing
+blackbirds
+
 [Waiting For Network](/waiting-for-network): Find out what else you could be
 doing with your time while you wait for your model to train
 

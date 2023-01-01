@@ -16,14 +16,12 @@ linguistic and cultural experience relating to Japan. I’ll try my best, but th
 translations are not going to be or even aiming to be perfect. This is mostly a
 learning exercise for me. Anyways, onto the fun stuff!
 
-First on the chopping block is [*Wei Wei
-Daigakusei*](https://github.com/jasmaa/translations/blob/main/yabai-t-shirts-yasan/wei-wei-daigakusei.md)
-(lit. Way Way College Students) which was released in 2016 as part of Yabai T's
-album, *We love Tank-top*. The song describes a group of 5 college students in
-the Kansai area living a rowdy and free life instead of studying hard at school.
-While the premise isn’t exactly unique, Yabai T frames it with a uniquely Kansai
-spin, including a few callouts to locations that have ties back to Osaka and the
-Kansai area in general.
+First on the chopping block is *Wei Wei Daigakusei* which was released in 2016
+as part of Yabai T's album, *We love Tank-top*. The song describes a group of 5
+college students in the Kansai area living a rowdy and free life instead of
+studying hard at school. While the premise isn’t exactly unique, Yabai T frames
+it with a uniquely Kansai spin, including a few callouts to locations that have
+ties back to Osaka and the Kansai area in general.
 
 ## Translation Notes
 
