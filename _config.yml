@@ -30,6 +30,8 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
 github_username: jasmaa
 linkedin_username: jasmaa
+mastodon_instance: mastodon.social
+mastodon_username: jasonmaa3955
 
 # Build settings
 plugins:
