@@ -3,7 +3,14 @@ layout: page
 title: Fun
 ---
 
-Some fun (and boring) things that are also hosted here:
+Some things that I have made for fun (and out of boredom):
+
+[AWS Status Poem Bot](https://botsin.space/@bobertfrost): A bot that posts
+badly-written AI-generated poems when AWS goes down
+
+[3DC Metro](/3dcmetro): DC metro but it's in the third dimension
+
+[Is Google Up](https://is-google-up.netlify.app/): Is Google up???
 
 [Shami-Momo Identifier](/shami-momo-identifier): Identifies if a picture is of
 Shamiko or Momo
