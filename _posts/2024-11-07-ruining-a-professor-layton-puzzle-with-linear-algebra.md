@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Ruining a Layton Puzzle with Linear Algebra"
+title: "Ruining a Professor Layton Puzzle with Linear Algebra"
 subtitle: "Once you Gaussian eliminate the non-pivot elements whatever remains, however improbable, must be the truth!"
 date: "2024-11-07"
 categories: Misc
