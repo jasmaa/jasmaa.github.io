@@ -4,6 +4,12 @@ Personal website
 
 ## Getting Started
 
+Install gems:
+
+```
+bundle install
+```
+
 Build and serve with:
 
 ```

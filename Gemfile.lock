@@ -13,7 +13,7 @@ GEM
     ffi (1.17.0)
     forwardable-extended (2.6.0)
     http_parser.rb (0.8.0)
-    i18n (1.14.5)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     jekyll (4.2.2)
       addressable (~> 2.4)
@@ -52,7 +52,7 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
-    rexml (3.3.7)
+    rexml (3.3.9)
     rouge (3.30.0)
     safe_yaml (1.0.5)
     sassc (2.4.0)
@@ -68,10 +68,11 @@ GEM
       tzinfo (>= 1.0.0)
     unicode-display_width (1.8.0)
     wdm (0.1.1)
-    webrick (1.8.1)
+    webrick (1.9.0)
 
 PLATFORMS
   x64-mingw32
+  x86_64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
