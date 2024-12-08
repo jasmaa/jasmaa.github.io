@@ -19,7 +19,7 @@ To eat the stir-fry, a genius needs to be able to pick up the two chopsticks to 
 
 Find a way for these geniuses to eat their stir-fry while avoiding deadlock.
 
-This problem is a spin of a popular problem in concurrent programming known as the Dining Philosophers problem. Like any good problem, it has multiple solutions.
+This problem is a spin on a popular problem in concurrent programming known as the Dining Philosophers problem. Like any good problem, it has multiple solutions.
 
 Caspian’s father proposes the following one.
 
@@ -55,7 +55,7 @@ Introduce a third party, like a waiter, who controls the geniuses.
 
 ![6 plates in a circle labeled A to F clockwise with a chopstick in between each one. There is a waiter in the middle.](/images/dining-philosophers/dining_philosophers_03_0.png)
 
-Any given genius must have the waiter’s permission to pick up their chopsticks. When a genius wants to eat, they signal to the waiter. If no one is currently eating, the waiter gives the genius permission to pick up their chopsticks and becomes closed to any new requests from other geniuses to eat.
+Any given genius must have the waiter’s permission to pick up their chopsticks. When a genius wants to eat, they signal to the waiter. If no one is currently eating, the waiter gives the genius permission to pick up their chopsticks and becomes closed off to any new requests from other geniuses.
 
 ![6 plates in a circle labeled A to F clockwise with a chopstick in between each one. There is a waiter in the middle. There is a blue line from A to the waiter with the text "PLS?" and a green line from the waiter to A with the text "OK".](/images/dining-philosophers/dining_philosophers_03_1.png)
 
@@ -67,7 +67,7 @@ Once the genius is done eating and puts down their chopsticks, they tell the wai
 
 ![6 plates in a circle labeled A to F clockwise with a chopstick in between each one. There is a waiter in the middle. C has green lines to the chopsticks on its left and right with the text "YUM"](/images/dining-philosophers/dining_philosophers_03_4.png)
 
-The introduction of the waiter effectively serializes the geniuses who were acting in parallel before. What was previously a chaotic mess of geniuses fighting over chopsticks now becomes an orderly sequence turn-taking moderated by the waiter.
+The introduction of the waiter effectively serializes the geniuses who were acting in parallel before. What was previously a chaotic mess of geniuses fighting over chopsticks now becomes an orderly sequence of turn-taking moderated by the waiter.
 
 In concurrent programming, this third-party is known as a lock or **mutex**. A mutex acts similarly to the waiter from the Dining Philosophers: it represents some sort of permission that a concurrent program must obtain before executing parts of its logic. If a program hits a chunk of its logic that requires the mutex, but the program hasn’t acquired it, it won’t be able to continue until it can acquire that mutex. Naturally, mutexes are useful when you have logic that shouldn’t run in parallel, like file writes or mutating actions in a database.
 
@@ -75,7 +75,7 @@ In concurrent programming, this third-party is known as a lock or **mutex**. A m
 
 After Caspian finishes, Caspian’s father, clearly pissed, reprimands his wife, calling stir-fry a sorry excuse for a home-cooked meal and storms out of the house. For Caspian, this is just another regular occurrence in his dysfunctional home. However, the viewers get to follow Caspian’s father out to the garage where we find out that that whole abusive husband persona was in fact just an act and that his father and mother are colluding on *something* under their son's nose! It turns out that there’s more than meets the eye with Caspian’s family.
 
-Just like how his family's outward appearance is a facade to Caspian, the Dining Philosophers problem is also, in a sense, a facade to us. It is a theoretical problem, a toy example hiding the oft uglier and grungy programs written to solve real-world problems. These are programs that must juggle different processes all trying to write to memory at once; programs that must handle access to a database for multiple clients; and all while squeezing out as much efficiency from the machine without crashing, a far cry from our philosophers having their quaint little dinner. After all, multi-threading *is* feared by many for good reason.
+Just like how his family's outward appearance is a facade to Caspian, the Dining Philosophers problem is also, in a sense, a facade to us. It is a theoretical problem, a toy example hiding the oft uglier and grungy programs written to solve real-world problems. These are programs that must juggle different processes all trying to write to memory at once; programs that must handle access to a database for multiple clients. They must handle a variety of edge cases, all while squeezing out as much efficiency from the machine without crashing, a far cry from our philosophers having their quaint little dinner. After all, multi-threading *is* feared by many for good reason.
 
 ---
 
@@ -89,9 +89,9 @@ I think what has especially resonated with me about it is the show’s technical
 
 One character even blatantly re-enacts the famous cyborg typing scene from *Ghost in the Shell* later on in season 1! (so cool!)
 
-Despite this, I don’t think *Pantheon* lets its predecessors completely define it either. The execution and story feel like a fresh take on the ideas and atmosphere pioneered by its forecomers, remixing them rather than just creating a weak rehash. The only criticisms I have is that I felt the show kinda did a genre swap from a psychological horror to a more general thriller. It also gets a bit difficult to manage near the end of season 1 with the viewer having to juggle several, often changing, character motivations. The voice acting can also feel a bit wooden at times, especially in earlier episodes. Of course, these are minor nits. I still love this show.
+Despite this, I don’t think *Pantheon* lets its predecessors completely define it either. The execution and story feel like a fresh take on the ideas and atmosphere pioneered by its forebearers, remixing them rather than just creating a weak rehash. The only criticisms I have is that I felt the show kinda did a genre swap from a psychological horror to a more general thriller. It also gets a bit difficult to manage near the end of season 1 with the viewer having to juggle several, often changing, character motivations. The voice acting can also feel a bit wooden at times, especially in earlier episodes. Of course, these are minor nits. I still love this show.
 
-*Pantheon* itself is also based off of a series of short stories. I really want to read them, especially after I found out that they were authored by Ken Liu, the English translator for my favorite sci-fi novel of all time, *Death’s End*. However, at least one person online has said the original stories are quite dry and may not be as interesting as the show. This I can believe after attempting to drag myself through more "sciencey" sci-fi, such as *Permutation City* or *Red Mars*, and finding myself losing focus.
+*Pantheon* itself is based off of a series of short stories. I really want to read them, especially after I found out that they were authored by Ken Liu, the English translator for my favorite sci-fi novel of all time, *Death’s End*. However, at least one person online has said the original stories are quite dry and may not be as interesting as the show. This I can believe after attempting to drag myself through more "sciencey" sci-fi, such as *Permutation City* or *Red Mars*, and finding myself losing focus.
 
 One thing I do wish is that I had gotten into the show earlier. I had never heard of it until this month despite it being nearly 2 years old at the time of writing. I think one of the main contributing factors to this is its distribution. It was apparently locked behind AMC+ and HIDIVE, only making it to Netflix this year, so no one I knew was talking about it. Season 2 is also still only available in Australia and New Zealand which is both extremely odd and kind of a shame. I think the show is amazing and doesn’t deserve to die in obscurity. Hopefully the Netflix release will prevent that.
 
@@ -99,6 +99,6 @@ One thing I do wish is that I had gotten into the show earlier. I had never hear
 
 Ken Liu is an interesting person. He started his career as a Microsoft engineer. Then he became a lawyer. Then he became a writer, and quite an accomplished one at that, having written for *Star Wars* and *Love Death + Robots* (and of course translating Cixin Liu’s *Death’s End*, the final work of his *Three Body Problem* trilogy).
 
-Ken Liu as someone who made it in both the tech and literature is not unique either, which is even more surprising. Andy Weir of *Martian* fame is another programmer who later became a sci-fi writer. I also recently learned of another person in the tech space writing sci-fi, Ted Chiang, whose *Tower of Babylon* I’ve been wanting to read.
+Even more surprising is that Ken Liu as someone who made it in both tech and literature circles is not unique either. Andy Weir of *Martian* fame is another programmer who later became a sci-fi writer. I also recently learned of another person in the tech space writing sci-fi, Ted Chiang, whose *Tower of Babylon* I’ve been wanting to read.
 
 The upshot is not really to fanboy about random famous people but more so to say that it never ceases to amaze me knowing how many people out there not only *have* multifaceted, cross-discipline talents but are also *actively applying them* to accomplish their dreams.
