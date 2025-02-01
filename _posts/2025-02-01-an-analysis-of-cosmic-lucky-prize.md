@@ -4,7 +4,7 @@ title: "An Analysis of Cosmic Lucky Prize"
 subtitle: "It's Phainonomics!"
 date: "2025-02-01"
 categories: Data
-tags: python
+tags: python games
 ---
 
 What's the best way to simultaneously get millions of weebs excited to play a gacha game AND to also motivate a tired guy to revive his blog for the nth time in his life?
