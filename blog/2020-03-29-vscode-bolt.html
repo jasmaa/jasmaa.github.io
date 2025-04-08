@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>VS Code Bolt | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">VS Code Bolt</h1>
+    <h3 class="text-center mb-3"><em>That One Coding Project That Isn't Actually a Coding Project</em></h3>
+    <h5 class="text-center">Mar 29, 2020</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Recently, I had started experimenting with Firebase’s Realtime Database.
+Then one thing led to another, and I eventually found myself working on a
+language extension for a rules language, but I’m getting ahead of myself.</p>
+
+<h2 id="background">Background</h2>
+
+<p>Taking a step back and providing some much-needed background:
+the Firebase Realtime Database is a JSON-based,
+key-value store which makes it easy to start with but also quick to trip up in since
+data doesn’t have a well-defined structure. Moreover,
+while a traditional database would be interfaced by a backend acting as a middleman
+to authenticate users and limit the scope of possible queries, Firebase seems to be
+intended to directly interact with the client. This means that security becomes
+a major problem as it has to be enforced directly on the database’s end.</p>
+
+<p>Firebase’s solution to both of these problems is a rule system. Database rules are written
+into another JSON file and allow one to specify the conditions for data read, write, and validation.
+The rule system solves everything except it also introduces a new problem: giant, unreadable JSON files.
+It seems that the people at Google got tired of writing these rules and made a compiler
+for a new rules language called Bolt which compiles down to the JSON rules.</p>
+
+<p>When my nose led me to Bolt, I latched onto it immediately, having also tired of writing a
+growing, unmanageable set of rules. Jumping into Bolt, my first instinct was to find an
+extension for syntax highlighting, but, unfortunately, none of the available ones on
+the marketplace met my expectations. I made like any sane and normal person and dived
+into making my own!</p>
+
+<h2 id="making-language-extensions">Making Language Extensions</h2>
+
+<p>While I develop a lot IN VS Code, I had no actual experience developing
+FOR VS Code. Surprisingly, getting started was quite simple: I was able to bootstrap a new project
+with the Yeoman VS Code extension generator and all a language extension needed after that was a
+TextMate file (<code class="language-plaintext highlighter-rouge">.tmLanguage.json</code>) where all the parsing rules for the grammar would be written.</p>
+
+<p>So how to write the parsing rules?</p>
+
+<p>The generator thankfully provided a dummy grammar to provide some ground, and I had also
+just taken a programming languages course at university so writing grammars wasn’t uncharted
+territory. However, figuring out how to write these rules and finding a place to start was
+still a daunting task. Looking at the grammars defined by both my Bolt extension predecessors as well as the
+JS grammar file for VS Code itself, I began to get a grasp of how to write grammars in TextMate.</p>
+
+<p>TextMate works by matching constructs using regular expressions.
+Constructs can be either matched using a single regex or by trying to match regexes
+for the beginning and end of a construct. The latter kind of match is
+especially useful for constructs that enclose things such as strings.</p>
+
+<p>As an example, this regex was used to match the beginning of function declarations:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(function\\s)?\\s*([a-zA-Z_$]\\w*)\\s*(\\()((?:[a-zA-Z_$]\\w*)(?:,\\s*(?:[a-zA-Z_$]\\w*))*)?(\\))\\s*{
+</code></pre></div></div>
+
+<p>…which looks like a complete mess at first until it gets broken down:</p>
+
+<p><img src="/images/vscode_bolt/function_declaration.png" alt="Function declaration regex" /></p>
+
+<p>The regex above uses a lot of captures groups since TextMate uses those to assign scopes to
+parts of a construct which determines how text gets highlighted. In addition, capture groups
+can also be used to nest patterns for more constructs as seen in capture group 4 below
+which tries to find and match argument names in the function header.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"beginCaptures": {
+	"1": {
+		"name": "storage.type.function.bolt"
+	},
+	"2": {
+		"name": "entity.name.function.bolt"
+	},
+	"3": {
+		"name": "punctuation.definition.parameters.begin.bolt"
+	},
+	"4": {
+		"patterns": [{
+			"name": "variable.parameter.function.bolt",
+			"match": "\\b(?:[a-zA-Z_$]\\w*)"
+		}]
+	},
+	"5": {
+		"name": "punctuation.definition.parameters.end.bolt"
+	}
+},
+</code></pre></div></div>
+
+<p>References to defined constructs can also be included inside other
+constructs which makes it really easy to design a grammar top-down.
+The patterns shown below match the in-between text of a function
+declaration block, saying that the inside of a block can either include
+another <code class="language-plaintext highlighter-rouge">function-declaration</code> or an expression (<code class="language-plaintext highlighter-rouge">expr</code>).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"patterns": [
+	{
+		"include": "#function-declaration"
+	},
+	{
+		"include": "#expr"
+	}
+]
+</code></pre></div></div>
+
+<p>The rest of the project boiled down to writing regex rules to match key constructs
+and placing them properly into my hierarchy.</p>
+
+<p><img src="/images/vscode_bolt/tree.png" alt="Parsing hierarchy" /></p>
+
+<p>The one difference with TextMate grammar rules and the ones I had written for
+school was that I had to parse entire constructs in one go. The parsers I was
+used to had much more flexibility, using lookaheads to determine nested constructs.
+The best I could do in TextMate was to mimic this by specifying the patterns in the
+in-between of an enclosed construct.</p>
+
+<p>Debugging the extension throughout was also a nightmare. Writing the regexes was already
+bad enough since they had to be written using escapes, but TextMate’s limitations meant
+that more work for parsing fell on the regexes, leading to very long and complicated expressions.
+Trudging through, I eventually got the extension to a place where most of the
+language constructs were written into the TextMate grammar.</p>
+
+<h2 id="opening-up-shop">Opening Up Shop</h2>
+
+<p>At this point I was ready to release it to the marketplace. Packaging up the extension for
+release was simple with <code class="language-plaintext highlighter-rouge">vsce</code> but my experience with other markplaces told
+me that publishing my extension was likely going to be a hassle.</p>
+
+<p>Turns out I was wrong.</p>
+
+<p>It was surprisingly easy to publish to the VS Code Marketplace: all I had
+to do was get an Azure personal access token and publish the package. From there,
+it was a matter of doing some aesthetic clean up and adding
+some badges and my Bolt language extension was ready for anyone to use!</p>
+
+<p><img src="/images/vscode_bolt/marketplace.png" alt="Marketplace page" /></p>
+
+<h2 id="improvements-and-conclusion">Improvements and Conclusion</h2>
+
+<p>While the syntax highlighter works quite nicely overall, more could still be done with
+it. One issue is that I did not name scopes for all language structures so
+while highlighting may look acceptable with the default theme, other themes might render
+syntax differently.</p>
+
+<p>It also appears that a lot of JavaScript functionality is supported in Bolt
+which was not encoded in my grammar. While I had initially tested what JS I could write by
+compiling arbitrary statements and seeing if they worked, definitively solving this problem
+would require a deep dive into the Bolt compiler’s source which I am not going to do as of now.
+However, for the most part, the highlighter covers the kind of Bolt that most people will probably
+be writing (or so I hope).</p>
+
+<p>In the end, I am surprisingly proud of this project despite not having written any code for it.
+I didn’t expect to ever use any of the parsing stuff I learned when I took programming
+languages, having written it off as too low-level and faraway from the world of
+app development, but here I am today, a wiser man. I also find it ironic that in an effort
+to not have to write large, unreadable JSON files, I ended up making this project
+which is, at its core, a large, complicated, and very unreadable JSON file.</p>
+
+<p>Life is full of many mysteries and contradictions.</p>
+
+<h2 id="appendix-a-fun-with-foss">Appendix A: Fun with FOSS</h2>
+
+<p>At the start, I had originally just intended to make a pull request to one of the other Bolt extensions,
+but when I peeked at their repositories, I found that
+<a href="https://github.com/smkamranqadri/vscode-bolt-language">both</a>
+<a href="https://github.com/ThadeuLuz/vsce-firebase-bolt">projects</a>
+had actually done a straight one-to-one adaption of a set of rules originating from a
+<a href="https://github.com/davideast/bolt-sublime">package written years ago for Sublime</a>
+by a Googler who, in turn, had lifted parts of his grammar off of someone else’s
+<a href="https://github.com/btford/sublime-text-javascript">personal JS Sublime language package</a>!</p>
+
+<p>This long chain of forking was the primary reason why I had hesitated to make
+a pull request to begin with. The grammars appeared to have been machine converted from
+the original XML into JSON which made them somewhat of a nightmare to read
+and modify. I was also not sure what both creators treated as the ground truth
+for their grammars and decided it was just easier to make my own grammar from scratch.</p>
+
+<p>On the other hand, it’s amazing to see code(?) work its way up to the present. Some rules from the
+original JS language package date as far back to 2012 and have haphazardly made their way
+across different projects for different editors, residing in different forms, to end up
+being used by thousands today and scrutinized by a flakey college student 8 years later. I think it’s
+one thing when talking about old code in a long-running project but it’s another to see code move across
+different projects and contexts over time.</p>
+
+<p><strong>UPDATE 05/25/20</strong>: Grammar examples moved to Gist, minor changes to text</p>
+
+<p><strong>UPDATE 01/17/21</strong>: Grammar examples moved back as code</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#bolt" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  bolt
+</a>
+
+<a href="/tags#firebase" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  firebase
+</a>
+
+<a href="/tags#vscode" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  vscode
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2020-11-16-misaka-net">←Misaka Net</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2020-01-24-adxtools">adxtools→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>
