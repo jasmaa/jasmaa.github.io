@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>The Magic of --follow | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">The Magic of --follow</h1>
+    <h3 class="text-center mb-3"><em>Follow? Follow!</em></h3>
+    <h5 class="text-center">Mar 13, 2024</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>I recently discovered the joy of using the <code class="language-plaintext highlighter-rouge">--follow</code> flag. Let me tell you a
+little bit more about what I mean.</p>
+
+<p>One of the tools at my work involves running a test script that both (1) takes a
+long time to run and (2) generates a <em>lot</em> of output.</p>
+
+<p>When I first started working with it, I naively ran the script as-is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./run-tests.sh
+</code></pre></div></div>
+
+<p>I came back 1 hour later to find that it had printed a huge mess of a test
+report to stdout. The report had so many lines to the point that the oldest ones
+had already been truncated by my terminal. This was not very useful to me nor my
+senior who was asking me where the hell the test results were.</p>
+
+<p>On my second try, I tried a slightly smarter approach. I redirected the script’s
+output to a file instead of stdout this time:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./run-tests.sh &gt; ~/test-results.txt
+</code></pre></div></div>
+
+<p>Now the script would write the test results to a file for safe-keeping. I re-ran
+it and left for another hour. When I came back, it was a simple matter of
+grepping the TXT file for any failed test cases and transferring the file off of
+my remote desktop to send to my team:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grep -i fail ~/test-results.txt
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp me@host.example.com:/path/to/test-results.txt ~/test-results.txt
+</code></pre></div></div>
+
+<p>This worked out, but now I had a new problem: Unlike in the naive approach, I
+couldn’t see the script output in real-time anymore. This made it difficult to
+figure out what was actually happening over the course of that 1 hour. To get
+the output, I could repeatedly <code class="language-plaintext highlighter-rouge">tail</code> the results file but that gets kind of
+annoying after a while. That’s when I discovered the magic of <code class="language-plaintext highlighter-rouge">--follow</code>. Here’s
+what I did:</p>
+
+<p>I re-ran the original command in my terminal:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./run-tests.sh &gt; ~/test-results.txt
+</code></pre></div></div>
+
+<p>And in another terminal, I ran:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tail -f ~/test-results.txt
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">-f</code> flag is short-hand for <code class="language-plaintext highlighter-rouge">--follow</code> which continuously updates the output
+with the latest lines at the end of a file. Now I had the best of both worlds: I
+could monitor the progress of the test script in real-time and have those
+results saved to a file that I could analyze in post.</p>
+
+<p>Perhaps something this simple doesn’t merit a full-blown blog post, but I still
+feel proud of my little discovery, no matter how much it pales in comparison to
+the arcane commands of the shell gurus. Also, I haven’t written a post in over
+half a year, so now is as good a time as any to start again. Until next time!</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#shell" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  shell
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-08-15-status-599">←Status 599</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2023-10-28-the-microsoft-oauth2-spa-experience">The Microsoft OAuth2 SPA Experience→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>
