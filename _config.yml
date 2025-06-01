@@ -32,6 +32,8 @@ github_username: jasmaa
 linkedin_username: jasmaa
 mastodon_instance: mastodon.social
 mastodon_username: jasonmaa3955
+mastodon_alt_instance: torimori.net
+mastodon_alt_username: jasonmaa3955
 
 # Build settings
 plugins:
