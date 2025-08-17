@@ -7,7 +7,7 @@ categories: Misc
 tags: mastodon hardware self-hosting
 ---
 
-I've been self-hosting a single-user Mastodon instance at for some time now. I figured it's probably time to write up my experience setting it up so I can share my experiences with the rest of the world (and so I can also have it documented somewhere once I inevitably forget how I did do it).
+I've been self-hosting a single-user Mastodon instance for some time now. I figured it's probably time to write up my experience setting it up so I can share my experiences with the rest of the world (and so I can also have it documented somewhere once I inevitably forget how I did do it).
 
 ## Dude, Where’s My Pi?
 
@@ -37,7 +37,7 @@ Self-hosting meant that I needed to turn one of my Potatoes into a Mastodon serv
 
 My entire setup pretty much followed the [Mastodon setup guide](https://docs.joinmastodon.org/admin/install/) line-for-line. I did run into a bit of trouble with installing yarn, but it turned out this was due to lynx having an older version of Node. APT kept installing the older Node version even after I uninstalled Node and set the package source to Node 20. Eventually, I was able to get it to work by fiddling around and uninstalling enough dependencies so that APT wouldn’t keep installing the older Node.
 
-The rest of the guide went mostly without a hitch, except that I did have to settle on a domain name. Once I got one, the next step was to get an SSL certificate for my server. This meant it was finally time to figure out how I was going to expose lynx to the Internet. I was originally planning to use Tailscale Funnel but soon found out that Funnel [only allows DNS names that are a subdomain of the tailnet’s domain](https://tailscale.com/kb/1223/funnel#requirements-and-limitations). I had already bought my own domain, and I also didn’t really want to call my Mastodon server to be on something like foo.ts.net so that was a no-go.
+The rest of the guide went mostly without a hitch, except that I did have to settle on a domain name. Once I got one, the next step was to get an SSL certificate for my server. This meant it was finally time to figure out how I was going to expose lynx to the Internet. I was originally planning to use Tailscale Funnel but soon found out that Funnel [only allows DNS names that are a subdomain of the tailnet’s domain](https://tailscale.com/kb/1223/funnel#requirements-and-limitations). I had already bought my own domain, and I also didn’t really want to call my Mastodon server something like foo.ts.net so that was a no-go.
 
 After some more quick research, I ended up going with an alternative and setting up with Cloudflare Tunnel. Following the [tunnel setup guide](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-remote-tunnel/), I was able to register a domain name with Cloudflare and set up the tunnel. The entire process was very similar to using Tailscale Funnel and simply involved running the cloudflared daemon on lynx. However, trouble started brewing once I started configuring the routing.
 
