@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>CMSC Undergrad Calendar | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">CMSC Undergrad Calendar</h1>
+    <h3 class="text-center mb-3"><em>Calendar from Undergrad</em></h3>
+    <h5 class="text-center">Sep 27, 2018</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Going into college, one of my primary goals was to get
+my act together. I’ve always been awful at managing events, so
+recently I’ve started trying to actively use Google Calendar.
+Integrating it into my livelihood was very straight-forward:</p>
+
+<ul>
+  <li>Add calendars for bulk events</li>
+  <li>Manually add smaller, one-off events</li>
+</ul>
+
+<p>Then I happened upon the behemoth that is the CMSC Undergrad calendar. Not only
+could I not find a Google Calendar mirror, but calendars
+for subsequent months seemed to be getting pulled via some ajax magic.
+I wanted to just scrape the entire thing but the whole site was so arcane
+to navigate that it was much more trouble than it was worth.</p>
+
+<p>I was about to give up and just manually add all 50+ some events when
+the words of an old friend came back to me:</p>
+
+<p><em>“Webscraping? Pfft that’s easy.”</em></p>
+
+<p>In a sense, he was right because while trying to hack together a script and figuring
+out what parameters to shove into a POST request takes a lot of time
+(at least for me anyways…), there are smarter ways to do
+webscraping.</p>
+
+<p>The solution I turned to was Selenium, mostly because this project gave me
+an excuse to start messing around with it.</p>
+
+<h2 id="process">Process</h2>
+
+<p>One of the first things I did was figure out how to get around with Selenium.
+Once I could successfully navigate through the calendars via button click and
+pull the source, the project became mostly a parsing game. I threw all the
+HTML into BeautifulSoup and looked for event hyperlinks which essentially
+just got me a list of all the files under “event” directory. I then went through every
+event page and did the same thing, this time trying to pull out the event title,
+location, and date if I could and processing it into a reasonable form.</p>
+
+<p>Now I had all the event data I needed but still no way to put it into my Google
+Calendar. Thankfully, Google provides a nice API to their service plus some base
+example code which I copied and modified. Running my little script, I now had
+a handy way of mirroring the undergrad calendar over to Google except for one
+small problem. For some reason, the times were off by an hour starting from
+November. How curious! I thought I had messed up some timezone issue, but then
+I remembered: Daylight saving time. Ugh. Google Calendar was automatically accounting
+for DST for some reason. To be honest, I just monkey-patched the
+code to change the time offset based on whether DST was in place or not.</p>
+
+<h2 id="after-thoughts">After Thoughts</h2>
+
+<p>This project was not that complicated, and I’m sure there were better ways to do
+what I had set out to accomplish. For all I know, I may have just entirely missed
+an “Add to Google Calendar” button on the undergrad site which would have saved
+me a lot of trouble.</p>
+
+<p>One of the end goals was to put this script onto a server and run it every month
+to update the list of events, but I had some trouble getting Google to authenticate
+me on my EC2 instance and decided that this was enough since I could run the
+script monthly myself anyways.</p>
+
+<p>As for its use, many big events in the computer science department get hyped up
+days before they happen anyways, making this thing largely useless. That being said,
+the calendar still has some use for reminding me of smaller events and if anything,
+I learned how to prototype webscrapers faster with it through the Selenium experience.</p>
+
+<p>The calendar itself can be accessed <a href="https://calendar.google.com/calendar/embed?src=a08cd3h5pl26olnsts54pn8kvs%40group.calendar.google.com&amp;ctz=America%2FNew_York">here</a>
+although it is likely not up-to-date.</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#calendar" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  calendar
+</a>
+
+<a href="/tags#python" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  python
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2018-11-04-chip8">←CHIP-8</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2018-08-08-spooter">Spooter→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>
