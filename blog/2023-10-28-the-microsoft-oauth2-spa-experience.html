@@ -1,0 +1,351 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>The Microsoft OAuth2 SPA Experience | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">The Microsoft OAuth2 SPA Experience</h1>
+    <h3 class="text-center mb-3"><em></em></h3>
+    <h5 class="text-center">Oct 28, 2023</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Boo! It’s October, so I’ve decided to rise from the dead with a new post. I’ve
+recently had the pleasure of messing around with the Microsoft Identity platform
+and would like to recount my experience here.</p>
+
+<p>The Microsoft Identity platform is a service that Microsoft uses to handle
+authorization into several of its web APIs, most notably the <a href="https://learn.microsoft.com/en-us/graph/use-the-api">Graph
+API</a> which gives developers
+programmatic access to various Microsoft cloud services, such as Outlook, Teams,
+OneDrive, etc. Of course, the platform uses everyone’s favorite authorization
+standard, OAuth2. Microsoft supports a rarer application of OAuth2 for entirely
+client-side applications which makes this a bit more interesting to write about.</p>
+
+<h2 id="creating-an-oauth2-application">Creating an OAuth2 application</h2>
+
+<p>The first thing that needs to be done for any integration into an
+OAuth2-authorized API is to create an OAuth2 app on the resource vendor’s site.
+For Microsoft, this setup <a href="https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app">happens to live on
+Azure</a>.
+I made an Azure account and after wandering through a forest of UI panels and
+widgets, I finally found myself on the Applications page.</p>
+
+<p>When creating an OAuth2 app, you are given several options for which type of app
+to create. Since I was working on a React app in Vite, I chose SPA. I also
+provided a redirect URI for Microsoft to send users to at the end of the OAuth2
+handshake.</p>
+
+<p><img src="/images/the-microsoft-oauth2-spa-experience/azure.png" alt="Applications page on Azure with SPA OAuth2
+application" /></p>
+
+<p>Typically most OAuth2 apps also come with a client secret. This is usually used
+by the client app to prove to the resource server that the client is legitimate
+when it redeems an access token. However, we don’t need one for the SPA route
+(since I guess the web UI a user is using can just be thought of as an extension
+of that user), so this was skipped. That being said, Microsoft’s client secret
+generation is a bit different from most OAuth2 apps I’ve seen before in that it
+allows devs to (1) have multiple secrets on one OAuth2 app (yay?) and (2) it
+also forces those secrets to expire which means that they must be manually
+rotated every so often (aww…).</p>
+
+<h2 id="authorization-in-a-spa">Authorization in a SPA</h2>
+
+<p>With my shiny new OAuth2 app, it was time to get building. The SPA workflow on
+Microsoft is slightly different from 3-legged OAuth2 which most vendors
+implement. The general flow is still:</p>
+
+<ol>
+  <li>Authorize the user and get a code</li>
+  <li>Redeem that code for an access token</li>
+</ol>
+
+<p>However, since this all takes place in a web browser, there are only really two
+agents involved in this flow, the resource server and the user, rather than the
+3 involved in 3-legged OAuth2 which would also include a server from the 3rd
+party client that owns the OAuth2 app. This simplifies some things (no need for
+a client secret since no client service), but it also makes things more
+complicated (so how do you prove that the redemption request is legitimate
+without a client secret then?). This leads us to one of the more unique (and
+infuriating) parts of this experience, PKCE.</p>
+
+<p><img src="/images/the-microsoft-oauth2-spa-experience/path_01.png" alt="Comic constrasting the behavior of normal web developers and web developers
+working on authorization. The 1st panel is a screencap of a developer saying
+&quot;...so once you hit submit the data is magically sent to our backend service!&quot;
+while demoing the app to applause. The 2nd panel is of a deranged web developer
+in a polo saying, &quot;...so before we talk about OAuth, first we need to talk about
+RFC 7636 Proof Key for Code Exchange by OAuth Public
+Clients&quot;." /></p>
+
+<p>PKCE, or <a href="https://datatracker.ietf.org/doc/html/rfc7636">RFC 7636</a>, is a way to
+prevent malicious clients from using stolen OAuth2 codes. Consider this
+scenario: Eve, an attacker, is able to see all incoming HTTP requests for Alice,
+a normal user, (either through malware installed on the Alice’s device or by
+sniffing network requests). Alice decides she wants to use a legitimate client
+application and authorizes against a resource server through that client’s
+OAuth2 app. The authorization is successful, and the resource server responds to
+Alice with a code. However, since Eve is watching all HTTP responses for Alice,
+Eve sniffs the code from the query params of the URL for that response. Eve then
+attempts to redeem the stolen code through her own OAuth2 app. The resource
+server receives the redemption request from Eve’s malicious app, and since the
+resource server thinks it’s a legitimate request, it responds to Eve with an
+access token. Now Eve can use this token to access all of Alice’s data! 😭</p>
+
+<p><img src="/images/the-microsoft-oauth2-spa-experience/no_pkce.png" alt="Diagram of Eve intercepting and redeeming OAuth2 code in scheme without
+PKCE" /></p>
+
+<p>This is very bad. The problem is that we need some way to allow the resource
+server to prove that the agent who originally generated the request for the code
+is also the same person who ends up redeeming it for an access token. To do
+this, PKCE asks the user to first generate a high-entropy secret (read-as:
+unguessable UUID). This secret is hashed and encoded before being sent as part
+of the authorization request to the resource server who keeps it on file. When a
+client later tries to redeem the code for an access token, the client needs to
+provide the original secret in the redemption request. The resource server
+receives the redemption request, and does the same hashing procedure on the
+secret. If the hash from the redemption request matches the original hash from
+the authorization request, then the user has successfully proven themselves as
+the original requester and an access token is sent back to them. If the hash is
+mismatched or not provided at all, an error is sent back instead.</p>
+
+<p><img src="/images/the-microsoft-oauth2-spa-experience/yes_pkce.png" alt="Diagram of Eve intercepting and failing to redeem OAuth2 code in scheme with
+PKCE" /></p>
+
+<p>Once I digested all of this, it was time to put my new-found knowledge to
+practice. The code challenge scheme used by PKCE is SHA-256, so I found a way to
+generate a cryptographically-secure UUID, hash it using SHA-256, and encode it
+in base64:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">codeVerifier</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">randomUUID</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">encoder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TextEncoder</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">hash</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">subtle</span><span class="p">.</span><span class="nx">digest</span><span class="p">(</span><span class="dl">"</span><span class="s2">SHA-256</span><span class="dl">"</span><span class="p">,</span> <span class="nx">encoder</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">codeVerifier</span><span class="p">));</span>
+<span class="kd">const</span> <span class="nx">codeChallenge</span> <span class="o">=</span> <span class="nx">btoa</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(...</span><span class="k">new</span> <span class="nb">Uint8Array</span><span class="p">(</span><span class="nx">hash</span><span class="p">)));</span>
+</code></pre></div></div>
+
+<p>However, sending this to the authorization server resulted in an error:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AADSTS501491: Invalid size of Code_Challenge parameter.
+</code></pre></div></div>
+
+<p>Thanks, Microsoft. A quick search and <a href="https://github.com/MicrosoftDocs/azure-docs/issues/42906#issuecomment-649937512">I found a few others who ran into the
+same issue
+before</a>.
+Apparently, base64 pads encodings to multiples of 4, so a SHA-256 hash would end
+up with a 44 character-long encoding. However, Microsoft doesn’t expect the
+challenge to be padded and only accepts encodings with character length 43. This
+meant that I needed to manually trim off the extra padding in the base64 output.
+I also found out that base64 encoding as-is is not URL-safe, so I needed to
+replace some symbols as well. This is the final code I ended up with:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">codeVerifier</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">randomUUID</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">encoder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TextEncoder</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">hash</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">subtle</span><span class="p">.</span><span class="nx">digest</span><span class="p">(</span><span class="dl">"</span><span class="s2">SHA-256</span><span class="dl">"</span><span class="p">,</span> <span class="nx">encoder</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">codeVerifier</span><span class="p">));</span>
+<span class="c1">// Remove trailing ='s and make b64 url safe</span>
+<span class="kd">const</span> <span class="nx">codeChallenge</span> <span class="o">=</span> <span class="nx">btoa</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(...</span><span class="k">new</span> <span class="nb">Uint8Array</span><span class="p">(</span><span class="nx">hash</span><span class="p">)))</span>
+  <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/=/g</span><span class="p">,</span> <span class="dl">""</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\+</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">"</span><span class="s2">-</span><span class="dl">"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\/</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">"</span><span class="s2">_</span><span class="dl">"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Whew! After all that, I finally got my app to start redirecting with the code.
+Now pausing for some questions.</p>
+
+<p>Yeah, you kid in the back.</p>
+
+<p>Uh-huh.</p>
+
+<p>Ok so the question is: “Why do this stuff with redeeming codes if the resource
+server could theoretically just give you an access token instead of a code at
+the authorization step?”</p>
+
+<p>This is actually <a href="https://learn.microsoft.com/en-us/entra/identity-platform/scenario-spa-overview">one of the options for authorization from a SPA on
+Microsoft</a>
+and is known as an implicit grant. Essentially, instead of the resource server
+sending the user to the redirect URI with a code, they just send the user to the
+redirect URI with the access token straight up after authorization. While this
+is a simpler method for authorizing in SPAs, implicit grants are considered
+insecure since the token is available in the response URL (which leads to risk
+of getting sniffed as we saw before in the PKCE section), and implicit grants
+also don’t vend out refresh tokens. The OAuth2 spec also <a href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.2.2">puts the access token
+for implicit grants in a URL fragment
+identifier</a> for
+some reason which kinda scared me.</p>
+
+<h2 id="fun-with-cors">Fun with CORS</h2>
+
+<p>So far, I felt I was doing pretty well on authorization after PKCE. Then I tried
+to redeem the codes in the SPA and got this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://login.microsoftonline.com/common/oauth2/v2.0/token. (Reason: CORS header 'Access-Control-Allow-Origin' missing
+</code></pre></div></div>
+
+<p>Okay…I had seen this type of error before. It’s a CORS error that usually
+happens to prevent the web browser from calling out to any arbitrary server. But
+Microsoft had advertised this method as working for SPAs which run in web
+browsers, so we really shouldn’t be getting these, right? What’s the deal?</p>
+
+<p>Unfulfilled, I set off on a long journey of discovery (read-as: I started
+searching the error up on the Internet) and found that many users had also run
+into the same issue. However, none of their solutions worked for me. As a sanity
+check, I even tried redeeming the code outside of a browser by sending the
+redemption request in curl and watched it drop an access token in my lap.
+Something else was up.</p>
+
+<p>Throughout this journey, I had also come to learn of the <a href="https://github.com/AzureAD/microsoft-authentication-library-for-js">Microsoft
+Authentication Library for
+Javascript</a>,
+or MSAL.js. Apparently, this is an SDK developed by Microsoft for devs
+integrating with their identity platform. It streamlines a bunch of
+complications with orchestrating the OAuth2 handshake (like opening up login
+popups and constructing URLs). I had initially ignored it, refusing to build on
+top of another layer of abstraction, but another hour passed, and I caved,
+integrating my app with MSAL just to see what their secret sauce was.</p>
+
+<p>I walked myself through the login popup, the authorization, the code, and
+then…the access token?!</p>
+
+<p>What? It worked?! How was MSAL doing it?</p>
+
+<p>I opened the network tab in my browser, and sure enough, the token redemption
+request was going through and it was using…a form data body? Wait.
+<a href="https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow#request-an-access-token-with-a-client_secret">Microsoft’s documentation had this POST request written with a URL-encoded
+form</a>
+which is what I had been using as well. I switched my form construction code
+over and then there it was:</p>
+
+<p>The access token.</p>
+
+<p>Oh god. The service is conditionally setting an allow origin header depending on
+the format of the POST body <sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>. I screamed and then moved on.</p>
+
+<p>At this point, I had a working integration with Microsoft Identity in a SPA. I
+could do anything now.</p>
+
+<h2 id="and-so">And so…</h2>
+
+<p>I chose to stop. I had initially envisioned making a one-stop shop for calling
+into a bunch of different SaaS APIs (which would’ve solved a pain point from my
+day job), but then I discovered the <a href="https://developer.microsoft.com/en-us/graph/graph-explorer">Graph
+Explorer</a>, a website
+miles beyond whatever I had finally managed to scrap together over those past
+few days, and realized I had a long road ahead of me. I was already tired from
+debugging OAuth2 and wanted to do something else, so I set this one down.</p>
+
+<p>Thus the story stops here for now. Maybe one day I’ll pick this project back up
+again, but I wanted to rest at this point. Perhaps I just needed a spa day (a
+real one, not one of those cursed ones where you lock up 5 devs in a room with
+food and water, shake the room for 3 days, and hope a functioning SPA pops out
+at the end).</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>It looks like this has been fixed since then so now both form data and
+URL-encoded forms can be used for token redemption from a SPA. Either that
+or I had a fever dream hallucination sometime in early October. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#microsoft" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  microsoft
+</a>
+
+<a href="/tags#oauth2" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  oauth2
+</a>
+
+<a href="/tags#react" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  react
+</a>
+
+<a href="/tags#web" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  web
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-03-13-the-magic-of-follow">←The Magic of --follow</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2023-02-19-fixing-a-d-force-dance-pad">Fixing a D-Force Pad→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

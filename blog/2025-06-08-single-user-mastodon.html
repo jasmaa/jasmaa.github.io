@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Setting up a Self-Hosted Single User Mastodon Instance | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Setting up a Self-Hosted Single User Mastodon Instance</h1>
+    <h3 class="text-center mb-3"><em>Masto Sweet Masto</em></h3>
+    <h5 class="text-center">Jun 08, 2025</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>I’ve been self-hosting a single-user Mastodon instance for some time now. I figured it’s probably time to write up my experience setting it up so I can share my experiences with the rest of the world (and so I can also have it documented somewhere once I inevitably forget how I did do it).</p>
+
+<h2 id="dude-wheres-my-pi">Dude, Where’s My Pi?</h2>
+
+<p>Most stories start from the beginning so that’s where we shall start too.</p>
+
+<p>It was early 2023. News of Silicon Valley Bank’s collapse was all the talk, COVID still existed (depending on who you asked), and I still could not get my hands on a Raspberry Pi. You could thank the global chip shortage for that. What I did manage to find, however, was an alternative product from Libre Computer called <a href="https://en.wikipedia.org/wiki/Libre_Computer_Project#AML-S905X-CC_(Le_Potato)">Le Potato</a>.</p>
+
+<p>Being the trigger happy guy I am, I purchased one instantly without thinking and soon found myself with a SBC and nothing more. Turns out that I needed a little bit more than just the board. Namely, I was still down a microSD card for storage, a microUSB cable for power, and an ethernet cable for internet. One more virtual grocery run later and I had a bunch more stuff with still absolutely no idea what to do with it. The Potato is pretty bare bones; it does not come with an instruction manual, so it was off to the Internet again, this time to figure out how in the world to get Linux on the thing.</p>
+
+<p>Luckily, I stand on the shoulders of giants. Many others out there have already experimented with Le Potato, and the Libre Computer forums even offer a <a href="https://hub.libre.computer/t/libre-computer-start-here-guide/2422">getting started guide</a> which links to more resources for setting up various flavors of Linux. In terms of setup, I found both <a href="https://www.youtube.com/watch?v=dpsQmXYhC4o">this video tutorial by Shotoku Tech</a> and <a href="https://www.youtube.com/watch?v=-d2zoc-UAuA">this one by Vincent Stevenson</a> to be extremely helpful. After much trial and error, I ended up just following Shotoku Tech’s guide nearly step for step, flashing Armbian Jammy using balenaEtcher. I plugged everything in and turned on the monitor again but no luck. Just as I was about to go through another Sisyphean cycle of re-flash and reboot, suddenly, the monitor lit up, showing Linux booting up briefly, before turning off again.</p>
+
+<p><em>What the fu-</em></p>
+
+<p>A few more tries later with varying levels of success, and I discovered that the Potato’s LED blinking pattern was different the times when I was able to get Linux to boot. Before, only the Potato’s red and green LEDs were on. However, when Linux booted, the blue LED would also begin flashing. Some part of my setup was causing the Potato to be unable to boot. Searching the Libre Computer forums, I eventually found out that most deviations from the LED blinking pattern were usually due to a bad power supply. The Potato expects 5V of power. I looked at my Potato’s setup and there, connecting wall power to the micro USB cord charging the Potato lay the culprit, the power adapter of a shitty USB charger I had gotten for free at a math competition many moons ago (see appendix).</p>
+
+<p>After swapping out the power adapter, the Potato seemed to boot reliably. I hooked up ethernet and my USB keyboard to the Potato, set up root and a personal user, and after a few more steps, a beautiful login screen greeted me. The login screen also displayed the Potato’s local IP which meant I was now able to SSH into it from my personal computer (yay!).</p>
+
+<p>Throughout 2023, I ended up running a <a href="https://github.com/jasmaa/guizhong">personal Discord music bot</a> off of my Potato. During this time, I would also purchase two siblings for it, scaling up my Potato cluster to a grand total of 3.</p>
+
+<p><img src="/images/single-user-mastodon/IMG_1261.jpg" alt="Photo of the Potatoes. There are 3 SBCs on a mini rack next to a Netgear router." /></p>
+
+<p>Aside from attempting to self-host a Komga and Jenkins server via Tailscale Funnel though, not much else happened with these Potatoes. However, flash-forward to 2025 and things began to change. This is because I would start getting the urge to self-host a single-user Mastodon instance.</p>
+
+<h2 id="a-mastodon-of-my-own">A Mastodon of My Own</h2>
+
+<p>Self-hosting meant that I needed to turn one of my Potatoes into a Mastodon server. Currently, I have three Potatoes named serval, gepard, and lynx (see appendix B). serval was already running a bunch of cron jobs and gepard already had too much stuff on it which meant the only candidate left for my instance was lynx. I cleaned up lynx a bit and got started.</p>
+
+<p>My entire setup pretty much followed the <a href="https://docs.joinmastodon.org/admin/install/">Mastodon setup guide</a> line-for-line. I did run into a bit of trouble with installing yarn, but it turned out this was due to lynx having an older version of Node. APT kept installing the older Node version even after I uninstalled Node and set the package source to Node 20. Eventually, I was able to get it to work by fiddling around and uninstalling enough dependencies so that APT wouldn’t keep installing the older Node.</p>
+
+<p>The rest of the guide went mostly without a hitch, except that I did have to settle on a domain name. Once I got one, the next step was to get an SSL certificate for my server. This meant it was finally time to figure out how I was going to expose lynx to the Internet. I was originally planning to use Tailscale Funnel but soon found out that Funnel <a href="https://tailscale.com/kb/1223/funnel#requirements-and-limitations">only allows DNS names that are a subdomain of the tailnet’s domain</a>. I had already bought my own domain, and I also didn’t really want to call my Mastodon server something like foo.ts.net so that was a no-go.</p>
+
+<p>After some more quick research, I ended up going with an alternative and setting up with Cloudflare Tunnel. Following the <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-remote-tunnel/">tunnel setup guide</a>, I was able to register a domain name with Cloudflare and set up the tunnel. The entire process was very similar to using Tailscale Funnel and simply involved running the cloudflared daemon on lynx. However, trouble started brewing once I started configuring the routing.</p>
+
+<p>I had initially set up my domain to route to http://localhost. When I tried to visit the domain, however, the browser ended up looping repeatedly. Digging a bit more, I found out that the cause was due to the nginx rules for Mastodon always attempting to upgrade HTTP to HTTPS. This meant that I had to point the tunnel routing to HTTPS instead. However, when I tried this, I ended up with a 502 Bad Gateway error. Searching around the Internet again, it turns out a <a href="https://community.cloudflare.com/t/one-of-my-cloudflare-tunnels-is-returning-a-bad-gateway-error/483145/3">few folks had fixed this by enabling the No TLS Verify option</a> (see appendix C). I turned it on and, lo and behold, it worked!</p>
+
+<p>I quickly created a new account on my server and the rest is history.</p>
+
+<h2 id="to-see-the-future">To See the Future</h2>
+
+<p>As of this writing, my Mastodon server has been online for 18 consecutive days. This is longer than what I had initially expected, especially since I know full well I am cheaping out on many parts of this setup. However, the instance seems to be running fine so far, barring some occasional lag. My only complaint is that it is a bit lonely with just myself, but I’m still managing for now.</p>
+
+<p><img src="/images/single-user-mastodon/IMG_1260.jpg" alt="Photo of htop running on an external monitor. There is a line reading &quot;Uptime: 18 days&quot;." /></p>
+
+<p>Looking forward, probably the most notable risk I’ve taken going the self-hosting route is that it’s now also my job to manage the server’s infrastructure and content. This means it’s up to me that it doesn’t go down and doesn’t end up ingesting any undesirable content. As they say, “With great power comes great responsibility.” However, I honestly see this as more of an opportunity than a burden. I’ve had few chances to actually run and maintain a long-running service on an actual Linux box (Kuiperbowl being the only other), so I feel that this will be something I can use as a learning experience. Even if something catastrophic does happen, I won’t let anyone else down. This is a single user instance with just me after all.</p>
+
+<p>There’s still a lot more I have to do as part of this. Most of this involves figuring out how to monitor both Mastodon and my Linux host, how to perform and manage Postgres and media backups, how to keep Mastodon up-to-date, and so on. I also need to get more familiar with Mastodon’s admin tools and do some work finding more ways to bring content I like to my instance.</p>
+
+<p>Anyways, assuming all goes well, and the instance doesn’t disappear because I get lazy, bankrupted, ill, or arrested, then perhaps there will also be more posts about my Potatoes and the Mastodon in the future. But only time will tell. Until the next one!</p>
+
+<hr />
+
+<h2 id="appendix-a-my-love-is-a-phone-charger">Appendix A: My Love is a Phone Charger</h2>
+
+<p>Let’s step backwards in time. The year was 2017, and the world was quite different. Donald Trump had recently become president of the United States, COVID-19 had not yet rocked the world, and I was a bright-eyed kid in high school taking a trip up to CMU with a few friends to participate in the annual CMIMC math competition. Unlike my friends, I was (and still am) not very good at math. I was mainly there for the bagels and free swag.</p>
+
+<p>A few companies were also there, I assumed not to do math but to scout for talent instead. To lure youngsters by and convince them of a promising future of corporate servitude, these companies had booths chock full of freebies. Like everyone else, we completely fell for these. Our group ended up making off with a bunch of pens, hoodies, pajamas.</p>
+
+<p>For me, the most important thing I walked off with was one of these 12-foot long chargers that Two Sigma was handing out. It was love at first sight, because the charging cord was long which meant I could power my phone and still roll around all day in bed while facetiming my then-girlfriend. However, my friends and I soon found out that these chargers were, to put it bluntly, not very thermally efficient (and also probably very flammable). Most of us ditched them soon after, but I kept using mine.</p>
+
+<p>Winter blossomed into Spring and my beloved 12-foot cord would stop working soon after that, leaving only the power adapter as the sole survivor. Although the adapter always generated a ridiculous amount of heat, I would keep using it as part of my primary phone charger setup, taking it with me into college and the years beyond.</p>
+
+<p>Fast-forward to around Fall of 2023, during a trip to San Francisco with those very same friends, I would pull out my charger, and one of my friends would casually point it out and pose to me the following question:</p>
+
+<p>“Jason. How the fuck are you still using that piece of shit?”</p>
+
+<p><img src="/images/single-user-mastodon/IMG_1262.jpg" alt="Photo of a teal hexagonal USB to wall power adapter. On the top reads &quot;TWO SIGMA&quot;." /></p>
+
+<h2 id="appendix-b-machine-names">Appendix B: Machine Names</h2>
+
+<p>My Potatoes were originally nameless which was not great since just like children, without names, it is very hard to tell them apart. Since I was (and still am) into Honkai: Star Rail, I ended up naming them serval, gepard, and lynx after the Landau siblings.</p>
+
+<p>The process to change the names was quite straightforward. I just SSH’d into each one and ran hostnamectl to change the name:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hostnamectl set-hostname lynx
+</code></pre></div></div>
+
+<p>Of course, this naming scheme will become problematic if I ever get a 4th Potato. I hope before this happens, Hoyo will introduce an estranged 4th Landau sibling who was lost in a snowstorm as a child and raised by a pack of wolves.</p>
+
+<h2 id="appendix-c-fun-with-tls">Appendix C: Fun with TLS</h2>
+
+<p>I’m still not entirely sure what the no TLS verify does and why it worked.</p>
+
+<p>My best guess at what’s happening is that there is some sort of SSL certificate mismatch. Cloudflare Tunnels presents its own certificate for the website. However, since the Mastodon setup guide assumes nginx will be directly exposed to the Internet and not through a proxy, it guides you to generate a certificate from Let’s Encrypt to use with nginx. When the tunnel talks to nginx, nginx uses the Let’s Encrypt certificate which is not the same as the certificate on the Cloudflare side, causing the error seen in the original setup. However, with the TLS verification disabled, this mismatch doesn’t matter anymore because the tunnel won’t check that the certificate from nginx is mismatched with the Cloudflare certificate.</p>
+
+<p><img src="/images/single-user-mastodon/tlsfun.jpg" alt="Drawing of network communication between lynx, Cloudflare, and a user. There is a computer named &quot;lynx&quot;, a cloud named &quot;Cloudflare&quot;, and a person named &quot;user&quot;. Lynx has a certificate above it reading &quot;Let's Encrypt&quot;. Cloudflare has a certificate above it reading &quot;Cloudflare&quot;. There is a double-ended arrow between lynx and Cloudflare with an &quot;x&quot; below it. There is a double-ended arrow between Cloudflare and the user." /></p>
+
+<p>Most likely what I should’ve done is <a href="https://community.cloudflare.com/t/what-could-be-the-reason-that-tls-verify-doesnt-work-for-my-tunnel/662998">used Cloudflare’s origin server certificate with nginx instead of the Let’s Encrypt one like this person did to resolve the mismatch</a>. However, whatever I have is working, so I’m just going to leave it alone for now. I believe the only risk I’m running is that I could get MITM’d somewhere in-between Cloudflare and lynx. Perhaps properly fixing this (or attempting to do so) will be its own mini project for some future weekend.</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Misc" class="badge rounded-pill m-1 misc-badge">
+  Misc
+</a>
+
+    
+
+
+<a href="/tags#hardware" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  hardware
+</a>
+
+<a href="/tags#mastodon" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  mastodon
+</a>
+
+<a href="/tags#self-hosting" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  self-hosting
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2025-04-07-1000-ai-domains">The 1000 AI Domains that Really Really Really Really Really Want Your Attention (and money probably)→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

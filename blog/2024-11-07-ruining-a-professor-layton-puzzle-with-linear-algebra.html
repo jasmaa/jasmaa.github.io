@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Ruining a Professor Layton Puzzle with Linear Algebra | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Ruining a Professor Layton Puzzle with Linear Algebra</h1>
+    <h3 class="text-center mb-3"><em>Once you Gaussian eliminate the non-pivot elements whatever remains, however improbable, must be the truth!</em></h3>
+    <h5 class="text-center">Nov 07, 2024</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Capcom recently re-released most of the Ace Attorney series on Switch which made
+me want to play those games again. I ended up digging up my copy of <em>Professor
+Layton vs Phoenix Wright: Ace Attorney</em> and brought it along for a plane ride a
+few weeks ago where I encountered a particular puzzle that could be solved using
+mathemagics.</p>
+
+<p>The puzzle in question was <a href="https://layton.fandom.com/wiki/Puzzle:Decipher_the_Door">Puzzle #36: Decipher the
+Door</a> and appears in
+the game as a challenge that Layton and Luke must solve before they can proceed
+to meeting with the Storyteller of Labyinthia.</p>
+
+<p>The puzzle itself involves opening a door by solving a combo lock. The number
+slots range from 1 to 6 and can only be changed via buttons that modify multiple
+slots at once.</p>
+
+<p><img src="/images/ruining-a-professor-layton-puzzle-with-linear-algebra/IMG_0246.jpg" alt="Puzzle with
+instructions" /></p>
+
+<p><img src="/images/ruining-a-professor-layton-puzzle-with-linear-algebra/IMG_0247.jpg" alt="Puzzle with combination
+inputs" /></p>
+
+<p>Ah ha, a classic linear algebra problem.</p>
+
+<p>Converting both the combination lock and the buttons into vectors, the problem
+reduces down to needing to find the right linear combination that will produce
+the vector representing the target state for the combination lock.</p>
+
+<p>In other words, finding \(\vec{x}\) where:</p>
+
+\[\begin{bmatrix}
+0 \\
+1 \\
+1 \\
+0 \\
+\end{bmatrix} x_1 +
+\begin{bmatrix}
+ 1 \\
+-1 \\
+ 1 \\
+-1 \\
+\end{bmatrix} x_2 +
+\begin{bmatrix}
+-2 \\
+ 0 \\
+ 0 \\
+ 2 \\
+\end{bmatrix} x_3 +
+\begin{bmatrix}
+0 \\
+0 \\
+1 \\
+3 \\
+\end{bmatrix} x_4 +
+\begin{bmatrix}
+-4 \\
+-3 \\
+-2 \\
+-1 \\
+\end{bmatrix} x_5 +
+\begin{bmatrix}
+1 \\
+2 \\
+3 \\
+4 \\
+\end{bmatrix} =
+\begin{bmatrix}
+3 \\
+3 \\
+3 \\
+3 \\
+\end{bmatrix}\]
+
+<p>Doing some algebra and converting everything to a matrix, this becomes:</p>
+
+\[\begin{bmatrix}
+0 &amp;  1 &amp; -2 &amp; 0 &amp; -4 \\
+1 &amp; -1 &amp;  0 &amp; 0 &amp; -3 \\
+1 &amp;  1 &amp;  0 &amp; 1 &amp; -2 \\
+0 &amp; -1 &amp;  2 &amp; 3 &amp; -1 \\
+\end{bmatrix}
+\vec{x}
+=
+\begin{bmatrix}
+ 2 \\
+ 1 \\
+ 0 \\
+-1 \\
+\end{bmatrix}\]
+
+<p>Which means the matrix we need to row-reduce is:</p>
+
+\[\begin{bmatrix}
+0 &amp;  1 &amp; -2 &amp; 0 &amp; -4 &amp;  2 \\
+1 &amp; -1 &amp;  0 &amp; 0 &amp; -3 &amp;  1 \\
+1 &amp;  1 &amp;  0 &amp; 1 &amp; -2 &amp;  0 \\
+0 &amp; -1 &amp;  2 &amp; 3 &amp; -1 &amp; -1 \\
+\end{bmatrix}\]
+
+<p>I ended up doing the row-reduction in Python which yielded this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">sympy</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+	<span class="p">[</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span>  <span class="mi">2</span><span class="p">],</span>
+	<span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span>  <span class="mi">1</span><span class="p">],</span>
+	<span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+	<span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">sympy</span><span class="p">.</span><span class="n">Matrix</span><span class="p">(</span><span class="n">m</span><span class="p">).</span><span class="n">rref</span><span class="p">())</span>
+
+<span class="c1"># (Matrix([
+# [1, 0, 0, 0, -5/3,  1/3],
+# [0, 1, 0, 0,  4/3, -2/3],
+# [0, 0, 1, 0,  8/3, -4/3],
+# [0, 0, 0, 1, -5/3,  1/3]]), (0, 1, 2, 3))
+</span></code></pre></div></div>
+
+<p>Or in other words:</p>
+
+\[\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; 0 &amp; -5/3 \\
+0 &amp; 1 &amp; 0 &amp; 0 &amp;  4/3 \\
+0 &amp; 0 &amp; 1 &amp; 0 &amp;  8/3 \\
+0 &amp; 0 &amp; 0 &amp; 1 &amp; -5/3 \\
+\end{bmatrix}
+\vec{x}
+=
+\begin{bmatrix}
+1/3 \\
+-2/3 \\
+-4/3 \\
+1/3 \\
+\end{bmatrix}\]
+
+<p>Cool. Now we have a problem: this matrix is not square.</p>
+
+<p>What this means is that we have a free variable, \(x_5\). We need to make a
+guess for it. Obviously we can’t hit a button a fraction of a time so we also
+need to adjust \(x_5\) such that all the elements of \(\vec{x}\) are whole
+numbers. Thankfully, \(x_5 = 1\) happens to just work out.</p>
+
+<p>This gives us:</p>
+
+\[\begin{align}
+&amp; x_1 =  2 \\
+&amp; x_2 = -2 \\
+&amp; x_3 = -4 \\
+&amp; x_4 =  2 \\
+&amp; x_5 =  1 \\
+\end{align}\]
+
+<p>This is where we encounter our second problem: we also can’t hit a button a
+negative number of times.</p>
+
+<p>In the puzzle, the combo lock numbers range from 1 to 6. Once a number goes beyond
+6, it loops back to 1. What this means is that we’re actually working in base 6.
+We’ll have to convert the negative numbers to base 6 which can be done by just
+adding 6 to them until they’re in the range <sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>.</p>
+
+<p>This gives us a final answer of:</p>
+
+\[\begin{align}
+&amp; x_1 =  2 \\
+&amp; x_2 = -2 + 6 = 4 \\
+&amp; x_3 = -4 + 6 = 2 \\
+&amp; x_4 =  2 \\
+&amp; x_5 =  1 \\
+\end{align}\]
+
+<p>With vector in tow, I tapped the buttons one by one accordingly and voila,
+puzzle solved!</p>
+
+<p><img src="/images/ruining-a-professor-layton-puzzle-with-linear-algebra/IMG_0248.jpg" alt="Solved combination lock with 3 3 3
+3" /></p>
+
+<p>Overkill? Definitely. Fun? Debatable. Efficient? Not really (the best solution
+is apparently: <code class="language-plaintext highlighter-rouge">[0, 2, 1, 0, 1]</code>).</p>
+
+<p>Long story short, I did not, in fact, perform Gaussian elimination by hand
+40,000 feet in the sky next to a crying baby. I actually just ended up pressing
+buttons randomly until the right combination lined up :P</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Why does this work? Don’t ask me to prove it, but intuitively, it’s
+similar to moving the hands on an analog clock. The hours of a clock are in
+base 12. If the hour hand is at 12, moving it clockwise by 3 hours puts it
+at 3. The same thing can be achieved by moving it counter-clockwise by 9
+hours. So 3 is the same as -9 in base 12. What we’re doing in the puzzle is
+similar to this<sup id="fnref:2"><a href="#fn:2" class="footnote" rel="footnote" role="doc-noteref">2</a></sup> except the clock only has 6 hours and we’re moving the
+hour hands of multiple clocks all at once. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>This is a lie. We’re actually applying this clock intuition on the number
+of times we do an action, not the actual number in the slot. However, this
+is still okay since our entire equation is linear which means mod can be
+applied early since \((a(x \mod m)+b) \mod m = (ax+b) \mod m\). Don’t ask me
+to prove this one either. <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Misc" class="badge rounded-pill m-1 misc-badge">
+  Misc
+</a>
+
+    
+
+
+<a href="/tags#games" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  games
+</a>
+
+<a href="/tags#linear-algebra" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  linear-algebra
+</a>
+
+<a href="/tags#puzzles" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  puzzles
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-12-07-dining-philosophers">←Dining Philosophers</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-09-11-a-follow-up-to-the-magic-of-follow">A Follow-Up to the Magic of --follow→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

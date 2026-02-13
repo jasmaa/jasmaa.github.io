@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>A Follow-Up to the Magic of --follow | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">A Follow-Up to the Magic of --follow</h1>
+    <h3 class="text-center mb-3"><em>What’s new? Spill the tee!</em></h3>
+    <h5 class="text-center">Sep 11, 2024</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Nearly half a year ago, I wrote a <a href="/blog/2024-03-13-the-magic-of-follow">mini blog
+post</a> detailing my exploits working with
+large outputs. I was trying to find a way to see both the output logs of a test
+and to get a copy of the outputs in a file to share around which eventually led
+me to a solution using <code class="language-plaintext highlighter-rouge">tail -f</code>. Then a few weeks ago, while my friends and I
+were searching each other up on the Internet, that very blog post was dug up
+again. This in turn spawned a conversation that went something like this:</p>
+
+<p>“Jason, have you ever heard of tee?”</p>
+
+<p>“You mean for
+<a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Variables/Local_tee">assembly</a>,
+yeah?”</p>
+
+<p>“No for shell.”</p>
+
+<p>“Oh. Um. No.”</p>
+
+<p>“What does it do in assembly?”</p>
+
+<p>“It stores a value and loads it at the same time…I think.”</p>
+
+<p>“Imagine that for files.”</p>
+
+<p>Apparently I had been doing things the hard way. Linux comes with a command
+called <a href="https://man7.org/linux/man-pages/man1/tee.1.html"><code class="language-plaintext highlighter-rouge">tee</code></a> that does
+exactly what I was trying to do with <code class="language-plaintext highlighter-rouge">tail -f</code>: it displays to stdout while also
+writing to a file at the same time.</p>
+
+<p>Funny enough, it was at this time that I found myself also having to go back and
+work with some tests again. I tried out my newfound knowledge this time:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./run-tests.sh | tee ~/test-results.txt
+</code></pre></div></div>
+
+<p>…And to no one’s surprise it worked like a charm! Now I could see both the
+output and save a copy of it to a file with only one command!</p>
+
+<p>Perhaps, <code class="language-plaintext highlighter-rouge">tail -f</code> was a bad solution and the blog post from before is just junk
+now. However, an optimist would probably say that this in fact shows growth and
+that there are many approaches to solving a problem while a pragmatist would
+probably wonder why I spent so many words explaining what could have simply been
+an amendment to the original blog post. Then the super duper shell guru would
+show up and tell us all that there’s an even better way to do this.</p>
+
+<p>Anyways, until next time!</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#shell" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  shell
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-11-07-ruining-a-professor-layton-puzzle-with-linear-algebra">←Ruining a Professor Layton Puzzle with Linear Algebra</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-08-15-status-599">Status 599→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

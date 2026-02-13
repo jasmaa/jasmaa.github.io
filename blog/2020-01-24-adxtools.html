@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>adxtools | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">adxtools</h1>
+    <h3 class="text-center mb-3"><em>Or: How I Learned to Compress Audio Files</em></h3>
+    <h5 class="text-center">Jan 24, 2020</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>A little over half a year ago, I got it in my head to make a character mod for the 3DS game Persona Q.
+While I did not make it very far, I did dive far enough into the sound files
+to switch tracks and start working on making my own encoder and decoder for them in Go.</p>
+
+<h2 id="background">Background</h2>
+
+<p>Persona Q uses a proprietary file format developed by Criware called ADX for storing compressed audio.
+The ADX file format has been in use as far back as 1998 in Burning Rangers for the Sega Saturn, and more recently,
+games from the Persona franchise and others continue to use the format as audio middleware, likely due to its
+favorable compression-to-quality ratio and looping capabilities.</p>
+
+<p>Strangely enough, the most centralized wealth of knowledge on ADX is actually the
+<a href="https://en.wikipedia.org/wiki/ADX_(file_format)">Wikipedia page</a>. The ADX file header contains metadata such
+as the encoding type, number of audio channels, bitdepth, sample rate, looping data, etc.
+The header also points to the start of the sample data.</p>
+
+<p>Normally an uncompressed file like WAV stores its samples directly, storing each sample as a bitdepth-sized chunk
+of data. For example, a WAV file with bitdepth of 16-bits could have a sample be an integer anywhere from 32767 to
+-32768. While this allows for high resolution storage of sound waves, it costs quite a bit of memory. In order to cope
+with this trade-off, ADX uses two techniques in compression: First, samples are stored as errors from a predicted value
+derived from previously decoded samples as opposed to an exact value which supposedly allows for higher-quality encoding.</p>
+
+<p><img src="/images/adxtools/compression_01.png" alt="Prediction technique" /></p>
+
+<p>Second, lengths of sample errors are chunked into blocks with a scale value used as a multiplier to recover each error
+value during decoding. The scales are calculated in such a way that all unscaled values can be stored as tightly-packed
+4-bit nibbles instead of 16-bit integers. As a whole, this means that ADX files are able to preserve audio to a high
+quality while reducing the storage size by 4x.</p>
+
+<p><img src="/images/adxtools/compression_02.png" alt="Error scaling technique" /></p>
+
+<h2 id="the-decoder">The Decoder</h2>
+
+<p>I started on the decoder in May of last year. I had just started out in Go and wanted to try it out
+for another project. Writing an ADX decoder seemed to be something within reach while remaining
+challenging enough to not be a complete cake walk. Since pseudocode for a decoder was already on the Wikipedia page,
+I would mostly be dealing with figuring out how to implement it in Go, hopefully learning some file IO. I also ended up
+tacking Cobra on the project to get some experience with a command-line library.</p>
+
+<p>The first trouble I ran into ended up being in Cobra. I had wanted to use Go modules, but at the time
+I could not initialize a Cobra project outside of the GOPATH. Not wanting to find a workaround, I ditched
+modules and went straight to implementing the pseudocode. Ideally, I had imagined I would come to understand
+the file specs by building the implementation, but I ended up only being able to glean a fraction of what the
+code was doing. Instead of stopping, however, I opted to write now and analyze later. When the time came to
+test the decoder, I ran a file that I had ripped from Persona Q through it and, lo and behold, it worked!</p>
+
+<p>Well only kinda.</p>
+
+<p>I could recognize the music but the quality was beyond awful bringing us to my second issue.
+I scoured the code but could not find what was wrong. I had translated the pseudocode perfectly (or so I
+thought at the time). Because I could recognize the song, I was not doing anything wrong with picking
+up the samples, but then the problem could be anywhere in the decoding process. Logically, if the algorithm
+was implemented perfectly then perhaps there was some floating-point error or bits were getting truncated somewhere.
+It was at this point, I had had enough and put the project on hold.</p>
+
+<h2 id="the-encoder">The Encoder</h2>
+
+<p>As more time passed, I became ever more reluctant to
+work on adxtools. After contributing to aimacode for Google Summer of Code, I was immediately thrust into
+a new semester with no time to review the ADX file specs or polish my Go skills. adxtools got shelved as
+one of those eternal WIP projects on my GitHub, that is, until winter of this year.</p>
+
+<p>I had gotten the sudden urge to
+start working more with Go, started coding up a big project, got burned out as usual, and
+shelved it before immediately trying to start a new one. However, this time, I also became uncomfortably
+aware of the high number of WIP repos on my GitHub.</p>
+
+<p>I should finish one of these.</p>
+
+<p>Scrolling through them I saw
+adxtools once again, an unfinished Go project.</p>
+
+<p>Perfect. I dived right in.</p>
+
+<p>The first point of business was resolving what had stumped me in the decoder so many months ago. Within the first few
+seconds of reviewing my code, something caught my eye:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">:=</span> <span class="n">math</span><span class="o">.</span><span class="n">Cos</span><span class="p">(</span><span class="m">2</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">Pi</span><span class="o">*...</span>
+</code></pre></div></div>
+
+<p>Hold up. What? Why is the pi outside the trig function? I check the pseudocode. It’s supposed to be inside. I fix it
+and run the decoder for the first time in months, not expecting much. Then I play the file.</p>
+
+<p>It’s perfect. You gotta be kidding me!</p>
+
+<p>Feeling the full strides of success, I figure I may as well write the encoder while I still have time. Initially thinking it
+would simply be reversing the order of execution from the decoder, I quickly ran into a problem: How does
+one determine the scale? Our only source of authority, the Wikipedia page, says nothing about it and most
+other sources on ADX are only focused on describing decoders. Stopping to think, I reasoned that since the
+scale is merely a multiplier for a block of data, perhaps I could produce it by finding the greatest value
+in the block, treat it as the 4-bit max and scale the rest of the values against it. Tentatively writing
+this out, I managed to reverse the algorithm with a few changes and simplifications, such as choosing to
+encode by block instead of trying to encode starting from anywhere.</p>
+
+<p>Testing the encoder, I ended up with ADX files that once again, had recognizable audio but were very
+noisy. On the first round, I decoded my test file and ran it through Audacity.</p>
+
+<p>Strange. I was only encoding one channel.</p>
+
+<p>At first I thought I may have been corrupting blocks from the first channel
+when encoding the second, but hunting down the bug, I found I had entirely missed encoding the second
+channel at all! Naturally, fixing it didn’t alleviate the noise but in fact made it worse. I continued find
+and fix bugs in my encoder but at no point was I able to figure out where the noise was coming from.</p>
+
+<p>Truly stumped for the second time on this project, I ended up re-writing the decoder to ensure that
+I did not have a problem in my understanding of ADX. Re-writing the decoder had the small benefit of optimizing it
+as the Wikipedia version assumes streaming the audio from anywhere, but since all I needed to do was convert
+it over, I ended up getting away with fewer file operations, saving some time.</p>
+
+<p>After 3 days of trial-and-error and debug printing, I traced my problem to the one original algorithm
+I wrote: scale generation. Testing the encoder on a decoded file that was originally ADX, I found my scales
+to be similar but slightly off to the stored ones. What could be the cause? Did I need to re-think my entire process? Turns out
+the solutions to many of these big stumps end up being quite simple for some reason. On a whim, I changed my
+max 4-bit number from 8 to 7, and, suddenly the sound is crystal clear. I was dumbfounded. The 4-bit integer range
+is from -8 to 7. I had wanted to use 8 under the impression that it was a more conservative max but I was actually
+scaling some numbers out of range. Apparently this was enough to create noticable noise. With this
+tiny fix, both the encoder and decoder were finally finished. I merged my branch and wiped the WIP title off of adxtools,
+feeling quite satsified.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>adxtools, despite working, is nowhere near complete. The encoder and decoder work for a small subset of ADX files, specifically
+those with two channels and 4-bit bitdepths, and the encoder does not support looping. I would, however, like to turn it into a complete encoder
+and decoder at some point. Criware have also developed several other file formats such as ADX2 which would be worth adding
+to adxtools in the future.</p>
+
+<p>The greatest benefit of this project for myself was more experience working with Go. I got more comfortable with doing file IO as well
+as working with modules and got the added challenge of having to optimize my code. While I still do not understand much of the math
+used in the encoding techniques behind ADX, I did learn a bit of audio file storage from this project as well. At the end of the
+day, I know ADX is not a popular file format, only seeing prevalence in modding communities. ADX also has been around for
+long enough that mature tools have already been developed for it over a decade ago, but I think
+adxtools was, regardless, still an interesting project, albeit mildly infuriating to debug at times.</p>
+
+<p><strong>UPDATE 02/06/20:</strong> Incorrect integer range has been fixed.</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#adx" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  adx
+</a>
+
+<a href="/tags#go" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  go
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2020-03-29-vscode-bolt">←VS Code Bolt</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2019-12-14-speedtrig">Speed Trig→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

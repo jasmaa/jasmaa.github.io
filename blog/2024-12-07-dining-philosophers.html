@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Dining Philosophers | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Dining Philosophers</h1>
+    <h3 class="text-center mb-3"><em>YUM!</em></h3>
+    <h5 class="text-center">Dec 07, 2024</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>I started watching <em>Pantheon</em> a few days ago. In the show, near the end of the first episode, we see a scene with one of the characters, a teenage loner named Caspian, at the dinner table with his parents. Caspian’s father begins to chide his son for learning differential calculus, an impractical subject he claims. He then poses the following problem to Caspian:</p>
+
+<p>Suppose n geniuses are sitting at a table with n plates and n chopsticks. Each genius has a plate in front of them and a chopstick to their left and right. There is an infinite supply of stir-fry that is constantly being shoveled onto everyone’s plates.</p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_00.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one" /></p>
+
+<p>To eat the stir-fry, a genius needs to be able to pick up the two chopsticks to their left and right. However, because there are not enough chopsticks, not every genius can eat at the same time. In the worst case scenario, you end up with deadlock where every genius attempts to pick up the chopstick to their left first and waits forever for the genius on their right to put down their chopstick.</p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_01_0.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. There is a red line from each plate to the chopstick on its left. Plate C has a blue arrow pointing to the chopstick on its right with the text &quot;WAITING...&quot;" /></p>
+
+<p>Find a way for these geniuses to eat their stir-fry while avoiding deadlock.</p>
+
+<p>This problem is a spin on a popular problem in concurrent programming known as the Dining Philosophers problem. Like any good problem, it has multiple solutions.</p>
+
+<p>Caspian’s father proposes the following one.</p>
+
+<h2 id="solution-1-resource-hierarchy">Solution 1: Resource hierarchy</h2>
+
+<p>Get the geniuses to agree on some ground rules:</p>
+<ol>
+  <li>All chopsticks will be ordered and given a number.</li>
+  <li>When picking up a chopstick, a genius must always pick up the lower numbered chopstick first, then the higher ordered one.</li>
+</ol>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_02_0.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. The chopsticks are labelled 1 to 6 clockwise with chopstick 1 to the left of plate A." /></p>
+
+<p>Assuming the geniuses follow these rules, in the worst case scenario, all geniuses first pick up their lowest number chopstick at the same time.</p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_02_1.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. The chopsticks are labelled 1 to 6 clockwise with chopstick 1 to the left of plate A. Every plate has a red line to the chopstick on its right except for plates A and B. A has a red line to chopstick 1 on its left. B has a blue line to chopstick 1 on its right with the text &quot;WAITING...&quot;" /></p>
+
+<p>This leaves only the highest-numbered chopstick left on the table. One of the geniuses adjacent to that chopstick will then pick it up, eat, and put down both of their chopsticks.</p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_02_2.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. The chopsticks are labelled 1 to 6 clockwise with chopstick 1 to the left of plate A. A has green lines to chopsticks 1 and 6 with the text &quot;YUM!&quot;. B has a blue line to chopstick 1 with the text &quot;WAITING...&quot;. All other plates have a red line to the chopstick on their right and a blue line to the chopstick on their left with the text &quot;...&quot;." /></p>
+
+<p>After this, the other geniuses who are waiting on the first genius’s chopsticks can pick them up and eat their stir-fry. Deadlock won’t happen because if the worst-case scenario ever comes up, there will always be a way to break out of it thanks to the ground rules.</p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_02_3.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. The chopsticks are labelled 1 to 6 clockwise with chopstick 1 to the left of plate A. A has a blue line to chopstick 1 on its left with the text &quot;...&quot;. F has green lines to chopsticks 6 and 5 on its left and right with the text &quot;YUM!&quot;. All other plates have a red line to the chopstick on their right and a blue line to the chopstick on their left with the text &quot;...&quot;." /></p>
+
+<p>As Caspian’s father explains this, Caspian suddenly cuts him off, saying that the resource hierarchy solution is impractical (a retort echoing to the way their conversation first started).</p>
+
+<p>In particular, it doesn’t scale well as more resources (i.e. chopsticks) get added. Suppose instead of 2 chopsticks, a genius needs to pick up m chopsticks in order to eat, and instead of only sharing one chopstick on either side, the geniuses share a pool of chopsticks. A given genius would spend a small eternity slowly picking up chopsticks until they get the m they need.</p>
+
+<p>Caspian then proposes a second, more “practical” solution.</p>
+
+<h2 id="solution-2-third-party-arbitrator">Solution 2: Third-party arbitrator</h2>
+
+<p>Introduce a third party, like a waiter, who controls the geniuses.</p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_03_0.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. There is a waiter in the middle." /></p>
+
+<p>Any given genius must have the waiter’s permission to pick up their chopsticks. When a genius wants to eat, they signal to the waiter. If no one is currently eating, the waiter gives the genius permission to pick up their chopsticks and becomes closed off to any new requests from other geniuses.</p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_03_1.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. There is a waiter in the middle. There is a blue line from A to the waiter with the text &quot;PLS?&quot; and a green line from the waiter to A with the text &quot;OK&quot;." /></p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_03_2.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. There is a waiter in the middle. A has green lines to the chopsticks on its left and right with the text &quot;YUM&quot;. There is a blue line from C to the waiter with the text &quot;PLS?&quot; and a blue line from the waiter to C with the text &quot;...&quot;." /></p>
+
+<p>Once the genius is done eating and puts down their chopsticks, they tell the waiter they are done, and the waiter becomes open to granting permission for new requests from any genius again.</p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_03_3.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. There is a waiter in the middle. There is a blue line from A to the waiter with the text &quot;DONE&quot;. There is a blue line from C to the waiter with the text &quot;PLS?&quot; and a green line from the waiter to C with the text &quot;OK&quot;." /></p>
+
+<p><img src="/images/dining-philosophers/dining_philosophers_03_4.png" alt="6 plates in a circle labeled A to F clockwise with a chopstick in between each one. There is a waiter in the middle. C has green lines to the chopsticks on its left and right with the text &quot;YUM&quot;" /></p>
+
+<p>The introduction of the waiter effectively serializes the geniuses who were acting in parallel before. What was previously a chaotic mess of geniuses fighting over chopsticks now becomes an orderly sequence of turn-taking moderated by the waiter.</p>
+
+<p>In concurrent programming, this third-party is known as a lock or <strong>mutex</strong>. A mutex acts similarly to the waiter from the Dining Philosophers: it represents some sort of permission that a concurrent program must obtain before executing parts of its logic. If a program hits a chunk of its logic that requires the mutex, but the program hasn’t acquired it, it won’t be able to continue until it can acquire that mutex. Naturally, mutexes are useful when you have logic that shouldn’t run in parallel, like file writes or mutating actions in a database.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>After Caspian finishes, Caspian’s father, clearly pissed, reprimands his wife, calling stir-fry a sorry excuse for a home-cooked meal and storms out of the house. For Caspian, this is just another regular occurrence in his dysfunctional home. However, the viewers get to follow Caspian’s father out to the garage where we find out that that whole abusive husband persona was in fact just an act and that his father and mother are colluding on <em>something</em> under their son’s nose! It turns out that there’s more than meets the eye with Caspian’s family.</p>
+
+<p>Just like how his family’s outward appearance is a facade to Caspian, the Dining Philosophers problem is also, in a sense, a facade to us. It is a theoretical problem, a toy example hiding the oft uglier and grungy programs written to solve real-world problems. These are programs that must juggle different processes all trying to write to memory at once; programs that must handle access to a database for multiple clients. They must handle a variety of edge cases, all while squeezing out as much efficiency from the machine without crashing, a far cry from our philosophers having their quaint little dinner. After all, multi-threading <em>is</em> feared by many for good reason.</p>
+
+<hr />
+
+<h2 id="appendix-a-thoughts-on-pantheon">Appendix A: Thoughts on <em>Pantheon</em></h2>
+
+<p><em>Pantheon</em> has been a very interesting ride so far and perhaps deserves its own separate blog post one day. In short, it’s an animated sci-fi show centered around and exploring the implications of digitizing and emulating the human brain as a software program.</p>
+
+<p>I think what has especially resonated with me about it is the show’s technical subject (a software developer loves a show about software who would’ve guessed) and the clear inspirations it takes from late 90s and early 2000s anime (think <em>Serial Experiments Lain</em>, <em>Neon Genesis Evangelion</em>, <em>Paranoia Agent</em>, <em>Ghost in the Shell</em>). The anime influences are especially telling from its liberal references to these sources of inspiration. One only needs to look at Maddie’s laptop stickers to see parodies of the NERV logo from <em>NGE</em> and Maromi from <em>Paranoia Agent</em>.</p>
+
+<p><img src="/images/dining-philosophers/laptop.png" alt="Maddie Kim sitting with her laptop. The laptop has parody stickers of the NERV logo and Maromi." /></p>
+
+<p>One character even blatantly re-enacts the famous cyborg typing scene from <em>Ghost in the Shell</em> later on in season 1! (so cool!)</p>
+
+<p>Despite this, I don’t think <em>Pantheon</em> lets its predecessors completely define it either. The execution and story feel like a fresh take on the ideas and atmosphere pioneered by its forebearers, remixing them rather than just creating a weak rehash. The only criticisms I have is that I felt the show kinda did a genre swap from a psychological horror to a more general thriller. It also gets a bit difficult to manage near the end of season 1 with the viewer having to juggle several, often changing, character motivations. The voice acting can also feel a bit wooden at times, especially in earlier episodes. Of course, these are minor nits. I still love this show.</p>
+
+<p><em>Pantheon</em> itself is based off of a series of short stories. I really want to read them, especially after I found out that they were authored by Ken Liu, the English translator for my favorite sci-fi novel of all time, <em>Death’s End</em>. However, at least one person online has said the original stories are quite dry and may not be as interesting as the show. This I can believe after attempting to drag myself through more “sciencey” sci-fi, such as <em>Permutation City</em> or <em>Red Mars</em>, and finding myself losing focus.</p>
+
+<p>One thing I do wish is that I had gotten into the show earlier. I had never heard of it until this month despite it being nearly 2 years old at the time of writing. I think one of the main contributing factors to this is its distribution. It was apparently locked behind AMC+ and HIDIVE, only making it to Netflix this year, so no one I knew was talking about it. Season 2 is also still only available in Australia and New Zealand which is both extremely odd and kind of a shame. I think the show is amazing and doesn’t deserve to die in obscurity. Hopefully the Netflix release will prevent that.</p>
+
+<h2 id="appendix-b-thoughts-on-ken-liu-and-others">Appendix B: Thoughts on Ken Liu and others</h2>
+
+<p>Ken Liu is an interesting person. He started his career as a Microsoft engineer. Then he became a lawyer. Then he became a writer, and quite an accomplished one at that, having written for <em>Star Wars</em> and <em>Love Death + Robots</em> (and of course translating Cixin Liu’s <em>Death’s End</em>, the final work of his <em>Three Body Problem</em> trilogy).</p>
+
+<p>Even more surprising is that Ken Liu as someone who made it in both tech and literature circles is not unique either. Andy Weir of <em>Martian</em> fame is another programmer who later became a sci-fi writer. I also recently learned of another person in the tech space writing sci-fi, Ted Chiang, whose <em>Tower of Babylon</em> I’ve been wanting to read.</p>
+
+<p>The upshot is not really to fanboy about random famous people but more so to say that it never ceases to amaze me knowing how many people out there not only <em>have</em> multifaceted, cross-discipline talents but are also <em>actively applying them</em> to accomplish their dreams.</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#concurrency" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  concurrency
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2025-02-01-an-analysis-of-cosmic-lucky-prize">←An Analysis of Cosmic Lucky Prize</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-11-07-ruining-a-professor-layton-puzzle-with-linear-algebra">Ruining a Professor Layton Puzzle with Linear Algebra→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>
