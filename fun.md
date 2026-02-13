@@ -30,3 +30,4 @@ stopping theorem to predict random walk outcomes
 
 - [https://instagram.com/juliartmaa](https://instagram.com/juliartmaa)
 - [https://prchandr.com](https://prchandr.com)
+- [https://mastershinjin.github.io](https://mastershinjin.github.io)
