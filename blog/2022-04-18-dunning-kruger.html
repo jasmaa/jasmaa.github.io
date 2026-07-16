@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Dunning-Kruger | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Dunning-Kruger</h1>
+    <h3 class="text-center mb-3"><em></em></h3>
+    <h5 class="text-center">Apr 18, 2022</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>I recently read a <a href="https://economicsfromthetopdown.com/2022/04/08/the-dunning-kruger-effect-is-autocorrelation/">blog
+post</a>
+arguing that the Dunning-Kruger effect was not a psychological phenomenon but,
+rather, a statistical artifact.</p>
+
+<p>For some context, the <a href="https://en.wikipedia.org/wiki/Dunning%E2%80%93Kruger_effect">Dunning-Kruger
+effect</a> is a
+well-known cognitive bias discovered and discussed by David Dunning and Justin
+Kruger in a <a href="https://pubmed.ncbi.nlm.nih.gov/10626367/">1999 paper</a>. In short,
+the idea of the effect is that poor performers tend to overestimate their
+ability while skilled performers tend to underestimate their ability. The effect
+seems to have received wide-acceptance over time due to the ease with which
+their results have been reproduced in other areas. It also kind of just makes
+sense anecdotally; a lot of us have either been or seen that overconfident
+person learning a new subject.</p>
+
+<p>On the other hand, the blog post referenced above strongly pushes against the
+psychological conclusions of Dunning and Kruger’s results, making the argument
+that the Dunning-Kruger effect is actually a statistical artifact. The general
+idea from that post is that Dunning and Kruger’s results only arise because we
+are trying to correlate some random variable, X, with a function of itself, Y-X.
+In the case of Dunning-Kruger, X were test scores subjects scored, and Y were
+test scores subjects <em>think</em> they scored. Y-X is the discrepancy between the
+predicted and actual scores which were observed to have trended downwards as
+subjects went from overestimating to underestimating as skill increased.</p>
+
+<p><img src="/images/dunning-kruger/dk_figure.png" alt="Dunning-Kruger chart from paper" /></p>
+
+<p>The author argues that because of the way these calculations were designed, we
+are guaranteed to observe some trend between the two variables we are comparing
+(X vs Y-X) due to the inherent correlation that exists between them rather than
+because there is some psychological effect at play (e.g. humans overestimating
+their abilities). The author then goes on to provide an experiment and some
+graphs to support his point.</p>
+
+<p>This seemed like a very reasonable explanation, but I still had trouble
+accepting that the DK effect that many others, including myself, have taken to
+heart was just the result of some statistics. I wanted to try and recreate the
+author’s experiment and see it with my own eyes. Plus I wanted to see if I still
+had it in me to write some R.</p>
+
+<h2 id="an-experiment">An Experiment</h2>
+
+<p>We needed to setup a scenario with two independent random variables, X and Y (I
+ended up just making them standard normal distributions). Dunning and Kruger
+broke their participants up into quartiles based on their test scores, so I have
+done the same on the X variable.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+
+</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1000</span><span class="w">
+</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w">
+</span><span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w">
+</span><span class="n">x_quartiles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cut</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">breaks</span><span class="o">=</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">labels</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p>After this, I calculated the averages for X and Y by quartile. R treats the
+quartiles as factors, so I also needed to convert them to a numeric vector.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">x_quartiles</span><span class="p">)</span><span class="w">
+</span><span class="n">avgs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">group_by</span><span class="p">(</span><span class="n">x_quartiles</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarise_each</span><span class="p">(</span><span class="n">funs</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span><span class="w">
+</span><span class="n">avgs</span><span class="o">$</span><span class="n">x_quartiles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">avgs</span><span class="o">$</span><span class="n">x_quartiles</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now it’s time to make some graphs.</p>
+
+<p>These are what the data points looked like. X and Y were not correlated, so
+graphing them just creates a cloud of points. X and Y-X have a negative
+correlation, so we see a downwards trend with some noise (produced by Y).</p>
+
+<p><img src="/images/dunning-kruger/y_vs_x.png" alt="Y vs X" /></p>
+
+<p><img src="/images/dunning-kruger/y-x_vs_x.png" alt="Y-X vs X" /></p>
+
+<p>After the data points were grouped by quartile, I graphed a boxplot for each
+quartile. Since X is correlated with itself, the averages in the boxplots
+display a linear trend moving across quartiles. On the other hand, since X and Y
+are not correlated at all, the boxplots in each quartile look about the same
+compared to each other.</p>
+
+<p><img src="/images/dunning-kruger/x_by_quartiles.png" alt="X by quartiles" /></p>
+
+<p><img src="/images/dunning-kruger/y_by_quartiles.png" alt="Y by quartiles" /></p>
+
+<p>Graphing only the averages in each quartile and combining the graphs, we finally
+see something that is eerily similar to both what the author of the blog post
+and what Dunning and Kruger produced.</p>
+
+<p><img src="/images/dunning-kruger/x_and_y_by_quartiles.png" alt="X and Y averages by quartiles" /></p>
+
+<p>This graph roughly shows the correlation of X and Y to X (since the quartiles
+are just X split by group). The black line increases over the quartiles because
+X is effectively being graphed against X. Meanwhile, the red line appears flat
+since, because Y has no correlation with X. In each X quartile, the distribution
+of Y values remains roughly the same (quartiles 1 and 4 just represent fewer
+points since the probability of landing at the tails of a normal distribution is
+less likely).</p>
+
+<h2 id="a-statistical-artifact">A Statistical Artifact</h2>
+
+<p>The idea of DK being a statistical phenomenon is not new. The Dunning-Kruger
+effect Wikipedia page outright states that one of the criticisms for the
+Dunning-Kruger effect is <a href="https://en.wikipedia.org/wiki/Regression_toward_the_mean">regression to the
+mean</a>.</p>
+
+<p>One idea from regression to the mean is that after an initial sampling,
+performing a second sampling from the most extreme data points will still result
+in a mean that is close to the mean from the initial sample. For example,
+suppose I am interested in the distribution of test scores on a randomized
+true-false exam. If I made 100 students take a randomized true-false test, the
+expected mean score is 50%. If I then took the top 10 students from the 1st exam
+and made them take a different randomized true-false test, the expected score on
+the 2nd exam is still 50%. Since the answers are randomized, even though I took
+the top performers and made them take another test, the mean from the second
+testing is not extreme but, rather, still close to the mean from the first
+testing.</p>
+
+<p><img src="/images/dunning-kruger/regression_to_mean.png" alt="Regression to the mean with first test and second test with top-scorers" /></p>
+
+<p>This is roughly what is happening with our experiment. We performed an initial
+sampling of a distribution (X) and broke the data points into quartiles where
+the 1st and 4th quartiles could be considered “extreme” data points. We then
+performed a second sampling on the same distribution (Y) and calculated the
+averages per group. Due to regression to the mean, the averages of Y look the
+same across all groups of X, despite some groups being more extreme than others
+in terms of X. This is because, in each group, the group averages of Y are
+regressing towards the overall mean of Y.</p>
+
+<p>The real world implication is that, perhaps, the scores people get and the
+scores people guess they got have a discrepancy, not because of a difference in
+mental models between poor and skilled performers, but because these two
+variables are not really related at all. And why should they be related? All we
+know is that some people are very good at whatever test they took, not that they
+can make good judgments on how well they did.</p>
+
+<h2 id="so-what-does-it-all-mean">So What Does It All Mean?</h2>
+
+<p>Do the Dunning-Kruger effect and its psychological conclusions really exist or
+not? I used to believe so, that it was because most people new to a field were
+overconfident, but after running this experiment, I’m not so sure. Maybe we all
+just suck at judgment. Even if a person is good at taking a test, what incentive
+(other than maybe avoiding hubris) do they have to accurately assess how well
+they did? When we self-assess our ability, how do we know that we aren’t just
+randomly picking numbers from a distribution in our head and that we are
+actually making a grounded and logical analysis?</p>
+
+<p>Of course, when I questioned all of this to a friend, all they said was, “You’re
+thinking about this too much. People are just overconfident. I’ve seen them.”</p>
+
+<p>And perhaps they are right. Dunning-Kruger effect or not, psychologically-based
+or statistically-based, humans are still humans, one more unique than the next.
+One can use broad experiments to draw conclusions about data points overall, but
+it doesn’t mean you’ve discovered something about how an individual acts. I
+suppose the only real way to do that is to go out there and talk to some folks.</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Data" class="badge rounded-pill m-1 data-badge">
+  Data
+</a>
+
+    
+
+
+<a href="/tags#r" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  r
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2022-08-21-running-elixir-on-lambda">←Running Elixir on Lambda</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2022-02-27-thoughts-wei-wei-daigakusei">Thoughts: Wei Wei Daigakusei→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

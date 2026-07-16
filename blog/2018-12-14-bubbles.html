@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Bubbles | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Bubbles</h1>
+    <h3 class="text-center mb-3"><em>Poppin' Turtles</em></h3>
+    <h5 class="text-center">Dec 14, 2018</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Among many things brought out into the cold of December 1st, 2018 were four nerds with
+nothing better to do on a Saturday morning than participate in their school’s local hack day.
+While I cannot speak for the experiences of my companions, I do recall being awoken at 2 in the
+morning earlier that day by the finest drunks on our floor. In my drowsy state of quasi-conciousness, I came to a sudden premonition:</p>
+
+<p><em>Beatsaber. We should make 2D Beatsaber with OpenCV.</em></p>
+
+<p>A lackluster slumber followed, leading to the events of the day proper. The hackathon itself was comparably short, clocking in at 12 hours,
+meaning we could not go overboard with crazy ideas. While we had initially proposed making a motion-responsive color picker, this was
+deemed too simple as it could have been easily accomplished by hacking together some scripts in Unity and exporting to a phone with a
+gyroscope. When 2D Beatsaber was brought up, there seemed to at least be some amount of consensus on the project, and so we took it and ran.</p>
+
+<p>The following account reflects my own experiences and thus will focus a considerable amount on the code side of the project.
+The work of my teammates was pivotal to the completion of the hack, but I am afraid I would not be able to give anything more than a superficial description of their workflows.</p>
+
+<h2 id="design">Design</h2>
+
+<p>The general gist of our hack was to detect players using a webcam and overlay them into a rhythm game where they would be able to reach out and pop bubbles with their bodies
+in sync to music. In that sense, the program was more similar to Fruit Ninja on Xbox Kinect than Beatsaber, but the old name stuck. From the outset, we also chose to use OpenCV for object detection
+as it is relatively straight-forward to use. The game itself was split into a game manager to handle logic and a renderer to generate images from game data, both operating within a game loop.</p>
+
+<h2 id="process">Process</h2>
+
+<p>The first hurdle was, of course, figuring out how to detect our player. As training any sort of algorithm to detect features was out of our time scope, we were left with two options:</p>
+<ul>
+  <li>Use broad and traditional computer vision tactics to detect the player</li>
+  <li>Steal object detection models from somewhere else</li>
+</ul>
+
+<p>A brief search for OpenCV classifiers to detect hands gave us nothing, so we opted for the former option. In order to single out the players, the image was
+first background subtracted and then contour detection was run on it which left us with a reasonable
+player outline given that there was not too much movement behind the user.</p>
+
+<p><img src="/images/bubbles/bubble01.png" alt="Rudimentary contour detection" /></p>
+
+<p>Once we extracted all the points representing the player from finding the contour, it was a matter of sending this data to be processed by the game. The design was fairly tame
+with a central manager that kept track of, among many things, points representing the player and the locations of the bubbles. The game manager was also passed into a renderer
+that used PIL to stitch together an output image based on game data which was then sent out to be displayed. Music remained difficult to incorporate and had to be hardcoded in with stolen internet code,
+separate from the main models. Later on, a crude implementation of animated sprites was also added that simply gave each bubble a sprite index that incremented over time.</p>
+
+<p>Among the many challenges faced in that period were:</p>
+<ul>
+  <li>Embarrassingly poor use of git. We will branch and merge next time…</li>
+  <li>Difficulties incorporating sound. This ended up being messily written and running on a separate thread.</li>
+  <li>Problems synching bubbles with music. The game was supposed to be 4 minutes long. It is now 8 minutes long.</li>
+  <li>A slew of image-related problems including troubles with color-encoding, transparency, flipped images, and resizing</li>
+  <li>Issues optimizing collision detection</li>
+</ul>
+
+<p>Specifically regarding collision detection, collision with a bubble is done by checking if a player-representing point is contained within a radius of the bubble. While an exhaustive
+search initially worked with a small set of bubbles, the game quickly started to lag after scaling up. A simple solution was made, limiting only bubbles present on screen to be collidable, and
+while this greatly reduced lag, it did not entirely fix the game from stuttering. Potentially, in addition to only considering on-screen bubbles, a smarter solution may have been to bucket
+the player points by a position range to lower the search space for each detection.</p>
+
+<h2 id="after-thoughts">After Thoughts</h2>
+
+<p>Nearing the end of the hackathon, we integrated proper art assets and a completed beatmap into the game, ending up with something half-way decent. While admittedly some parts of the code were cheesed (<em>cough</em> strategic use of eval <em>cough</em>),
+the program as a whole was moreorless functional and worked to our satisfaction. Despite this, there was still much that could be done with this project. For one, the game would probably run nicer
+had it been written in a more optimized language like C as Python is very slow. It would also have been nice to have pluggable songs and beatmaps as well as a proper UI since the game currently
+goes directly to playing our one hardcoded song out of the box.</p>
+
+<p>In any case, in spite of its shortcomings, at the end of the day, the program did win us some socks so no complaints from me!
+We walked off that night, feeling chipper than ever all whilst spiriting away an orphaned liter of Diet Pepsi and a stack of cups from the catering.</p>
+
+<p><img src="/images/bubbles/bubble02.gif" alt="Game demonstration" /></p>
+
+<h2 id="acknowledgements">Acknowledgements</h2>
+
+<ul>
+  <li>Thanks to my friends who spent all Saturday building this hack with me</li>
+  <li>The song used in-project was BUBBLES by Tokyo Machine</li>
+</ul>
+
+<p>The repo for the project is available <a href="https://github.com/00roshnipatel/umd-mlhhackday-18">here</a> at the time of writing.</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#music" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  music
+</a>
+
+<a href="/tags#opencv" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  opencv
+</a>
+
+<a href="/tags#python" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  python
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2019-01-24-protobowlvr">←Protobowl VR</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2018-11-26-kuiperbowl">Kuiperbowl→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

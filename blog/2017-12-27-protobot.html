@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Protobot | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Protobot</h1>
+    <h3 class="text-center mb-3"><em>Py Protobowl Bowl Py</em></h3>
+    <h5 class="text-center">Dec 27, 2017</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Winter break’s here, so I decided to spend some time off making a way to programmatically
+interface with Protobowl</p>
+
+<p>The main goal of this was to prototype and then port code to Swift as iOS 10 has broken
+mobile Protobowl.
+Also out of some morbid desire to beat my quizbowl teammates at their game,
+an auto-answer bot was developed alongside API code.</p>
+
+<p>Of course, I’ve already tried this multiple times in the past with varying levels of success:</p>
+<ul>
+  <li>The first one: found PB source then gave up</li>
+  <li>Do it through HTTP: yeaaahhh…</li>
+  <li>Found ProtoBot in Java: promptly gave up afterwards</li>
+</ul>
+
+<p>I’m a bit pragmatic as you can see, mostly since I wasn’t going to burn a week on
+this kind of thing-whoops.</p>
+
+<p>From what I understand, PB upgrades HTTP requests to the websocket protocol and then sends
+JSON files between client and server. I was able to see this using Chrome’s Network
+tab, but the problem remained: How to upgrade HTTP to websocket?</p>
+
+<p>On a whim, I requested a socket from PB using HTTP and tried plugging the websocket address
+into a websocket client which…worked. Huh. Cool.</p>
+
+<p>Over the next few days, it was a matter of implementing many PB commands to be sent as
+JSON. Thankfully, Python’s json library dumps JSON nicely and PB’s not that strict with
+parsing, so I can just ignore the command headers for the most part.</p>
+
+<p>Sample run of the bot:</p>
+
+<p><img src="/images/protobot/pyprotobot.gif" alt="Sample run of bot" /></p>
+
+<p>Among various minor annoyances and roadblocks include:</p>
+<ul>
+  <li>PB disconnects idle users, so I need to constantly ping the site</li>
+  <li>PB sends packets as general “sync” packets which just contain a bunch of info.
+  Of course, these things are a a mess to identify and dig through.</li>
+  <li>Parsing data received is still incomplete. While unnecessary for an auto-answer bot,
+  I want it for a future client.</li>
+</ul>
+
+<p>The plan as of now is to focus on porting to Swift and then figure out how to best
+parse incoming websocket data. Xcode grievances are worth another day though.</p>
+
+<h2 id="acknowledgements">Acknowledgements</h2>
+
+<p>Much of this project owes itself to <a href="https://github.com/bobacadodl/ProtoBot">ProtoBot</a>
+which was a huge help in reference.</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#python" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  python
+</a>
+
+<a href="/tags#quizbowl" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  quizbowl
+</a>
+
+<a href="/tags#websocket" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  websocket
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2018-08-08-spooter">←Spooter</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,391 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>An Analysis of Cosmic Lucky Prize | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">An Analysis of Cosmic Lucky Prize</h1>
+    <h3 class="text-center mb-3"><em>It's Phainonomics!</em></h3>
+    <h5 class="text-center">Feb 01, 2025</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>What’s the best way to simultaneously get millions of weebs excited to play a gacha game AND to also motivate a tired guy to revive his blog for the nth time in his life?</p>
+
+<p>A lottery it seems.</p>
+
+<p>One of the games I play, Honkai Star Rail, is currently running an event titled Cosmic Lucky Prize. While most HSR events feature minigames, puzzles, or even full-blown side stories, Cosmic Lucky Prize is weird in that it offers nearly no gameplay at all! Instead, every day for 7 days, players will be given two choices: gamble or don’t gamble. Don’t gamble and you get a flat 100 jades, but gamble, and you could win a whopping 500,000 jades! Enough to roll gacha 3125 times!</p>
+
+<p>While Cosmic Lucky Prize appears deceptively simple on the surface, a closer look at the event and its rules reveals a rather interesting problem of risk and reward underneath its veil of riches and fortune.</p>
+
+<h2 id="the-game-and-its-rules">The Game and its Rules</h2>
+
+<p>In order to analyze this game, one must first know how it works. Cosmic Lucky Prize’s rules are quite straightforward. A drawing happens every day for 7 days. In each drawing, players can choose to either gamble or bail.</p>
+
+<p>If a player gambles, they enter the pool of all other gamblers. From the pool, a limited number of participants are first selected to be Superstars based on a daily quota. The quota allocates 2 players on days 1, 2, and 3; 3 players on days 4, 5, and 6; and 5 players on day 7, adding up to a grand total of 20 Superstars for the entire event. If chosen, Superstars will receive 500,000 jades. They will also become exempt from being chosen as Superstar again.</p>
+
+<p>After Superstars are selected for a given day, the rest of the gambler pool is divided up for first and second prizes. 10% of the pool is chosen for first prize and receives 600 jades while the remaining 90% get second prize and receive 50 jades.</p>
+
+<p>Everyone else who bailed or didn’t participate automatically gets a flat 100 jades.</p>
+
+<p>I’ve pasted the <a href="https://www.hoyolab.com/article/36027135">full rules</a> below:</p>
+
+<p>● In phases 1, 2, and 3, there will be 2 Trailblazers per phase who have a chance to become the Lucky Superstar. In phases 4, 5, and 6, there will be 3 Trailblazers per phase who have a chance to become the Lucky Superstar. In phase 7, 5 Trailblazers will have a chance to become the Lucky Superstar.</p>
+
+<p>● In each phase’s lottery, if a Trailblazer participates but does not become the Lucky Superstar, there will be a 10% chance to win the First Prize and a 90% chance to win the Second Prize.</p>
+
+<p>● In each phase, Trailblazers can only win one of the following: Lucky Superstar, First Prize, or Second Prize. The rewards cannot overlap.</p>
+
+<p>● Across all 7 phases, a Trailblazer can only become the Lucky Superstar once. The same Trailblazer cannot be selected as the Lucky Superstar multiple times.</p>
+
+<h2 id="math-7th">Math 7th</h2>
+
+<p>When I first heard the rules, some things became immediately obvious. For one, the Superstar prize was virtually unobtainable. <a href="https://activeplayer.io/honkai-star-rail">One source reports HSR at over 5 million players globally</a> (and I suspect this number is even higher in practice). This means that even if only 1% of the player base gambles in the lottery, the chance of being a Superstar is still orders of magnitude below 1%. The Superstar prize acts more as a marketing scheme than anything to drive player excitement towards the event since your chance of winning 500,000 jades is slim to none.</p>
+
+<p>What ended up being more interesting for me, however, were the mechanics behind first and second prizes. Ignoring the Superstar prize and applying some probability, we can compare the expected number of jades awarded in a single drawing for a player who bails versus a player who gambles.</p>
+
+<p>For a bailing player, there is a 100% chance that they receive 100 jades:</p>
+
+\[\begin{align}
+&amp; E[X] = 1 * 100 \\
+&amp; = 100
+\end{align}\]
+
+<p>So a bailer gets on average 100 jades per draw.</p>
+
+<p>For a gambling player, there is a 10% chance that they receive 600 jades or a 90% chance that they receive 50:</p>
+
+\[\begin{align}
+&amp; E[X] = 0.1 * 600 + 0.9 * 50 \\
+&amp; = 105
+\end{align}\]
+
+<p>So a gambler gets on average 105 jades per draw.</p>
+
+<p>Comparing these values alone, it seems like a better bet to always gamble since this will net you slightly more jades in the long run. However, this assumption really only holds when the number of draws is high. Unfortunately, this is not the case for this event; only 7 draws will ever happen.</p>
+
+<p>So how does gambling compare with bailing when we account for the fact that there are only a small number of draws? Let’s instead calculate the winnings and chances for each outcome of a player who always bails versus one who always gambles. Let us call these personas the ColdFeet player and the ReachForTheStars player respectively.</p>
+
+<p>The ColdFeet case is straightforward. There is a 100% chance that the player earns 100 jades every draw. This will net them 700 jades by the end of the event.</p>
+
+\[\begin{align}
+&amp; p = 1 \\
+&amp; v = 7 * 100 = 700
+\end{align}\]
+
+<p>The mean and standard deviation for this case are pretty straightforward since there is no variation:</p>
+
+<div class="table-responsive"><table class="table">
+  <thead>
+    <tr>
+      <th>Mean</th>
+      <th>SD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>700</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>On the other hand, the calculation for the ReachForTheStars player is more complicated since they have a chance of losing the gamble and getting second prize. We can calculate the chances and winnings of all possible outcomes for ReachForTheStars by augmenting on the number of times that the player loses the gamble.</p>
+
+<p>Let’s start by finding the chance and payout if ReachForTheStars gets second prize all 7 days.</p>
+
+\[\begin{align}
+&amp; p = 0.9^7 = 0.48 \\
+&amp; v = 7 * 50 = 350
+\end{align}\]
+
+<p>What if the ReachForTheStars wins first prize only once? We have to choose one of the days for the gambler to win first prize. This can be done with a combination. After that we have to figure out the chance that they win 1 first prize and 6 second prizes. The calculation is then as follows:</p>
+
+\[\begin{align}
+&amp; p = 0.9^6 * 0.1^1 * {7 \choose 1} = 0.37 \\
+&amp; v = 6 * 50 + 1 * 600 = 900
+\end{align}\]
+
+<p>We can generalize this for any number of times ReachForTheStars wins first prize. Suppose the number of times they win first is \(t\). The probability and payouts are then:</p>
+
+\[\begin{align}
+&amp; p(t) = 0.9^{7-t} * 0.1^t * {7 \choose t} \\
+&amp; v(t) = (7-t) * 50 + t * 600
+\end{align}\]
+
+<p>Applying the formula for all possible values of \(t\), we can calculate the distribution of jades won:</p>
+
+<div class="table-responsive"><table class="table">
+  <thead>
+    <tr>
+      <th>t</th>
+      <th>Probability</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0.48</td>
+      <td>350</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0.37</td>
+      <td>900</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>0.12</td>
+      <td>1450</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>0.023</td>
+      <td>2000</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0.0026</td>
+      <td>2550</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>0.00017</td>
+      <td>3100</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>0</td>
+      <td>3650</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>0</td>
+      <td>4200</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p><img src="/images/an-analysis-of-cosmic-lucky-prize/gambler.png" alt="Bar graph of probability vs number of jades for the ReachForTheStars player. The title reads &quot;Probability of Earning Jades&quot;. The y-axis reads &quot;Probability&quot;. The x-axis reads &quot;Num Jades&quot;." /></p>
+
+<p>Using some probability formulas that I definitely didn’t need to look up to jog my memory, we can also get the mean and standard deviation of this distribution:</p>
+
+\[\begin{align}
+&amp; E[X] = \sum_{i} p(x_i) * x_i \\
+&amp; Var(X) = E[X^2] - E[X]^2 \\
+&amp; SD(X) = \sqrt{Var(X)}
+\end{align}\]
+
+<div class="table-responsive"><table class="table">
+  <thead>
+    <tr>
+      <th>Mean</th>
+      <th>SD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>735.00</td>
+      <td>436.55</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>As you can see, even with a small number of draws, always gambling still seems to be the better strategy, winning more jades on average than always bailing. Even winning first prize just once will put a ReachForTheStars player ahead of a ColdFeet one by 200 jades.</p>
+
+<p>However, this all comes at the cost of some risk. The chance of winning first at least once is a measly 52%, just over half. Moreover, the effort that ReachForTheStars has to go through is also much higher. They have to have the discipline to log in and choose to gamble every single day of the event.</p>
+
+<p>This led me to my next question: What happens to the other types of players who don’t fall into either of these personas, that is, players who don’t always bail or gamble? Is there a better strategy than always gambling? I didn’t really want to do more math, so it was time to run a little experiment instead!</p>
+
+<h2 id="a-simulated-universe">A Simulated Universe</h2>
+
+<p>I ended up writing <a href="https://github.com/jasmaa/cosmic-lucky-prize">a simulation to model the Cosmic Lucky Prize lottery</a>. The simulation runs the 7 draws with a population of 5 million. In addition, each of the simulated players acts based on different strategies I think real players will use. The strategies are as follows:</p>
+
+<ul>
+  <li>ColdFeet: Never gambles, always bails. Guaranteed to get 700 jades.</li>
+  <li>ReachForTheStars: Always gambles no matter what unless they get Superstar.</li>
+  <li>FirstPrizeEnjoyer: Gambles until they win first prize once and then stops gambling.</li>
+  <li>Latecomer: Only gambles during the last 4 days. This models players who are either late to the event or get pressured into gambling later because of FOMO.</li>
+  <li>Quitter: Always gambles on the 1st day and becomes less likely to gamble with each subsequent day. This models players who lose interest or suddenly get cold feet.</li>
+  <li>RandoNoob: Gambles randomly. This models an infrequent and casual player.</li>
+</ul>
+
+<p>After making a few optimizations to my code so that it could scale to 5 million players, I divided the population randomly among the different strategies and ran the simulation.</p>
+
+<p>This is the mean and standard deviation of the jades earned by the entire population after filtering out outliers:</p>
+
+<div class="table-responsive"><table class="table">
+  <thead>
+    <tr>
+      <th>Mean</th>
+      <th>SD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>696.38</td>
+      <td>287.96</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p><img src="/images/an-analysis-of-cosmic-lucky-prize/simulation_all.png" alt="Histogram of percentages of all jades earned. The title reads &quot;Distribution of Jades Earned&quot;. The y-axis reads &quot;Percentage&quot;. The x-axis reads &quot;Num Jades&quot;." /></p>
+
+<p>The overall distribution doesn’t tell us much about the strategies though, so I also grouped the data by agent type and ran the same analyses:</p>
+
+<div class="table-responsive"><table class="table">
+  <thead>
+    <tr>
+      <th>Agent</th>
+      <th>Mean</th>
+      <th>SD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ColdFeetAgent</td>
+      <td>700.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <td>FirstPrizeEnjoyerAgent</td>
+      <td>726.10</td>
+      <td>367.11</td>
+    </tr>
+    <tr>
+      <td>LatecomerAgent</td>
+      <td>669.54</td>
+      <td>253.98</td>
+    </tr>
+    <tr>
+      <td>QuitterAgent</td>
+      <td>690.06</td>
+      <td>282.22</td>
+    </tr>
+    <tr>
+      <td>RandoNoobAgent</td>
+      <td>691.40</td>
+      <td>265.69</td>
+    </tr>
+    <tr>
+      <td>ReachForTheStarsAgent</td>
+      <td>699.57</td>
+      <td>383.16</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p><img src="/images/an-analysis-of-cosmic-lucky-prize/simulation_by_agent.png" alt="6 histograms of percentages of jades earned grouped by agent type. The super title reads &quot;Distributions of Jades Earned by Different Agent Types&quot;. The title for each histogram from left to right, top to bottom read &quot;ColdFeetAgent&quot;, &quot;FirstPrizeEnjoyerAgent&quot;, &quot;LatecomerAgent&quot;, &quot;QuitterAgent&quot;, &quot;RandoNoobAgent&quot;, &quot;ReachForTheStarsAgent&quot;. The y-axis for each graph reads &quot;Percentage&quot;. The x-axis for each graph reads &quot;Num Jades&quot;." /></p>
+
+<h2 id="observations">Observations</h2>
+
+<p>Taking a look at the distributions, we can see that most of the data is concentrated in small humps throughout the graph, with the humps decreasing in size as the number of jades increases. We see this pattern for both the overall distribution and for the distributions grouped  by agent type. These humps seem to represent groups of players who won first prize a certain number of times. Winning first prize would essentially bump a player into the hump for the next bracket up.</p>
+
+<p>Of course, the best performing agents were the ones that could land more reliably in higher bracket humps. Sorting these agents by performance from best to worst, the agents ranked as follows: FirstPrizeEnjoyer, ColdFeet, ReachForTheStars, RandoNoob, Quitter, and finally Latecomer.</p>
+
+<p>Only FirstPrizeEnjoyer, ColdFeet, and ReachForTheStars outperformed the overall average. That being said, both FirstPrizeEnjoyer and ReachForTheStars also had greater standard deviations than the overall standard deviation, indicating higher risk when taking these strategies. ColdFeet was the only strategy beating the overall average that also offered lower risk (since these players obviously never gambled).</p>
+
+<p>One additional observation is that the distributions of Quitter and RandoNoob are very similar in shape. This seems to indicate that quitting early was no different than playing randomly.</p>
+
+<p>Despite the differences in agent performance, the actual outcomes per agent type did not actually seem to be that much different in the grand scheme of things. Even without doing any rigorous comparison of the distributions, it’s pretty clear that all of the agent averages hovered around 700 jades. The standard deviation for even the riskiest strategies only went up to about 400 which means that the vast majority of players were still getting at worst 350 jades and at best around 1100 jades. This kind of makes sense since most of the luckier gambling players likely won first prize once but couldn’t win it more times, landing them into the ~1000 jades earned bracket. Converting to rolls, most players will then earn about 2 to 6 rolls from this event no matter what they do. There is not much of a difference between the min and max of this range to be honest.</p>
+
+<p>Still, if you are someone who wants to make the most out of Cosmic Lucky Prize, you’ll benefit the most if you commit to either being all or nothing. If you missed even a few days and started gambling late, or if you started out gambling but quit later, you end up with a higher chance of receiving fewer jades in the end than if you had just sat out all 7 days instead. Perhaps this is best illustrated in the famous words of a certain senior manager:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>“Investing in victory means playing the long game!”
+</code></pre></div></div>
+
+<p><img src="/images/an-analysis-of-cosmic-lucky-prize/topaz-ultimate.gif" alt="GIF of Topaz and Numby using their ultimate. Topaz thinks in front of a holographic screen before Numby runs up a stock market arrow collecting coins." /></p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Data" class="badge rounded-pill m-1 data-badge">
+  Data
+</a>
+
+    
+
+
+<a href="/tags#games" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  games
+</a>
+
+<a href="/tags#python" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  python
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2025-04-07-1000-ai-domains">←The 1000 AI Domains that Really Really Really Really Really Want Your Attention (and money probably)</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-12-07-dining-philosophers">Dining Philosophers→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>
