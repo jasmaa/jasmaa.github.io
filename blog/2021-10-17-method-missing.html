@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Method Missing | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Method Missing</h1>
+    <h3 class="text-center mb-3"><em>Your method is in another class.</em></h3>
+    <h5 class="text-center">Oct 17, 2021</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Let’s try a shorter-form blog post today. Suppose you are bored and want to learn more about a Ruby
+library. You do the sensible thing: read the source, starting from a class the library’s clients
+would consume. You expect to find a plethora of method definitions or at least some mixins or class
+inheritance that might point you in the right direction. Instead you get the following:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Foo</span>
+  <span class="vi">@bar</span> <span class="o">=</span> <span class="o">...</span>
+  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="vi">@bar</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="nb">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>If you are like me, then the first question you may have is, “Author. Where. Are. My. <strong>METHODS</strong>?”</p>
+
+<p>Then the old wise-sounding voice in your head would probably echo something vague in response like:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Seek not what lies before your eyes.
+</code></pre></div></div>
+
+<p>And you would thus be enlightened.</p>
+
+<h2 id="method-missing">Method Missing</h2>
+
+<p>The secret to this mystery lies, of course, in Ruby’s
+<a href="https://apidock.com/ruby/BasicObject/method_missing"><code class="language-plaintext highlighter-rouge">method_missing</code></a> method. Normally, when a
+method call is made to an object that does not define that method, <code class="language-plaintext highlighter-rouge">NoMethodError</code> is thrown.
+However, by implementing <code class="language-plaintext highlighter-rouge">method_missing</code>, one is able to essentially catch calls before they fall
+by specifying behavior that gets executed dynamically at runtime. For instance, in our toy example,
+<code class="language-plaintext highlighter-rouge">method_missing</code> catches method calls in <code class="language-plaintext highlighter-rouge">Foo</code>, gets the method’s id, and uses
+<a href="https://apidock.com/ruby/Object/send"><code class="language-plaintext highlighter-rouge">send</code></a> to redirect the method call to <code class="language-plaintext highlighter-rouge">@bar</code> instead.</p>
+
+<p>A major use of <code class="language-plaintext highlighter-rouge">method_missing</code> seems to be in providing concise implementations of
+<a href="https://en.wikipedia.org/wiki/Delegation_(object-oriented_programming)">delegation</a> (our
+snippet above is actually an example of this). Delegation usually is more verbose. For instance,
+in Java, one would have to manually redefine every method being delegated in the parent’s class to
+achieve the same functionality. Ruby’s <code class="language-plaintext highlighter-rouge">method_missing</code> seems to make the whole affair shorter to
+write and easier to maintain.</p>
+
+<p>Another interesting application of <code class="language-plaintext highlighter-rouge">method_missing</code> is in creating
+<a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific languages</a> (DSLs)
+by parsing method names. As an example, Kim Bekkelund has a very concise
+<a href="https://gist.github.com/kimjoar/2773597">XML DSL implementation</a> using <code class="language-plaintext highlighter-rouge">method_missing</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">method_missing</code> is also more generally a case of
+<a href="https://en.wikipedia.org/wiki/Metaprogramming">metaprogramming</a>, a feature of some languages that
+allows code to be treated as data. While metaprogramming is not limited to Ruby, Ruby seems to be
+particularly (in)famous for it.</p>
+
+<h2 id="a-hypothetical-pitfall">A Hypothetical Pitfall</h2>
+
+<p>Like all things <code class="language-plaintext highlighter-rouge">method_missing</code> can be overused and abused. For one, <code class="language-plaintext highlighter-rouge">method_missing</code> has very high
+reach since it can respond to any undefined method. Sometimes, this can lead to unexpected behavior.</p>
+
+<p>Let’s contrive an example. Suppose we are making a dictionary API. We love <code class="language-plaintext highlighter-rouge">method_missing</code>
+for some reason and decide to use it to write our dictionary:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DictionaryAPI</span>
+  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">method_name</span> <span class="o">=</span> <span class="nb">method</span><span class="p">.</span><span class="nf">to_s</span>
+    <span class="k">if</span> <span class="n">method_name</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/^define_/</span><span class="p">)</span>
+      <span class="n">term</span> <span class="o">=</span> <span class="n">method_name</span><span class="p">.</span><span class="nf">sub</span><span class="p">(</span><span class="s1">'define_'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+      <span class="k">return</span> <span class="p">{</span>
+        <span class="ss">:term</span> <span class="o">=&gt;</span> <span class="n">term</span><span class="p">,</span>
+        <span class="ss">:definition</span> <span class="o">=&gt;</span> <span class="vi">@external_source</span><span class="p">.</span><span class="nf">retrieve_definition</span><span class="p">(</span><span class="n">term</span><span class="p">),</span>
+      <span class="p">}</span>
+    <span class="k">else</span>
+      <span class="k">raise</span> <span class="no">NoMethodError</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Our dictionary parses terms from method calls of the form <code class="language-plaintext highlighter-rouge">define_{TERM}</code> and then retrieves
+the definitions from an external source before returning a response.</p>
+
+<p>This works fine for most common words:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">d</span> <span class="o">=</span> <span class="no">Dictionary</span><span class="p">.</span><span class="nf">new</span>
+<span class="nb">puts</span> <span class="n">d</span><span class="p">.</span><span class="nf">define_dog</span>
+
+<span class="c1"># { :term =&gt; "dog", :definition =&gt; ... }</span>
+</code></pre></div></div>
+
+<p>But what if someone decides they want to find the definition for the term “singleton_method”?:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">puts</span> <span class="n">d</span><span class="p">.</span><span class="nf">define_singleton_method</span>
+
+<span class="c1"># dictionary.rb:18:in `define_singleton_method': wrong number of arguments (given 0, expected 1..2) (ArgumentError)</span>
+<span class="c1">#        from dictionary.rb:18:in `&lt;main&gt;'</span>
+</code></pre></div></div>
+
+<p>Oops, <a href="https://apidock.com/ruby/Object/define_singleton_method"><code class="language-plaintext highlighter-rouge">define_singleton_method</code></a>
+is a method that already exists for all objects. Back to the drawing board…</p>
+
+<p>This example is admittedly contrived. In this case, Ruby has also stopped us
+very quickly because the function arity differs, so little harm was done.
+However, what if this API existed at a larger scale? Perhaps <code class="language-plaintext highlighter-rouge">DictionaryAPI</code> inherits
+from a long line of ancestors, and we had a method name that silently collided with a
+name from one of the ancestors. Perhaps there is no collision now, but there will be one in the
+future due to a change in an ancestor.</p>
+
+<p>Furthermore, it would be hard to catch this collision in testing since most people would just test
+common words like “dog” and see expected functionality. And what happens once someone does
+eventually discover the collision? The whole API needs to change. What if we end up colliding again
+with something else after the changes?</p>
+
+<p>The main issue is that although name collision itself is not specific to <code class="language-plaintext highlighter-rouge">method_missing</code>, by using
+<code class="language-plaintext highlighter-rouge">method_missing</code>, we open up the potential to collide with an infinite number of function
+names rather than just one we manually defined.</p>
+
+<p>Because of this, I feel that <code class="language-plaintext highlighter-rouge">method_missing</code> and metaprogramming overall are double-edged swords.
+Metaprogramming opens a lot of doors. On one hand, it allows for a crazy amount of functionality
+to be implemented with very little code. On the other hand, using metaprogramming haphazardly can
+lead to a lot of unforeseen issues, such as the method name collision scenario. This means that
+much more care and attention needs to be taken when using it, and these mental acrobatics may
+not be worth the benefits of metaprogramming at the end of the day.</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#metaprogramming" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  metaprogramming
+</a>
+
+<a href="/tags#ruby" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  ruby
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2022-02-12-yabai-t">←Yabai T-Shirts Yasan</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2021-08-18-nand2tetris">The Nand2Tetris Experience→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

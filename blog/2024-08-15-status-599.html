@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Status 599 | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Status 599</h1>
+    <h3 class="text-center mb-3"><em>It's time for a timeout</em></h3>
+    <h5 class="text-center">Aug 15, 2024</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Recently, I’ve been seeing ads on the Metro targeting the military-industrial
+complex. While I didn’t find them terribly interesting per se <sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>, they did do
+their job and somehow still ended up catching my attention.</p>
+
+<h2 id="the-ad">The Ad</h2>
+
+<p>Each ad prominently features an HTTP error message plastered on a backdrop of
+military personnel along with some rhetoric for the viewer to buy the
+product/service advertised or else face implied dire technical consequences.</p>
+
+<p>I’ve only seen two overall variants so far. The first one features the standard
+Status 404 that everyone knows and loves <sup id="fnref:2"><a href="#fn:2" class="footnote" rel="footnote" role="doc-noteref">2</a></sup>.</p>
+
+<p><img src="/images/status-599/404.jpg" alt="Ad featuring status 404" /></p>
+
+<p>The second one, however, features an error code I have never seen before: Status
+599.</p>
+
+<p><img src="/images/status-599/599.jpg" alt="Ad featuring status 599" /></p>
+
+<h2 id="what-in-the-world-is-status-599">What in the world is Status 599?</h2>
+
+<p>Despite working with web APIs every day, this was the first time I had ever
+heard of a 599 error code. What exactly is it? And why did the makers of this ad
+choose that code specifically?</p>
+
+<p>For starters, Status 599 seems to be non-standard. It does not appear to be
+documented in any RFC and neither
+<a href="https://docs.rs/http/latest/http/status/struct.StatusCode.html">Rust</a> nor
+<a href="https://pkg.go.dev/net/http">Go</a> include it as a constant in their list of
+status codes.</p>
+
+<p>A cursory Google search indicates that Status 599 is supposedly shown when a
+request made to a proxy gets timed out by the upstream service that the proxy is
+calling. However, the truth of this is difficult to verify <a href="https://github.com/rmaake1/httpstatuses/issues/22#issuecomment-234104647">as several sources
+making this claim this seem to circularly refer to each
+other</a>.</p>
+
+<p>Becoming ever more curious, I dug a bit deeper and tried to find exactly what
+software products and what kind of situations people encountered Status 599 in.
+One source says that <a href="https://www.belugacdn.com/blog/cdn/error-599/">Status 599 has been seen among Microsoft HTTP
+proxies</a> but did not mention any
+specific products. Searches across forums also show this error showing up in a
+few other products including <a href="https://groups.google.com/g/borland.public.delphi.reporting-charting/c/UKoY3dbb_QM?pli=1">SAP Crystal
+Reports</a>,
+<a href="https://community.cisco.com/t5/management/599-error-with-curl-example/td-p/4118771">Cisco
+CUCM</a>,
+<a href="https://www.reddit.com/r/ShadowPC/comments/1an4mzu/im_getting_error_code_a599/">Shadow
+PC</a>,
+<a href="https://forum.proxmox.com/threads/too-many-redirections-599.107482/">Proxmox</a>,
+and <a href="https://github.com/owncloud/core/issues/40139">OwnCloud</a>. A few of these do
+seem to corroborate the proxy timeout definition, relating to connectivity
+issues with dependencies. Others, not so much. OwnCloud appears to respond with
+Status 599 when <a href="https://github.com/owncloud/core/blob/master/index.php#L60">something has gone so horribly wrong that the server can’t even
+log the error that got
+thrown</a>. Cisco
+CUCM’s usage is even more odd, showing Status 599 when the AXL version used by
+the client is unsupported, a client error that doesn’t seem even remotely
+related to timeouts or 5xx server errors at all.</p>
+
+<p>What exactly Status 599 means remains ambiguous, and its varied usage across
+actual software products doesn’t help clear much of that fog. Status 599 still
+seems like an enigma to me, and I feel like that it is precisely the reason why
+it was chosen for this ad. Just imagine paying for a piece of software, getting
+an error message that is effectively gibberish while using it, spending week
+after week digging through forums and customer support to try to figure out what
+is wrong, and finally turning up with absolutely <em>nothing</em>. That is extremely
+frustrating, and perhaps it is that very frustration that this ad hopes to
+conjure up, rudely resurfacing dreadful memories buried deep in the minds of
+random IT folks during their otherwise uneventful commutes, all to get their
+attention.</p>
+
+<h2 id="appendix-proxy-vs-reverse-proxy">Appendix: Proxy vs Reverse Proxy</h2>
+
+<p>Other than sounding like an epic battle of grand proportions concocted and
+debated by only the biggest and baddest of nerds, proxy vs reverse proxy is a
+question I often find myself asking and answering again and again (mostly due to
+my poor memory).</p>
+
+<p>In short, both are man-in-the-middle components used for forwarding requests.
+The main difference is that a proxy forwards requests from a private intranet
+out to the Internet while a reverse proxy forwards requests from the Internet to
+a private intranet.</p>
+
+<p>A proxy makes sense when you have callers sending requests out into the
+Internet. For example, let’s say you are a web administrator for a public
+school. You want to prevent kids from watching anime on their school laptops.
+You could install a content filter on the laptops that intercepts every outbound
+HTTP request, checks the origin, and blocks the request if it matches a
+blocklisted origin. In this case, the content filter is a proxy. It controls
+which requests from the student can make it out into the external Internet.</p>
+
+<p>On the other hand, a reverse proxy makes sense when you have services that
+receive requests within your intranet. For example, if you are hosting a server
+for a web API, you most likely want to have something like NGINX only route
+requests for certain paths to be handled by your application. In this case,
+NGINX is a reverse proxy. It controls which requests from the external Internet
+can make it into your application.</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>…or fear. I once encountered an ad featuring a business woman that was
+placed and oriented in just the right way so that she would make eye-contact
+with passengers sitting down. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Writing this, I was reminded of The Best 404 Page Ever where I spent much
+of my after school life before Flash got murdered. It apparently lives on
+<a href="https://thebest404pageeverredux.com/">here</a> thanks to Ruffle. <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#web" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  web
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-09-11-a-follow-up-to-the-magic-of-follow">←A Follow-Up to the Magic of --follow</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2024-03-13-the-magic-of-follow">The Magic of --follow→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Spooter | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Spooter</h1>
+    <h3 class="text-center mb-3"><em>2018: An NESASM Experiment</em></h3>
+    <h5 class="text-center">Aug 08, 2018</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>Fresh out of the Nerdy Nights Pong tutorial, I had vowed never to write any
+assembly for the NES ever again.</p>
+
+<p>As you can guess, that didn’t happen.</p>
+
+<h2 id="background">Background</h2>
+
+<p>While on vacation visiting my grandparents, I found out about a game jam called
+Floppy Jam. The gimmick of the jam was that all entries must theoretically
+fit on the 1.44MB alloted to a floppy disk, hence the name of the jam.
+Naturally, this meant that most orthodox game engines would not meet the cut as
+they create too much overhead.</p>
+
+<p>This also meant that I was down to only a few options if I chose to participate:</p>
+<ol>
+  <li>Finally learn OpenGL and pray that I can write something in C/C++</li>
+  <li>Hack a thing together with various JS libraries and a canvas</li>
+  <li>Go back to NESASM hell</li>
+</ol>
+
+<p>I might also mention at this point that my grandparents have limited access to
+the Internet, and being on vacation, I wanted to see sights, not screens.
+So, with a few cached NESDev wiki pages and the 6502 instruction manual in hand,
+I jumped back into the fray of writing really bad assembly code.</p>
+
+<h2 id="process">Process</h2>
+
+<p>For the longest time, I had dreamed of making an even shittier version of
+Hong Kong 97, a bootleg SNES game starring Jackie Chan vs China. While this was the
+impetus for the project, Spooter very quickly morphed into a traditional space shooter.</p>
+
+<p>Starting off, I copied the Pong basecode I had written following Nerdy Nights
+last year, leaving a lot of the hardware shenanigans intact while deleting just
+enough Pong functionality for the assembly to still compile and run. After
+fiddling a little bit more with the code, I managed to get a space ship sprite
+to load and went from there.</p>
+
+<p>One of the greatest hurdles in designing Spooter was controlling groups of objects
+(lasers, aliens, explosions). Initially, I thought this could be done naively by
+hardcoding the functionality of every object individually. However, as I started
+adding functionality for the aliens, this readily became infeasable.
+As you might expect, since every alien
+needed to be checked against every laser, I would be re-writing upwards of 12
+blocks of code. This kinda ticked me off. I had avoided anything too complicated
+before this, but now I braced myself for the inevitable and wrote what may be
+called in the most primitive sense, a “nested for-loop”. After somehow
+successfully doing that, I started to get into the groove of things and began
+navigating and building a jungle of jumps, loops, and register juggling, even
+working in a system of activating and deactivating groups of objects with a
+bitmask where the bits in a byte would dictate active members of a group (so
+a bitmask of 00001001 would mean that the 4th and 1st object were active).</p>
+
+<p>By far, the largest time sink with NESASM was fixing bugs. Often this was a slip-up
+like forgetting to load newly-added sprites or writing to the wrong area of memory.
+Other times, bugs were a result of inexperience with writing for the system such
+as not knowing to turn off NMI before loading a new BG.</p>
+
+<p>A few of these many endless gripes include:</p>
+<ul>
+  <li>Labels that would occasionally get out of range. This was solved by hacking
+  sections of code out and putting them into subroutines which worked somehow…</li>
+  <li>More than enough bugs arose simply from bad math in hex and writing to the
+  wrong addresses</li>
+  <li>Nine-out-of-ten, a bug somehow got fixed by clearing/setting the carry bit</li>
+  <li>For the longest time, I thought I was bit-shifting right when I was really
+  going left</li>
+  <li>The score is an 8-bit value and, as such, will overflow once the player gets
+  a score of 256. This will remain a feature that I now dub, “Spaceship
+  Reincarnation”</li>
+  <li>The game over screen is made of BG tiles and flickers since the only working
+  method I have of writing to the background is turning off NMI, writing to an
+  address, and turning it back on…</li>
+</ul>
+
+<p>Here is the finished game. The final product ended up being a relatively simple
+shoot ‘em up where enemy floppies would float down, get shot, and respawn
+ad infinitum.</p>
+
+<p><img src="/images/spooter/spooter_01.png" alt="Spooter main game" /></p>
+
+<h2 id="after-thoughts">After Thoughts</h2>
+
+<p>Several goals remain unaccomplished for this project.</p>
+
+<p>For one, I had wanted to add music and sound-effects into the game but lack of experience
+with the APU and time made this a hard endeavor. Another early dream was also to
+parallel the boss of Hong Kong 97 with a large boss made of BG tiles. This was
+also not possible due to a lack of experience.</p>
+
+<p>The box art was also drawn up in MSPaint in the literal hour immediately
+after the game’s completion and leaves much to be desired.</p>
+
+<p>Here it is in all its glory.</p>
+
+<p><img src="/images/spooter/spooter_boxart.png" alt="Spooter main game" /></p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#assembly" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  assembly
+</a>
+
+<a href="/tags#nes" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  nes
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2018-09-27-cmsc_calendar">←CMSC Undergrad Calendar</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2017-12-27-protobot">Protobot→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>

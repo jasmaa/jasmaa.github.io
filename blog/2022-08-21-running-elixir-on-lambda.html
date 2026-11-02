@@ -1,0 +1,304 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Running Elixir on Lambda | Jason Maa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/css/native.css" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="me" href="https://mastodon.social/@jasonmaa3955" />
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/tex-chtml.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 offset-md-0 navbar-container">
+      <div class="d-flex flex-column pb-5 navbar">
+        <h3 class="text-center mb-3"><a href="/">Jason Maa</a></h3>
+        <small class="text-center mb-3">Hi, welcome to my domain.</small>
+        <div class="nav-links">
+          <a class="nav-item" href="/">Home</a>
+          <a class="nav-item" href="/about">About</a>
+          <a class="nav-item" href="/docs/Jason Maa - Resume.pdf">Resume</a>
+          <a class="nav-item" href="/fun">Fun</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 offset-md-0 px-4">
+      <div class="post-content">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="display-4 text-center mb-3">Running Elixir on Lambda</h1>
+    <h3 class="text-center mb-3"><em></em></h3>
+    <h5 class="text-center">Aug 21, 2022</h5>
+    <div class="divider"></div>
+  </div>
+
+  <p>A while back, I discovered that Johns Hopkins publishes <a href="https://coronavirus.jhu.edu/region">daily COVID case and
+death counts for all 50 US states</a>. The
+graphs reminded me a lot of metric graphs for monitoring services, and I began
+to imagine a system of mirroring the data into CloudWatch and paging myself
+whenever they breached a certain threshold.</p>
+
+<p><img src="/images/running-elixir-on-lambda/jhu-covid.png" alt="Johns Hopkins COVID case and death count time series graph for
+Maryland" /></p>
+
+<p>This idea ended up evolving into
+<a href="https://github.com/jasmaa/covid-pager">CovidPager</a>, and while I never did get
+as far as paging myself (PagerDuty kinda expects me to be a company), I do want
+to talk about the most interesting part of the project: the fact that it ended
+up as an Elixir application running on Lambda!</p>
+
+<h2 id="run-whatever-you-want">Run Whatever You Want</h2>
+
+<p>The beginning of this journey starts with Lambda and its custom runtime.
+Although your typical Lambda function would use an officially supported runtime,
+ever since 2018, Lambda has also begun providing custom runtimes. This is our
+ticket into running an Elixir Lambda handler.</p>
+
+<p>A handler running in a custom runtime interfaces with Lambda by interacting with
+the <a href="https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html">Lambda Runtime
+API</a>. The
+runtime API is available as an HTTP service and is quite simple. It’s made up of
+four operations: get the next invocation, respond to an invocation, report a
+service initialization error, and report an invocation error.</p>
+
+<p><img src="/images/running-elixir-on-lambda/logs-api-concept-diagram.png" alt="Lambda runtime API
+architecture" /></p>
+
+<p>In order for Elixir to run on Lambda, at minimum, we would need to write an
+Elixir application with an HTTP client that is able to poll requests from the
+next invocation endpoint, process the requests, and send responses to the
+response endpoint. This is a lot of boilerplate work. Thankfully, someone else
+has done it for us already in the form of the <a href="https://github.com/aws-samples/aws-lambda-elixir-runtime/tree/master/elixir_runtime">AWS Lambda Elixir
+Runtime</a>!
+Building on top of the runtime implementation is as simple as adding
+<code class="language-plaintext highlighter-rouge">:aws_lambda_elixir_runtime</code> as a dependency in our Mix project, writing the
+Lambda handler, and deploying a custom runtime Lambda function that targets the
+handler using its identifier.</p>
+
+<h2 id="run-in-wherever-you-like">Run In Wherever You Like</h2>
+
+<p>If you are like me and followed the AWS Lambda Elixir Runtime guide by deploying
+the release artifacts directly to Lambda, there is a high chance you ran into an
+error related to a dependency for <code class="language-plaintext highlighter-rouge">beam.smp</code>. The reason behind this is that
+Elixir itself depends on the BEAM virtual machine which was compiled for your
+machine’s environment as part of the prerequisite Erlang installation for
+Elixir. Your machine is most likely not configured exactly the same as Amazon
+Linux 2 (AL2), the environment that the custom runtime Lambda function runs in,
+which will result in incompatibilities. In my case, BEAM needed glibc version
+2.29 while <a href="https://docs.aws.amazon.com/AL2/latest/relnotes/relnotes-20220802.html">Amazon Linux 2 has version
+2.26</a> at
+the time of writing. The only real solution for this would be to spin up an EC2
+instance running AL2, re-download and re-compile Erlang and Elixir on it, and
+then rebuild my application. I took one look at my wallet, one look at the time,
+and decided nah.</p>
+
+<p>Normally, this would be where the experiment ends, but back in 2020, Lambda
+released support for container images. What this means is that our function’s
+environment does not have to be tied to Amazon Linux anymore. We can just
+<del>steal</del> acquire a pre-existing Docker image for Elixir and build our
+application on top of that! Lambda will run our container and any dependency
+issues between our machine and Amazon Linux disappears since we can just model
+our environment via Docker instead! For CovidPager, I ended up using an Elixir
+Alpine image and set up Docker to build and run the application binary.</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Dockerfile</span>
+
+<span class="k">FROM</span><span class="s"> elixir:1.13-alpine</span>
+
+<span class="k">WORKDIR</span><span class="s"> /app</span>
+
+<span class="k">RUN </span>mix <span class="k">do </span>local.hex <span class="nt">--force</span>, local.rebar <span class="nt">--force</span>
+
+<span class="k">ENV</span><span class="s"> MIX_ENV=prod</span>
+
+<span class="k">COPY</span><span class="s"> mix.exs mix.lock ./</span>
+<span class="k">COPY</span><span class="s"> config config</span>
+<span class="k">RUN </span>mix deps.get
+
+<span class="k">COPY</span><span class="s"> lib lib</span>
+<span class="k">RUN </span>mix release
+
+<span class="k">ADD</span><span class="s"> aws-lambda-rie-x86_64 /usr/local/bin/aws-lambda-rie</span>
+<span class="k">COPY</span><span class="s"> ./entry_script.sh /entry_script.sh</span>
+
+<span class="k">ENTRYPOINT</span><span class="s"> [ "/entry_script.sh" ]</span>
+<span class="k">CMD</span><span class="s"> [ "Elixir.CovidPager:handler" ]</span>
+</code></pre></div></div>
+
+<p>You may have noticed that the <code class="language-plaintext highlighter-rouge">Dockerfile</code> also contains an <code class="language-plaintext highlighter-rouge">ENTRYPOINT</code> that
+points to a shell file called <code class="language-plaintext highlighter-rouge">entry_script.sh</code>. This is to support <a href="https://docs.aws.amazon.com/lambda/latest/dg/images-test.html">locally
+testing the container image
+function</a>. To do
+this, AWS provides a Runtime Interface Emulate (RIE) which is a stand-in for the
+real Lambda Runtime Interface web server. We can include the RIE binary in our
+image and then configure the entrypoint of the image to a program (in this case,
+<code class="language-plaintext highlighter-rouge">entry_script.sh</code>) which will conditionally run the service using RIE or the
+actual binary depending on whether the Lambda runtime is present. If deployed
+locally, RIE allows the Lambda function to be triggerable via HTTP POST to the
+local Docker endpoint.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># entry_script.sh</span>
+
+<span class="c">#!/bin/sh</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nt">-z</span> <span class="s2">"</span><span class="k">${</span><span class="nv">AWS_LAMBDA_RUNTIME_API</span><span class="k">}</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+  </span><span class="nb">exec</span> /usr/local/bin/aws-lambda-rie _build/prod/rel/covid_pager/bin/covid_pager start <span class="nv">$@</span>
+<span class="k">else
+  </span><span class="nb">exec </span>_build/prod/rel/covid_pager/bin/covid_pager start <span class="nv">$@</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Having the ability to do this kind of local testing is powerful since it means
+that we can test our service as if it were truly deployed instead of only being
+able to test through unit tests. Unit tests can’t test entire integrations since
+they usually mock out key dependencies, such as external services, so being able
+to see a service’s real behavior during local development helps to uncover any
+sort of integration failure cases as early as possible.</p>
+
+<p>Once I was able to test locally, it was time to deploy for real. I uploaded the
+image to ECR and spun up a Lambda container image function that would consume
+the uploaded image. The infrastructure specification ended up being just a
+single function in CDK.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// deployment-stack.ts</span>
+
+<span class="kd">const</span> <span class="nx">fn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">lambda</span><span class="p">.</span><span class="nx">DockerImageFunction</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="dl">'</span><span class="s1">ECRFunction</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">functionName</span><span class="p">:</span> <span class="dl">'</span><span class="s1">CovidPager</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">code</span><span class="p">:</span> <span class="nx">lambda</span><span class="p">.</span><span class="nx">DockerImageCode</span><span class="p">.</span><span class="nx">fromImageAsset</span><span class="p">(</span><span class="dl">'</span><span class="s1">/PATH/TO/PROJECT/ROOT</span><span class="dl">'</span><span class="p">),</span>
+  <span class="na">timeout</span><span class="p">:</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">Duration</span><span class="p">.</span><span class="nx">seconds</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="butwhy-run-like-this-at-all">But…Why Run Like This At All?</h2>
+
+<p>Question time. Yes, you in the back.</p>
+
+<p>…</p>
+
+<p>Ok um, so the question was: why in the world would anyone want to do this?
+That’s a great question. I’m not really sure.</p>
+
+<p>One of Elixir’s major selling points is its ability to deal with faults. An
+Elixir application does this with
+<a href="https://hexdocs.pm/elixir/1.12/Supervisor.html">supervisors</a> that watch child
+processes. If a child fails, supervisors can take further action based on a
+supervisor’s strategy. For example, a one-for-one strategy will restart just the
+failing child if a child fails while a one-for-all strategy will restart all
+children under the supervisor if a child fails. A more complex application may
+have a supervisor tree with higher-level supervisors that watch lower-level
+supervisors that themselves watch the actual worker processes.</p>
+
+<p><img src="/images/running-elixir-on-lambda/supervision-tree-example.png" alt="Example supervision
+tree" /></p>
+
+<p>The supervisor design works best for long-running applications since it allows
+for a service to recover from faults by only restarting parts of the application
+as opposed to the whole in order to keep the overall service up and running.
+However, this isn’t really a great fit for Lambda which is meant for only
+short-lived tasks (currently, <a href="https://aws.amazon.com/about-aws/whats-new/2018/10/aws-lambda-supports-functions-that-can-run-up-to-15-minutes/">a Lambda function’s max execution time is 15
+minutes</a>).</p>
+
+<p>Moreover, with serverless design, it feels that fault tolerance is intended to
+be taken care of by the infrastructure rather than by the actual service.
+Because of this, AWS services end up doing most of the heavy lifting to recover
+from or avoid faults (ex. ensuring a service is healthy in ECS by automatically
+restarting unhealthy containers or ensuring requests are processed by a service
+by fronting them with an SQS queue). All in all, this seems to make Elixir’s
+fault-tolerant design feel redundant when paired with Lambda.</p>
+
+<p>In my opinion, the greatest benefit of running Elixir on Lambda may simply be
+access to the Elixir language itself. Choosing Lambda for infrastructure does
+not mean that Elixir is off the table as a choice for language and vice versa.
+Moreover, as a functional language, Elixir generally feels like a good fit for
+writing Lambda functions since both are designed for stateless execution.</p>
+
+<h2 id="closing-thoughts">Closing Thoughts</h2>
+
+<p>The upshot is that running Elixir in Lambda is not only theoretically possible,
+but actually quite accessible through the AWS Lambda Elixir Runtime and Lambda’s
+support for containers. While Elixir’s fault-tolerance benefits are lost within
+a Lambda function, it’s still neat that Lambda can run Elixir, and it opens up
+the door for Elixir development on Lambda from anyone who wants to try.</p>
+
+<p>That being said, running Elixir in Lambda still poses a risk since it is not
+officially supported by Lambda. Even though some well-known companies are
+already using Elixir (Heroku and Discord to name names), the language itself is
+not mainstream like Python or Java. If Elixir and functional programming as a
+whole really do reach widespread popularity in the coming years, it would be
+interesting to see its effect on how developers design services in the future as
+well as how cloud providers will react to those shifting design paradigms.</p>
+
+
+  <div class="mt-5">
+    
+
+
+<a href="/categories#Programming" class="badge rounded-pill m-1 programming-badge">
+  Programming
+</a>
+
+    
+
+
+<a href="/tags#aws" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  aws
+</a>
+
+<a href="/tags#elixir" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  elixir
+</a>
+
+<a href="/tags#lambda" class="badge rounded-pill bg-secondary m-1">
+  <i class="fa fa-tag" style="margin-right: 0.1em;"></i>
+  lambda
+</a>
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex flex-column align-items-center">
+      <div class="divider"></div>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2022-11-27-heroku-eulogy">←A Eulogy for Heroku Free Tier</a>
+      
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="text-center" href="/">Home</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      
+      <a class="text-center" href="/blog/2022-04-18-dunning-kruger">Dunning-Kruger→</a>
+      
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<footer class="d-flex flex-column align-items-center mb-5">
+  <div class="divider w-75 my-5"></div>
+  <div>
+    <a href="mailto:jasonmaa3955@gmail.com"><i class="fa fa-envelope"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://linkedin.com/in/jasmaa"><i class="fa-brands fa-linkedin"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://github.com/jasmaa"><i class="fa-brands fa-github"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="https://mastodon.social/@jasonmaa3955"><i class="fa-brands fa-mastodon"
+        style="font-size: x-large; margin-right: 0.5em;"></i></a>
+    <a href="/feed.xml"><i class="fa fa-rss" style="font-size: x-large; margin-right: 0.5em;"></i></a>
+  </div>
+</footer>
+</body>
+
+</html>
